@@ -26,6 +26,12 @@ app.use('/api/products', productRoutes);
 
 // Khởi động máy chủ
 const PORT = 8080;
+
+//Trang test thu
+app.get("/api", (req,res) => {
+  res.json({"users": ["user1", "user2", "user3"] })
+});
+
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
