@@ -14,16 +14,18 @@ const productRoutes = require('./routes/productRoutes');
 // Sử dụng bodyParser middleware
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-
+app.use((req, res, next) => {console.log(req.path, req.method); next();})
 // Sử dụng route cho từng bảng
 app.use('/api/accounts', accountRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/comments', commentRoutes);
 app.use('/api/images', imageRoutes);
 app.use('/api/orders', orderRoutes);
-app.use('/api/orderDetails', orderDetailRoutes);
+app.use('/api/orderdetails', orderDetailRoutes);
 app.use('/api/products', productRoutes);
-
+app.delete('/test/:id', (req,res) => {
+  console.log('called delete with id = ', req.params.id);
+})
 // Khởi động máy chủ
 const PORT = 8080;
 app.listen(PORT, () => {
