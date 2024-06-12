@@ -1,6 +1,5 @@
 // AddProductForm.js
 import React, { useState } from 'react';
-import '../css/addProductForm.css';
 
 const AddProductForm = ({ addProduct }) => {
   const [productName, setProductName] = useState('');
