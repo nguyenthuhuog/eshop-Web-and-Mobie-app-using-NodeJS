@@ -17,7 +17,7 @@ const Cart = () => {
         if (cartItems[productId] > 0) {
           try {
             const imageResponse = await axios.get(`${imageApiBase}/productID/${productId}`);
-            images[productId] = imageResponse.data.image_url;
+            images[productId] = imageResponse.data[0].image_url;
           } catch (error) {
             console.error(`Error fetching image for productID ${productId}:`, error);
           }
@@ -45,7 +45,7 @@ const Cart = () => {
               <img src={productImages[product.productID]} alt={product.productName} />
               <div className="description">
                 <p><b>{product.productName}</b></p>
-                <p>Price: ${product.price.toFixed(2)}</p>
+                <p>Price: ${parseFloat(product.price).toFixed(2)}</p>
                 <div className="countHandler">
                   <button onClick={() => removeFromCart(product.productID)}> <i className="fa-solid fa-minus"></i> </button>
                   <input

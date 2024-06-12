@@ -21,7 +21,8 @@ const ProductGrid = ({ categoryName }) => {
         fetchedProducts.map(async (product) => {
           try {
             const imageResponse = await axios.get(`${imageApiBase}/productID/${product.productID}`);
-            return { ...product, imageUrl: imageResponse.data.image_url };
+            // imageResponse contain multiple images of one product
+            return { ...product, imageUrl: imageResponse.data[0].image_url };
           } catch (error) {
             console.error(`Error fetching image for productID ${product.productID}:`, error);
             return product;
@@ -55,7 +56,7 @@ const ProductGrid = ({ categoryName }) => {
             <div className="product" key={product.productID} onClick={() => handleProductClick(product.productID)}>
               <h3>{product.productName}</h3>
               <img src={product.imageUrl} alt={`Image of ${product.productName}`} />
-              <p>Price: ${product.price.toFixed(2)}</p>
+              <p>Price: ${parseFloat(product.price).toFixed(2)}</p>
               <p>Stock: {product.stock}</p>
               <button className="btn-addToCart" onClick={(e) => handleAddToCart(e, product)}>
                 Add to cart {cartItems[product.productID] > 0 && <> ({cartItems[product.productID]})</>}

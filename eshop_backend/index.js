@@ -1,6 +1,10 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
+const cors = require('cors');
+
+// Cấu hình CORS
+app.use(cors());
 
 app.use(bodyParser.json());
 
