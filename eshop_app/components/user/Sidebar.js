@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import '../css/homepage.js';
+import '../../css/homepage.js';
 
 const Sidebar = () => {
   const navigation = useNavigation();

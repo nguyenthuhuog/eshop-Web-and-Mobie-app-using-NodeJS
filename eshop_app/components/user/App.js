@@ -17,9 +17,9 @@ import KeyboardPage from './user/page/KeyboardPage';
 import ComputerPage from './user/page/ComputerPage';
 import HomePage from './user/homepage/HomePage';
 
-import ProductDetail from './product/ProductDetail';
-import ProductGrid from './product/ProductGrid'; 
-import { ShopContextProvider } from './product/ShopContextProvider';
+import ProductDetail from '../product/ProductDetail';
+import ProductGrid from '../product/ProductGrid'; 
+import { ShopContextProvider } from '../product/ShopContextProvider';
 // import Shop from './Shop';
 import Cart from './user/cart/Cart'; 
 import Checkout from './user/cart/Checkout';

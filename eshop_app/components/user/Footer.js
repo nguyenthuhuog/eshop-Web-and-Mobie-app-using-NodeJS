@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import styles from '../css/homepage';
+import styles from '../../css/homepage';
 
 const Footer = () => {
   return (

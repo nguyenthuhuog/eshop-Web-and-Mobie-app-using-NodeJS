@@ -3,7 +3,7 @@ import { View, Text, Image, TextInput, TouchableOpacity, StyleSheet } from 'reac
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import logo from '../img/logo1.png';
-import styles from '../css/homepage';
+import styles from '../../css/homepage';
 
 const Header = ({ openLoginModal, openRegisterModal }) => {
   const navigation = useNavigation();

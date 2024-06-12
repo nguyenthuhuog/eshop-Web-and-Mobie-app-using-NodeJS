@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import MarqueeText from 'react-native-marquee';
 import Sidebar from './Sidebar';
-import styles from '../css/homepage';
+import styles from '../../css/homepage';
 
 const Navbar = ({ toggleSidebar }) => {
   return (
