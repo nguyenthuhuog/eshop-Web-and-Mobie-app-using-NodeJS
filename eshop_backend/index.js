@@ -2,6 +2,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
 const cors = require('cors');
+const session = require('express-session');
+
 
 const accountController = require('./controllers/accountController');
 const accountRoutes = require('./routes/accountRoutes');
@@ -14,7 +16,16 @@ const productRoutes = require('./routes/productRoutes');
 const messageRoutes = require('./routes/messageRoutes');
 
 // Middlewares
-app.use(cors());
+app.use(session({
+  secret: 'your-secret-key', // Chuỗi bí mật để ký session ID cookie
+  resave: false, // Không lưu session nếu không thay đổi
+  saveUninitialized: true, // Lưu session mới nhưng không được sửa đổi
+  cookie: { secure: false } // Đặt thành true nếu sử dụng HTTPS
+}));
+app.use(cors({
+  origin: 'http://localhost:3000', // Allow requests from this origin
+  credentials: true, // Allow credentials (cookies, authorization headers)
+}));
 app.use(bodyParser.json());
 
 app.use('/api/accounts', accountRoutes);
@@ -25,17 +36,6 @@ app.use('/api/orders', orderRoutes);
 app.use('/api/orderdetails', orderDetailRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/messages', messageRoutes);
-
-app.post('/login', (req, res) => {
-  accountController.login(req.body.username, req.body.password, (err, result) => {
-    if (err) {
-      console.error("Error:", err.message);
-      res.status(500).json({ error: err.message });
-    } else {
-      res.status(200).json(result);
-    }
-  });
-});
 
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {

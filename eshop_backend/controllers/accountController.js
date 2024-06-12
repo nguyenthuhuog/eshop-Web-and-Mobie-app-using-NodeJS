@@ -77,10 +77,10 @@ accountController.login = (username, password, callback) => {
       return;
     }
     if (result.length === 0) {
-      callback(null, { message: `Login failed` });
+      callback(401); // login failed
       return;
     }
-    callback(null, { message: 'Login successful', user: result[0] });
+    callback(null, result[0] ); // login succesful
   });
 };
 

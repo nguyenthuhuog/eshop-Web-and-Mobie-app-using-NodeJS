@@ -1,8 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const accountController = require('../controllers/accountController');
+const { authMiddleware, adminMiddleware } = require('../middlewares/authMiddleware');
 
-router.get('/', (req, res) => {
+router.get('/', adminMiddleware, (req, res) => {
   accountController.getAll((err, accounts) => {
     if (err) {
       console.error("Error:", err);
@@ -13,7 +14,7 @@ router.get('/', (req, res) => {
   });
 });
 
-router.get('/:id', (req, res) => {
+router.get('/:id', (req, res) => {  
   const id = req.params.id;
   accountController.getById(id, (err, account) => {
     if (err) {
@@ -27,7 +28,7 @@ router.get('/:id', (req, res) => {
 
 router.post('/', (req, res) => {
   const accountData = req.body;
-  accountController.create(accountData, (err, newAccount) => {
+  accountController.insert(accountData, (err, newAccount) => {
     if (err) {
       console.error("Error:", err);
       res.status(500).json({ error: err.message || "Internal Server Error" });
@@ -61,5 +62,34 @@ router.delete('/:id', (req, res) => {
     }
   });
 });
+
+router.post('/login', (req, res) => {
+  const { username, password } = req.body;
+  accountController.login(username, password, (err, result) => {
+    if (err) {
+      res.status(err).json({ error: err.message });
+    } else {
+      req.session.userId = result.userID;
+      req.session.isAdmin = result.isAdmin;
+      res.status(200).json({ message: 'Login successful', result });
+    }
+  });
+});
+
+router.post('/logout', (req, res) => {
+  accountController.logout((err, result) => {
+    if (err) {
+      res.status(500).json({ error: err.message || 'Internal Server Error' });
+    } else {
+      res.status(200).json(result);
+    }
+  });
+});
+
+// Route to get the current user information
+router.get('/current', authMiddleware, (req, res) => {
+  res.status(200).json(req.session.user);
+});
+
 
 module.exports = router;
