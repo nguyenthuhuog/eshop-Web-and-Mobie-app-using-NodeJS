@@ -62,4 +62,17 @@ router.delete('/:id', (req, res) => {
   });
 });
 
+router.get('/byCategory/:categoryName', (req, res) => {
+  const categoryName = req.params.categoryName;
+  productController.getByCategoryName(categoryName, (err, products) => {
+    if (err) {
+      console.error("Error:", err);
+      res.status(500).json({ error: err.message || "Internal Server Error" });
+    } else {
+      res.status(200).json(products);
+    }
+  });
+});
+
+
 module.exports = router;

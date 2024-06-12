@@ -69,4 +69,15 @@ productController.delete = (id, callback) => {
   });
 };
 
+productController.getByCategoryName = (categoryName, callback) => {
+  const sqlString = "SELECT * FROM products JOIN categories USING (categoryID) WHERE categoryName = ?";
+  db.query(sqlString, categoryName, (err, results) => {
+    if (err) {
+      callback(err);
+      return;
+    }
+    callback(null, results);
+  });
+};
+
 module.exports = productController;
