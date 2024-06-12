@@ -13,29 +13,33 @@ const ProductDetail = () => {
     const [newComment, setNewComment] = useState('');
     const api = `http://localhost:8080/api/products/${id}`;
     const imageApiBase = 'http://localhost:8080/api/images';
+    const commentApiBase = 'http://localhost:8080/api/comments';
+    const fetchProduct = async () => {
+        try {
+            const response = await axios.get(api);
+            const fetchedProduct = response.data;
+
+            const imageResponse = await axios.get(`${imageApiBase}/productID/${fetchedProduct.productID}`);
+            const productWithImage = { ...fetchedProduct, imageUrl: imageResponse.data[0].image_url };
+
+            setProduct(productWithImage);
+            console.log('Product details with image:', productWithImage);
+        } catch (error) {
+            console.error('Error fetching product details or image:', error);
+        }
+    };
+
+    const fetchComments = async () => {
+        try {
+            const response = await axios.get(commentApiBase);
+            console.log('Comments retrieved successfully:', response.data);
+            setComments(response.data);
+        } catch (error) {
+            console.error('Error fetching comments:', error);
+        }
+    };
 
     useEffect(() => {
-        const fetchProduct = async () => {
-            try {
-                const response = await axios.get(api);
-                const fetchedProduct = response.data;
-
-                const imageResponse = await axios.get(`${imageApiBase}/productID/${fetchedProduct.productID}`);
-                const productWithImage = { ...fetchedProduct, imageUrl: imageResponse.data.image_url };
-
-                setProduct(productWithImage);
-                console.log('Product details with image:', productWithImage);
-            } catch (error) {
-                console.error('Error fetching product details or image:', error);
-            }
-        };
-
-        const fetchComments = async () => {
-            // Lấy comment từ Local Storage
-            const storedComments = JSON.parse(localStorage.getItem(`comments-${id}`)) || [];
-            setComments(storedComments);
-        };
-
         fetchProduct();
         fetchComments();
     }, [id]);
@@ -49,19 +53,28 @@ const ProductDetail = () => {
         }
     };
 
-    const handleCommentSubmit = (e) => {
+    const handleCommentSubmit = async (e) => {
         e.preventDefault();
         const newCommentData = {
-            id: Date.now(),
             content: newComment,
+            productID: product.productID,
+            userID : 10000001,
         };
-        const updatedComments = [...comments, newCommentData];
-        setComments(updatedComments);
+        
         setNewComment('');
 
-        // Lưu comment vào Local Storage
-        localStorage.setItem(`comments-${id}`, JSON.stringify(updatedComments));
+        try {
+            const response = await axios.post(commentApiBase, newCommentData);
+            
+            if (response.status === 201) {
+                console.log('Comment saved successfully:', response.data);
+            }
+        } catch (error) {
+            console.error('Error saving comment:', error);
+        }
+        fetchComments()
     };
+    
 
     if (!product) return <div>Loading...</div>;
 
@@ -78,7 +91,7 @@ const ProductDetail = () => {
                 </div>
                 <div className="product-info">
                     <h2 className="product-name">{product.productName}</h2>
-                    <p className="product-price">Price: ${product.price.toFixed(2)}</p>
+                    <p className="product-price">Price: ${parseFloat(product.price).toFixed(2)}</p>
                     <div>
                         <p className="product-details-title">{productDetailsTitle}</p>
                         {productDetails}
@@ -99,7 +112,9 @@ const ProductDetail = () => {
                 <h3>Comments</h3>
                 <ul>
                     {comments.map((comment) => (
-                        <li key={comment.id}>{comment.content}</li>
+                        <li key={comment.id}>
+                            User #{comment.userID}: {comment.content}
+                        </li>
                     ))}
                 </ul>
                 <form onSubmit={handleCommentSubmit}>
