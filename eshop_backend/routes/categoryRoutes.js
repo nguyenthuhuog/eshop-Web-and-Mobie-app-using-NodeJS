@@ -2,60 +2,64 @@ const express = require('express');
 const router = express.Router();
 const categoryController = require('../controllers/categoryController');
 
-// Route cho tất cả categories
-router.get('/', async (req, res) => {
-  try {
-    const categories = await categoryController.getAll();
-    res.status(200).json(categories);
-  } catch (error) {
-    console.error("Error:", error);
-    res.status(500).json({ error: error.message || "Internal Server Error" });
-  }
+router.get('/', (req, res) => {
+  categoryController.getAll((err, categories) => {
+    if (err) {
+      console.error("Error:", err);
+      res.status(500).json({ error: err.message || "Internal Server Error" });
+    } else {
+      res.status(200).json(categories);
+    }
+  });
 });
 
-router.get('/:id', async (req, res) => {
+router.get('/:id', (req, res) => {
   const id = req.params.id;
-  try {
-    const category = await categoryController.getById(id);
-    res.status(200).json(category);
-  } catch (error) {
-    console.error("Error:", error);
-    res.status(500).json({ error: error.message || "Internal Server Error" });
-  }
+  categoryController.getById(id, (err, category) => {
+    if (err) {
+      console.error("Error:", err);
+      res.status(500).json({ error: err.message || "Internal Server Error" });
+    } else {
+      res.status(200).json(category);
+    }
+  });
 });
 
-router.post('/', async (req, res) => {
+router.post('/', (req, res) => {
   const categoryData = req.body;
-  try {
-    const newCategory = await categoryController.create(categoryData);
-    res.status(201).json(newCategory);
-  } catch (error) {
-    console.error("Error:", error);
-    res.status(500).json({ error: error.message || "Internal Server Error" });
-  }
+  categoryController.create(categoryData, (err, newCategory) => {
+    if (err) {
+      console.error("Error:", err);
+      res.status(500).json({ error: err.message || "Internal Server Error" });
+    } else {
+      res.status(201).json(newCategory);
+    }
+  });
 });
 
-router.put('/:id', async (req, res) => {
+router.put('/:id', (req, res) => {
   const id = req.params.id;
   const categoryData = req.body;
-  try {
-    const result = await categoryController.update(id, categoryData);
-    res.status(200).json(result);
-  } catch (error) {
-    console.error("Error:", error);
-    res.status(500).json({ error: error.message || "Internal Server Error" });
-  }
+  categoryController.update(id, categoryData, (err, result) => {
+    if (err) {
+      console.error("Error:", err);
+      res.status(500).json({ error: err.message || "Internal Server Error" });
+    } else {
+      res.status(200).json(result);
+    }
+  });
 });
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', (req, res) => {
   const id = req.params.id;
-  try {
-    const result = await categoryController.delete(id);
-    res.status(200).json(result);
-  } catch (error) {
-    console.error("Error:", error);
-    res.status(500).json({ error: error.message || "Internal Server Error" });
-  }
+  categoryController.delete(id, (err, result) => {
+    if (err) {
+      console.error("Error:", err);
+      res.status(500).json({ error: err.message || "Internal Server Error" });
+    } else {
+      res.status(200).json(result);
+    }
+  });
 });
 
 module.exports = router;

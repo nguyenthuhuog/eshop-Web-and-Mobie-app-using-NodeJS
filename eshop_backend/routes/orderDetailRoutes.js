@@ -2,60 +2,64 @@ const express = require('express');
 const router = express.Router();
 const orderDetailController = require('../controllers/orderDetailController');
 
-// Route cho tất cả order details
-router.get('/', async (req, res) => {
-  try {
-    const orderDetails = await orderDetailController.getAll();
-    res.status(200).json(orderDetails);
-  } catch (error) {
-    console.error("Error:", error);
-    res.status(500).json({ error: error.message || "Internal Server Error" });
-  }
+router.get('/', (req, res) => {
+  orderDetailController.getAll((err, orderDetails) => {
+    if (err) {
+      console.error("Error:", err);
+      res.status(500).json({ error: err.message || "Internal Server Error" });
+    } else {
+      res.status(200).json(orderDetails);
+    }
+  });
 });
 
-router.get('/:id', async (req, res) => {
+router.get('/:id', (req, res) => {
   const id = req.params.id;
-  try {
-    const orderDetail = await orderDetailController.getById(id);
-    res.status(200).json(orderDetail);
-  } catch (error) {
-    console.error("Error:", error);
-    res.status(500).json({ error: error.message || "Internal Server Error" });
-  }
+  orderDetailController.getById(id, (err, orderDetail) => {
+    if (err) {
+      console.error("Error:", err);
+      res.status(500).json({ error: err.message || "Internal Server Error" });
+    } else {
+      res.status(200).json(orderDetail);
+    }
+  });
 });
 
-router.post('/', async (req, res) => {
+router.post('/', (req, res) => {
   const orderDetailData = req.body;
-  try {
-    const newOrderDetail = await orderDetailController.create(orderDetailData);
-    res.status(201).json(newOrderDetail);
-  } catch (error) {
-    console.error("Error:", error);
-    res.status(500).json({ error: error.message || "Internal Server Error" });
-  }
+  orderDetailController.create(orderDetailData, (err, newOrderDetail) => {
+    if (err) {
+      console.error("Error:", err);
+      res.status(500).json({ error: err.message || "Internal Server Error" });
+    } else {
+      res.status(201).json(newOrderDetail);
+    }
+  });
 });
 
-router.put('/:id', async (req, res) => {
+router.put('/:id', (req, res) => {
   const id = req.params.id;
   const orderDetailData = req.body;
-  try {
-    const result = await orderDetailController.update(id, orderDetailData);
-    res.status(200).json(result);
-  } catch (error) {
-    console.error("Error:", error);
-    res.status(500).json({ error: error.message || "Internal Server Error" });
-  }
+  orderDetailController.update(id, orderDetailData, (err, result) => {
+    if (err) {
+      console.error("Error:", err);
+      res.status(500).json({ error: err.message || "Internal Server Error" });
+    } else {
+      res.status(200).json(result);
+    }
+  });
 });
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', (req, res) => {
   const id = req.params.id;
-  try {
-    const result = await orderDetailController.delete(id);
-    res.status(200).json(result);
-  } catch (error) {
-    console.error("Error:", error);
-    res.status(500).json({ error: error.message || "Internal Server Error" });
-  }
+  orderDetailController.delete(id, (err, result) => {
+    if (err) {
+      console.error("Error:", err);
+      res.status(500).json({ error: err.message || "Internal Server Error" });
+    } else {
+      res.status(200).json(result);
+    }
+  });
 });
 
 module.exports = router;

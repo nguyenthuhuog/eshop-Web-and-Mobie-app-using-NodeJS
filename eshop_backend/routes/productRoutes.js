@@ -2,60 +2,64 @@ const express = require('express');
 const router = express.Router();
 const productController = require('../controllers/productController');
 
-// Route cho tất cả products
-router.get('/', async (req, res) => {
-  try {
-    const products = await productController.getAll();
-    res.status(200).json(products);
-  } catch (error) {
-    console.error("Error:", error);
-    res.status(500).json({ error: error.message || "Internal Server Error" });
-  }
+router.get('/', (req, res) => {
+  productController.getAll((err, products) => {
+    if (err) {
+      console.error("Error:", err);
+      res.status(500).json({ error: err.message || "Internal Server Error" });
+    } else {
+      res.status(200).json(products);
+    }
+  });
 });
 
-router.get('/:id', async (req, res) => {
+router.get('/:id', (req, res) => {
   const id = req.params.id;
-  try {
-    const product = await productController.getById(id);
-    res.status(200).json(product);
-  } catch (error) {
-    console.error("Error:", error);
-    res.status(500).json({ error: error.message || "Internal Server Error" });
-  }
+  productController.getById(id, (err, product) => {
+    if (err) {
+      console.error("Error:", err);
+      res.status(500).json({ error: err.message || "Internal Server Error" });
+    } else {
+      res.status(200).json(product);
+    }
+  });
 });
 
-router.post('/', async (req, res) => {
+router.post('/', (req, res) => {
   const productData = req.body;
-  try {
-    const newProduct = await productController.create(productData);
-    res.status(201).json(newProduct);
-  } catch (error) {
-    console.error("Error:", error);
-    res.status(500).json({ error: error.message || "Internal Server Error" });
-  }
+  productController.create(productData, (err, newProduct) => {
+    if (err) {
+      console.error("Error:", err);
+      res.status(500).json({ error: err.message || "Internal Server Error" });
+    } else {
+      res.status(201).json(newProduct);
+    }
+  });
 });
 
-router.put('/:id', async (req, res) => {
+router.put('/:id', (req, res) => {
   const id = req.params.id;
   const productData = req.body;
-  try {
-    const result = await productController.update(id, productData);
-    res.status(200).json(result);
-  } catch (error) {
-    console.error("Error:", error);
-    res.status(500).json({ error: error.message || "Internal Server Error" });
-  }
+  productController.update(id, productData, (err, result) => {
+    if (err) {
+      console.error("Error:", err);
+      res.status(500).json({ error: err.message || "Internal Server Error" });
+    } else {
+      res.status(200).json(result);
+    }
+  });
 });
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', (req, res) => {
   const id = req.params.id;
-  try {
-    const result = await productController.delete(id);
-    res.status(200).json(result);
-  } catch (error) {
-    console.error("Error:", error);
-    res.status(500).json({ error: error.message || "Internal Server Error" });
-  }
+  productController.delete(id, (err, result) => {
+    if (err) {
+      console.error("Error:", err);
+      res.status(500).json({ error: err.message || "Internal Server Error" });
+    } else {
+      res.status(200).json(result);
+    }
+  });
 });
 
 module.exports = router;

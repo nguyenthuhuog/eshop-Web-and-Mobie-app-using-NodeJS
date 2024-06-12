@@ -2,60 +2,64 @@ const express = require('express');
 const router = express.Router();
 const imageController = require('../controllers/imageController');
 
-// Route cho tất cả images
-router.get('/', async (req, res) => {
-  try {
-    const images = await imageController.getAll();
-    res.status(200).json(images);
-  } catch (error) {
-    console.error("Error:", error);
-    res.status(500).json({ error: error.message || "Internal Server Error" });
-  }
+router.get('/', (req, res) => {
+  imageController.getAll((err, images) => {
+    if (err) {
+      console.error("Error:", err);
+      res.status(500).json({ error: err.message || "Internal Server Error" });
+    } else {
+      res.status(200).json(images);
+    }
+  });
 });
 
-router.get('/:id', async (req, res) => {
+router.get('/:id', (req, res) => {
   const id = req.params.id;
-  try {
-    const image = await imageController.getById(id);
-    res.status(200).json(image);
-  } catch (error) {
-    console.error("Error:", error);
-    res.status(500).json({ error: error.message || "Internal Server Error" });
-  }
+  imageController.getById(id, (err, image) => {
+    if (err) {
+      console.error("Error:", err);
+      res.status(500).json({ error: err.message || "Internal Server Error" });
+    } else {
+      res.status(200).json(image);
+    }
+  });
 });
 
-router.post('/', async (req, res) => {
+router.post('/', (req, res) => {
   const imageData = req.body;
-  try {
-    const newImage = await imageController.create(imageData);
-    res.status(201).json(newImage);
-  } catch (error) {
-    console.error("Error:", error);
-    res.status(500).json({ error: error.message || "Internal Server Error" });
-  }
+  imageController.create(imageData, (err, newImage) => {
+    if (err) {
+      console.error("Error:", err);
+      res.status(500).json({ error: err.message || "Internal Server Error" });
+    } else {
+      res.status(201).json(newImage);
+    }
+  });
 });
 
-router.put('/:id', async (req, res) => {
+router.put('/:id', (req, res) => {
   const id = req.params.id;
   const imageData = req.body;
-  try {
-    const result = await imageController.update(id, imageData);
-    res.status(200).json(result);
-  } catch (error) {
-    console.error("Error:", error);
-    res.status(500).json({ error: error.message || "Internal Server Error" });
-  }
+  imageController.update(id, imageData, (err, result) => {
+    if (err) {
+      console.error("Error:", err);
+      res.status(500).json({ error: err.message || "Internal Server Error" });
+    } else {
+      res.status(200).json(result);
+    }
+  });
 });
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', (req, res) => {
   const id = req.params.id;
-  try {
-    const result = await imageController.delete(id);
-    res.status(200).json(result);
-  } catch (error) {
-    console.error("Error:", error);
-    res.status(500).json({ error: error.message || "Internal Server Error" });
-  }
+  imageController.delete(id, (err, result) => {
+    if (err) {
+      console.error("Error:", err);
+      res.status(500).json({ error: err.message || "Internal Server Error" });
+    } else {
+      res.status(200).json(result);
+    }
+  });
 });
 
 module.exports = router;
