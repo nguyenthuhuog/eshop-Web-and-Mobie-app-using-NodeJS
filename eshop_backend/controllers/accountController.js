@@ -69,4 +69,19 @@ accountController.delete = (id, callback) => {
   });
 };
 
+accountController.login = (username, password, callback) => {
+  const sqlString = "SELECT * FROM accounts WHERE username = ? and password = ?";
+  db.query(sqlString, [username, password], (err, result) => {
+    if (err) {
+      callback(err);
+      return;
+    }
+    if (result.length === 0) {
+      callback(null, { message: `Login failed` });
+      return;
+    }
+    callback(null, { message: 'Login successful', user: result[0] });
+  });
+};
+
 module.exports = accountController;
