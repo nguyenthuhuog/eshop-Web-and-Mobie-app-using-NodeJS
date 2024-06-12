@@ -1,22 +1,22 @@
 import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
-import { ShopContext } from './ShopContextProvider'; 
-import { useNavigate } from 'react-router-dom';
-import '../../css/homepage.css';
+import { ShopContext } from './ShopContextProvider';
+import { useNavigation } from '@react-navigation/native';
+import { View, Text, Image, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
 
 const ProductGrid = ({ categoryName }) => {
   let api = 'http://localhost:8080/api/products';
-  let imageApiBase = 'http://localhost:8080/api/images';
+  const imageApiBase = 'http://localhost:8080/api/images';
   const [products, setProducts] = useState([]);
   const { addToCart, cartItems } = useContext(ShopContext);
-  const navigate = useNavigate();
+  const navigation = useNavigation();
 
   const fetchProducts = async () => {
     try {
       if (categoryName != null) api = `${api}/byCategory/${categoryName}`;
       const response = await axios.get(api);
       const fetchedProducts = response.data;
-      
+
       const productsWithImages = await Promise.all(
         fetchedProducts.map(async (product) => {
           try {
@@ -36,7 +36,7 @@ const ProductGrid = ({ categoryName }) => {
   };
 
   const handleProductClick = (productId) => {
-    navigate(`/product/${productId}`);
+    navigation.navigate('ProductDetail', { id: productId });
   };
 
   const handleAddToCart = (e, product) => {
@@ -49,26 +49,35 @@ const ProductGrid = ({ categoryName }) => {
   }, [categoryName]);
 
   return (
-    <div className="main">
-      <div className="product-grid">
+    <ScrollView style={styles.main}>
+      <View style={styles.productGrid}>
         {products.length > 0 ? (
           products.map((product) => (
-            <div className="product" key={product.productID} onClick={() => handleProductClick(product.productID)}>
-              <h3>{product.productName}</h3>
-              <img src={product.imageUrl} alt={`Image of ${product.productName}`} />
-              <p>Price: ${parseFloat(product.price).toFixed(2)}</p>
-              <p>Stock: {product.stock}</p>
-              <button className="btn-addToCart" onClick={(e) => handleAddToCart(e, product)}>
-                Add to cart {cartItems[product.productID] > 0 && <> ({cartItems[product.productID]})</>}
-              </button>
-            </div>
+            <TouchableOpacity
+              key={product.productID}
+              style={styles.product}
+              onPress={() => handleProductClick(product.productID)}
+            >
+              <Text style={styles.productName}>{product.productName}</Text>
+              <Image source={{ uri: product.imageUrl }} style={styles.productImage} />
+              <Text style={styles.productPrice}>Price: ${parseFloat(product.price).toFixed(2)}</Text>
+              <Text style={styles.productStock}>Stock: {product.stock}</Text>
+              <TouchableOpacity
+                style={styles.btnAddToCart}
+                onPress={(e) => handleAddToCart(e, product)}
+              >
+                <Text style={styles.btnText}>
+                  Add to cart {cartItems[product.productID] > 0 && `(${cartItems[product.productID]})`}
+                </Text>
+              </TouchableOpacity>
+            </TouchableOpacity>
           ))
         ) : (
-          <p>Loading products...</p>
+          <Text>Loading products...</Text>
         )}
-      </div>
-    </div>
+      </View>
+    </ScrollView>
   );
-}
+};
 
 export default ProductGrid;

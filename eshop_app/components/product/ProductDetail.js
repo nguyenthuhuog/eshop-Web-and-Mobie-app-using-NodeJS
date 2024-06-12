@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import { View, Text, Image, TextInput, Button, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
 import axios from 'axios';
-import { useParams } from 'react-router-dom';
-import '../../css/productdetail.css';
-import '@fortawesome/fontawesome-free/css/all.min.css';
+import { useRoute } from '@react-navigation/native';
 
 const ProductDetail = () => {
-    const { id } = useParams();
+    const route = useRoute();
+    const { id } = route.params;
     const [product, setProduct] = useState(null);
     const [quantity, setQuantity] = useState(1);
     const [quantityError, setQuantityError] = useState(false);
@@ -14,6 +14,7 @@ const ProductDetail = () => {
     const api = `http://localhost:8080/api/products/${id}`;
     const imageApiBase = 'http://localhost:8080/api/images';
     const commentApiBase = 'http://localhost:8080/api/comments';
+
     const fetchProduct = async () => {
         try {
             const response = await axios.get(api);
@@ -53,80 +54,81 @@ const ProductDetail = () => {
         }
     };
 
-    const handleCommentSubmit = async (e) => {
-        e.preventDefault();
+    const handleCommentSubmit = async () => {
         const newCommentData = {
             content: newComment,
             productID: product.productID,
-            userID : 10000001,
+            userID: 10000001,
         };
-        
+
         setNewComment('');
 
         try {
             const response = await axios.post(commentApiBase, newCommentData);
-            
+
             if (response.status === 201) {
                 console.log('Comment saved successfully:', response.data);
             }
         } catch (error) {
             console.error('Error saving comment:', error);
         }
-        fetchComments()
+        fetchComments();
     };
-    
 
-    if (!product) return <div>Loading...</div>;
+    if (!product) return <Text>Loading...</Text>;
 
     const productDetailsTitle = "Thông số sản phẩm";
     const productDetails = product.description.split(';').map((detail, index) => (
-        <p key={index} className="product-details">{detail.trim()}</p>
+        <Text key={index} style={styles.productDetails}>{detail.trim()}</Text>
     ));
 
     return (
-        <div className="product-detail-page">
-            <div className="product-detail-container">
-                <div className="product-image">
-                    <img src={product.imageUrl} alt={product.productName} />
-                </div>
-                <div className="product-info">
-                    <h2 className="product-name">{product.productName}</h2>
-                    <p className="product-price">Price: ${parseFloat(product.price).toFixed(2)}</p>
-                    <div>
-                        <p className="product-details-title">{productDetailsTitle}</p>
+        <ScrollView style={styles.productDetailPage}>
+            <View style={styles.productDetailContainer}>
+                <Image source={{ uri: product.imageUrl }} style={styles.productImage} />
+                <View style={styles.productInfo}>
+                    <Text style={styles.productName}>{product.productName}</Text>
+                    <Text style={styles.productPrice}>Price: ${parseFloat(product.price).toFixed(2)}</Text>
+                    <View>
+                        <Text style={styles.productDetailsTitle}>{productDetailsTitle}</Text>
                         {productDetails}
-                    </div>
-                    <p className="product-stock">Stock: {product.stock}</p>
-                    <div className="cart-section">
-                        <div className="quantity-selector">
-                            <button onClick={() => handleQuantityChange(quantity - 1)} disabled={quantity <= 1}>-</button>
-                            <span>{quantity}</span>
-                            <button onClick={() => handleQuantityChange(quantity + 1)} disabled={quantity >= product.stock}>+</button>
-                        </div>
-                        <i className="fas fa-shopping-cart cart-icon"></i>
-                    </div>
-                    {quantityError && <p className="quantity-error">Cannot exceed available stock.</p>}
-                </div>
-            </div>
-            <div className="comments-section">
-                <h3>Comments</h3>
-                <ul>
-                    {comments.map((comment) => (
-                        <li key={comment.id}>
-                            User #{comment.userID}: {comment.content}
-                        </li>
-                    ))}
-                </ul>
-                <form onSubmit={handleCommentSubmit}>
-                    <textarea
+                    </View>
+                    <Text style={styles.productStock}>Stock: {product.stock}</Text>
+                    <View style={styles.cartSection}>
+                        <View style={styles.quantitySelector}>
+                            <TouchableOpacity onPress={() => handleQuantityChange(quantity - 1)} disabled={quantity <= 1}>
+                                <Text style={styles.quantityButton}>-</Text>
+                            </TouchableOpacity>
+                            <Text style={styles.quantityText}>{quantity}</Text>
+                            <TouchableOpacity onPress={() => handleQuantityChange(quantity + 1)} disabled={quantity >= product.stock}>
+                                <Text style={styles.quantityButton}>+</Text>
+                            </TouchableOpacity>
+                        </View>
+                        <TouchableOpacity>
+                            <Text style={styles.cartIcon}>🛒</Text>
+                        </TouchableOpacity>
+                    </View>
+                    {quantityError && <Text style={styles.quantityError}>Cannot exceed available stock.</Text>}
+                </View>
+            </View>
+            <View style={styles.commentsSection}>
+                <Text style={styles.commentsTitle}>Comments</Text>
+                {comments.map((comment) => (
+                    <Text key={comment.id}>
+                        User #{comment.userID}: {comment.content}
+                    </Text>
+                ))}
+                <View>
+                    <TextInput
                         value={newComment}
-                        onChange={(e) => setNewComment(e.target.value)}
+                        onChangeText={setNewComment}
                         placeholder="Write a comment..."
-                    ></textarea>
-                    <button type="submit">Submit</button>
-                </form>
-            </div>
-        </div>
+                        style={styles.commentInput}
+                    />
+                    <Button title="Submit" onPress={handleCommentSubmit} />
+                </View>
+            </View>
+        </ScrollView>
     );
 };
 
