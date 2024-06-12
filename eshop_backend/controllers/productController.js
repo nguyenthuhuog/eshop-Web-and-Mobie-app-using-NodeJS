@@ -2,6 +2,7 @@ const db = require("../config/database");
 
 const productController = {};
 
+// Get all products
 productController.getAll = (callback) => {
   const sqlString = "SELECT * FROM products";
   db.query(sqlString, (err, results) => {
@@ -13,6 +14,7 @@ productController.getAll = (callback) => {
   });
 };
 
+// Get product by ID
 productController.getById = (id, callback) => {
   const sqlString = "SELECT * FROM products WHERE productID = ?";
   db.query(sqlString, id, (err, results) => {
@@ -28,6 +30,7 @@ productController.getById = (id, callback) => {
   });
 };
 
+// Create a new product
 productController.create = (productData, callback) => {
   const sqlString = "INSERT INTO products SET ?";
   db.query(sqlString, productData, (err, result) => {
@@ -39,6 +42,7 @@ productController.create = (productData, callback) => {
   });
 };
 
+// Update product by ID
 productController.update = (id, productData, callback) => {
   const sqlString = "UPDATE products SET ? WHERE productID = ?";
   db.query(sqlString, [productData, id], (err, result) => {
@@ -54,6 +58,7 @@ productController.update = (id, productData, callback) => {
   });
 };
 
+// Delete product by ID
 productController.delete = (id, callback) => {
   const sqlString = "DELETE FROM products WHERE productID = ?";
   db.query(sqlString, id, (err, result) => {
@@ -69,14 +74,64 @@ productController.delete = (id, callback) => {
   });
 };
 
+// Get products by category name
 productController.getByCategoryName = (categoryName, callback) => {
-  const sqlString = "SELECT * FROM products JOIN categories USING (categoryID) WHERE categoryName = ?";
+  const sqlString = `
+    SELECT * FROM products
+    JOIN categories USING (categoryID)
+    WHERE categoryName = ?`;
   db.query(sqlString, categoryName, (err, results) => {
     if (err) {
       callback(err);
       return;
     }
     callback(null, results);
+  });
+};
+
+// Update stock quantities
+productController.checkout = (userID, products, callback) => {
+  db.beginTransaction((err) => {
+    if (err) {
+      callback(err);
+      return;
+    }
+
+    const updateStockQuery = `
+      UPDATE products
+      SET stock = CASE
+        ${products.map(product => `WHEN productID = ${product.productID} THEN stock - ${product.quantity}`).join(' ')}
+      END
+      WHERE productID IN (${products.map(product => product.productID).join(', ')});
+    `;
+
+    db.query(updateStockQuery, (err, result) => {
+      if (err) {
+        return db.rollback(() => {
+          callback(err);
+        });
+      }
+
+      const clearCartQuery = "DELETE FROM cart WHERE userID = ?";
+
+      db.query(clearCartQuery, [userID], (err, result) => {
+        if (err) {
+          return db.rollback(() => {
+            callback(err);
+          });
+        }
+
+        db.commit((err) => {
+          if (err) {
+            return db.rollback(() => {
+              callback(err);
+            });
+          }
+
+          callback(null, { message: "Checkout successful and cart cleared" });
+        });
+      });
+    });
   });
 };
 

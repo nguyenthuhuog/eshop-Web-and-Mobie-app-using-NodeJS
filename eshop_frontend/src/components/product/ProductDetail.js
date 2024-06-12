@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
+import { ShopContext } from './ShopContextProvider'; // Import ShopContext
 import '../../css/productdetail.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
@@ -11,9 +12,11 @@ const ProductDetail = () => {
     const [quantityError, setQuantityError] = useState(false);
     const [comments, setComments] = useState([]);
     const [newComment, setNewComment] = useState('');
+    const { addToCart } = useContext(ShopContext); // Use the ShopContext
     const api = `http://localhost:8080/api/products/${id}`;
     const imageApiBase = 'http://localhost:8080/api/images';
     const commentApiBase = 'http://localhost:8080/api/comments';
+
     const fetchProduct = async () => {
         try {
             const response = await axios.get(api);
@@ -53,6 +56,12 @@ const ProductDetail = () => {
         }
     };
 
+    const handleAddToCart = () => {
+        for (let i = 0; i < quantity; i++) {
+            addToCart(product.productID);
+        }
+    };
+
     const handleCommentSubmit = async (e) => {
         e.preventDefault();
         const newCommentData = {
@@ -60,21 +69,20 @@ const ProductDetail = () => {
             productID: product.productID,
             userID : 10000001, // tạm
         };
-        
+
         setNewComment('');
 
         try {
             const response = await axios.post(commentApiBase, newCommentData);
-            
+
             if (response.status === 201) {
                 console.log('Comment saved successfully:', response.data);
             }
         } catch (error) {
             console.error('Error saving comment:', error);
         }
-        fetchComments()
+        fetchComments();
     };
-    
 
     if (!product) return <div>Loading...</div>;
 
@@ -103,7 +111,7 @@ const ProductDetail = () => {
                             <span>{quantity}</span>
                             <button onClick={() => handleQuantityChange(quantity + 1)} disabled={quantity >= product.stock}>+</button>
                         </div>
-                        <i className="fas fa-shopping-cart cart-icon"></i>
+                        <i className="fas fa-shopping-cart cart-icon" onClick={handleAddToCart}></i>
                     </div>
                     {quantityError && <p className="quantity-error">Cannot exceed available stock.</p>}
                 </div>

@@ -1,10 +1,13 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
+import { ShopContext } from './product/ShopContextProvider'; 
 import logo from '../img/logo1.png';
 import '../css/homepage.css';
 
-
 const Header = ({ openLoginModal, openRegisterModal }) => {
+    const { getTotalCartCount } = useContext(ShopContext); 
+    const totalCartCount = getTotalCartCount(); 
+
     return (
         <div id="header">
             <div className="logo">
@@ -52,6 +55,9 @@ const Header = ({ openLoginModal, openRegisterModal }) => {
                     <Link to ="/cart">
                         <button className="btn-cart">
                             <i className="fas fa-shopping-cart"></i>
+                            {totalCartCount > 0 && (
+                                <span className="cart-count">{totalCartCount}</span>
+                            )}
                         </button>
                     </Link>
                     
