@@ -1,0 +1,41 @@
+.contact-form-footer {
+    background-color: #F6F4EB;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    margin-top: 30px;
+}
+.contact-form-footer h1 {
+    margin-top: 160px;
+}
+.contact-form-footer h2 {
+    margin-top: 10px;
+}
+
+.contact-form-footer label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.contact-form-footer input,
+.contact-form-footer textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.contact-form-footer button {
+    background-color: #0c1c2c;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.contact-form-footer button:hover {
+    background-color: #629ad3;
+}
