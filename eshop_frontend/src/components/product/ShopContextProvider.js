@@ -43,6 +43,14 @@ export const ShopContextProvider = (props) => {
     return totalAmount;
   };
 
+  const getTotalCartCount = () => {
+    let totalCount = 0;
+    for (const item in cartItems) {
+      totalCount += cartItems[item];
+    }
+    return totalCount;
+  };
+
   const addToCart = (itemId) => {
     setCartItems((prev) => ({ ...prev, [itemId]: (prev[itemId] || 0) + 1 }));
   };
@@ -58,8 +66,17 @@ export const ShopContextProvider = (props) => {
     setCartItems((prev) => ({ ...prev, [itemId]: newAmount }));
   };
 
-  const checkout = () => {
-    setCartItems(getDefaultCart(products));
+  const checkout = async () => {
+    try {
+      const productsToUpdate = Object.keys(cartItems).map(key => ({
+        productID: Number(key),
+        quantity: cartItems[key]
+      }));
+      await axios.post('http://localhost:8080/api/checkout', { userID: 1, products: productsToUpdate }); // Giả sử userID = 1
+      setCartItems(getDefaultCart(products)); // Reset the cart after successful checkout
+    } catch (error) {
+      console.error('Error during checkout:', error);
+    }
   };
 
   const contextValue = {
@@ -69,7 +86,10 @@ export const ShopContextProvider = (props) => {
     updateCartItemCount,
     removeFromCart,
     getTotalCartAmount,
+    getTotalCartCount,
     checkout,
+    setCartItems, // Ensure this is included in the context
+    getDefaultCart // Ensure this is included in the context
   };
 
   return (

@@ -1,11 +1,11 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import axios from 'axios';
 import { ShopContext } from '../../product/ShopContextProvider';
 import { useNavigate } from 'react-router-dom';
 import '../../../css/cart.css';
 
 const Cart = () => {
-  const { cartItems, products, removeFromCart, updateCartItemCount, addToCart, getTotalCartAmount, checkout } = useContext(ShopContext);
+  const { cartItems, products, removeFromCart, updateCartItemCount, addToCart, getTotalCartAmount, setCartItems, getDefaultCart } = useContext(ShopContext);
   const [productImages, setProductImages] = useState({});
   const imageApiBase = 'http://localhost:8080/api/images';
   const navigate = useNavigate();
@@ -28,9 +28,18 @@ const Cart = () => {
     fetchProductImages();
   }, [cartItems]);
 
-  const handleCheckout = () => {
-    checkout();
-    navigate('/checkout');
+  const handleCheckout = async () => {
+    const productsToUpdate = Object.keys(cartItems).map(key => ({
+      productID: Number(key),
+      quantity: cartItems[key]
+    }));
+    try {
+      await axios.post('http://localhost:8080/api/checkout', { userID: 1, products: productsToUpdate }); // userID tạm thời đặt là 1
+      setCartItems(getDefaultCart(products)); // Reset the cart after successful checkout
+      navigate('/checkout');
+    } catch (error) {
+      console.error('Error during checkout:', error);
+    }
   };
 
   const totalAmount = getTotalCartAmount();
@@ -74,6 +83,6 @@ const Cart = () => {
       )}
     </div>
   );
-}
+};
 
 export default Cart;

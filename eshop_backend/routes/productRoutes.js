@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const productController = require('../controllers/productController');
 
+// Get all products
 router.get('/', (req, res) => {
   productController.getAll((err, products) => {
     if (err) {
@@ -13,6 +14,7 @@ router.get('/', (req, res) => {
   });
 });
 
+// Get product by ID
 router.get('/:id', (req, res) => {
   const id = req.params.id;
   productController.getById(id, (err, product) => {
@@ -25,6 +27,7 @@ router.get('/:id', (req, res) => {
   });
 });
 
+// Create a new product
 router.post('/', (req, res) => {
   const productData = req.body;
   productController.create(productData, (err, newProduct) => {
@@ -37,6 +40,7 @@ router.post('/', (req, res) => {
   });
 });
 
+// Update a product
 router.put('/:id', (req, res) => {
   const id = req.params.id;
   const productData = req.body;
@@ -50,6 +54,7 @@ router.put('/:id', (req, res) => {
   });
 });
 
+// Delete a product
 router.delete('/:id', (req, res) => {
   const id = req.params.id;
   productController.delete(id, (err, result) => {
@@ -62,6 +67,7 @@ router.delete('/:id', (req, res) => {
   });
 });
 
+// Get products by category name
 router.get('/byCategory/:categoryName', (req, res) => {
   const categoryName = req.params.categoryName;
   productController.getByCategoryName(categoryName, (err, products) => {
@@ -74,5 +80,17 @@ router.get('/byCategory/:categoryName', (req, res) => {
   });
 });
 
+// Checkout route
+router.post('/checkout', (req, res) => {
+  const { userID, products } = req.body; // { userID: 1, products: [{ productID: 1, quantity: 2 }, ...] }
+  productController.checkout(userID, products, (err, result) => {
+    if (err) {
+      console.error("Error:", err);
+      res.status(500).json({ error: err.message || "Internal Server Error" });
+    } else {
+      res.status(200).json(result);
+    }
+  });
+});
 
 module.exports = router;
