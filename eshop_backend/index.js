@@ -3,7 +3,8 @@ const bodyParser = require('body-parser');
 const app = express();
 const cors = require('cors');
 const session = require('express-session');
-
+const fs = require('fs');
+const path = require('path');
 
 const accountController = require('./controllers/accountController');
 const accountRoutes = require('./routes/accountRoutes');
@@ -14,6 +15,26 @@ const orderRoutes = require('./routes/orderRoutes');
 const orderDetailRoutes = require('./routes/orderDetailRoutes');
 const productRoutes = require('./routes/productRoutes');
 const messageRoutes = require('./routes/messageRoutes');
+
+const VISIT_COUNT_FILE = path.join(__dirname, 'visitCount.json');
+
+// Function to read visit count from file
+const readVisitCount = () => {
+  try {
+    const data = fs.readFileSync(VISIT_COUNT_FILE, 'utf8');
+    return JSON.parse(data).visitCount;
+  } catch (err) {
+    return 0; // Default visit count if file doesn't exist
+  }
+};
+
+// Function to write visit count to file
+const writeVisitCount = (count) => {
+  fs.writeFileSync(VISIT_COUNT_FILE, JSON.stringify({ visitCount: count }), 'utf8');
+};
+
+// Initialize visit count
+let visitCount = readVisitCount();
 
 // Middlewares
 app.use(session({
@@ -27,6 +48,18 @@ app.use(cors({
   credentials: true, // Allow credentials (cookies, authorization headers)
 }));
 app.use(bodyParser.json());
+
+// Middleware to count visits for any page
+app.post('/api/visit-count', (req, res) => {
+  visitCount++;
+  writeVisitCount(visitCount);
+  res.json({ visitCount });
+});
+
+// Route to get visit count
+app.get('/api/visit-count', (req, res) => {
+  res.json({ visitCount });
+});
 
 app.use('/api/accounts', accountRoutes);
 app.use('/api/categories', categoryRoutes);
