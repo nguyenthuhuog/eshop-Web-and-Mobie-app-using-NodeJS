@@ -9,6 +9,7 @@ const LoginModal = ({ show, onClose }) => {
   if (!show) {
     return null;
   }
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -16,17 +17,22 @@ const LoginModal = ({ show, onClose }) => {
       console.log('User logged in:', response.data);
     } catch (error) {
       console.error('Login error:', error);
-      }
     }
+  }
+
   return (
-    <div id="loginModal" className="modal" style={{ display: show ? 'block' : 'none' }}>
+    <div className="modal" style={{ display: show ? 'block' : 'none' }}>
       <div className="modal-content">
         <span className="close" onClick={onClose}>&times;</span>
         <form onSubmit={handleSubmit}>
-          <label htmlFor="username">Username</label>
-          <input type="text" id="username" name="username" onChange={(e)=> setUsername(e.target.value)}/>
-          <label htmlFor="password">Password</label>
-          <input type="password" id="password" name="password" onChange={(e)=> setPassword(e.target.value)}/>
+          <div className="form-group">
+            <label htmlFor="username">Username</label>
+            <input type="text" id="username" name="username" value={username} onChange={(e) => setUsername(e.target.value)} required />
+          </div>
+          <div className="form-group">
+            <label htmlFor="password">Password</label>
+            <input type="password" id="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+          </div>
           <button type="submit">Login</button>
         </form>
       </div>
