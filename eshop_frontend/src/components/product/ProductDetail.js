@@ -67,7 +67,7 @@ const ProductDetail = () => {
         const newCommentData = {
             content: newComment,
             productID: product.productID,
-            userID : 10000001,
+            userID : 10000001, // tạm
         };
 
         setNewComment('');
