@@ -34,7 +34,7 @@ const Cart = () => {
       quantity: cartItems[key]
     }));
     try {
-      await axios.post('http://localhost:8080/api/checkout', { userID: 1, products: productsToUpdate }); // userID tạm thời đặt là 1
+      await axios.post('http://localhost:8080/api/checkout', { userID: 1, products: productsToUpdate }); // Assuming userID = 1
       setCartItems(getDefaultCart(products)); // Reset the cart after successful checkout
       navigate('/checkout');
     } catch (error) {
