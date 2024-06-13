@@ -72,7 +72,7 @@ export const ShopContextProvider = (props) => {
         productID: Number(key),
         quantity: cartItems[key]
       }));
-      await axios.post('http://localhost:8080/api/checkout', { userID: 1, products: productsToUpdate }); // Giả sử userID = 1
+      await axios.post('http://localhost:8080/api/checkout', { userID: 10000002, products: productsToUpdate }); // Giả sử userID = 10000002
       setCartItems(getDefaultCart(products)); // Reset the cart after successful checkout
     } catch (error) {
       console.error('Error during checkout:', error);

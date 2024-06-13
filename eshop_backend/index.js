@@ -14,6 +14,7 @@ const orderRoutes = require('./routes/orderRoutes');
 const orderDetailRoutes = require('./routes/orderDetailRoutes');
 const productRoutes = require('./routes/productRoutes');
 const messageRoutes = require('./routes/messageRoutes');
+const checkOutRoutes = require('./routes/checkOutRoutes');
 
 // Middlewares
 app.use(session({
@@ -36,6 +37,7 @@ app.use('/api/orders', orderRoutes);
 app.use('/api/orderdetails', orderDetailRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/messages', messageRoutes);
+app.use('/api/checkout', checkOutRoutes);
 
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
