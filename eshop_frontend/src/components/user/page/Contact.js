@@ -13,17 +13,17 @@ const Contact = () => {
         message: ''
     })
     const handleInput = (event) => {
-        setPost({...post, [event.target.name]: event.target.event})
+        setPost({...post, [event.target.name]: event.target.value}) // đổi event thành value -> lưu đc giá trị input vào biến này (lỗi syntax)
     }
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
             console.log(post);
             // Send a POST request with the form data
-            const response = await axios.post(api, {post})
-            .then(response => console.log(response));
+            const response = await axios.post(api, post); // ban đầu là {post}, t bỏ cái ngoặc thôi :v, input là 1 phần tử chứ k phải 1 list ý
+            // .then(response => console.log(response));
     
-            console.log('Message sent successfully:', response.data);
+            console.log('Message sent successfully:', response.data); // chỗ này lỗi đọc data, bỏ dòng then bên trên là hết, chắc kiểu nếu then rồi thì sau đó response bị giải phóng luôn idk
             setIsModalOpen(true);
         } catch (error) {
             console.error('Error sending message:', error);
