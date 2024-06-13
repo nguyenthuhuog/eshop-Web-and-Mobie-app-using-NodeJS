@@ -30,15 +30,15 @@ function App() {
     const [visitCount, setVisitCount] = useState(0);
     const location = useLocation();
 
-    useEffect(() => {
-        fetch("/api").then(
-            response => response.json()
-        ).then(
-            data => {
-                setBackendData(data);
-            }
-        );
-    }, []);
+    // useEffect(() => {
+    //     fetch("/api").then(
+    //         response => response.json()
+    //     ).then(
+    //         data => {
+    //             setBackendData(data);
+    //         }
+    //     );
+    // }, []);
 
     useEffect(() => {
         // Fetch and increment visit count for any page visit
@@ -85,6 +85,7 @@ function App() {
                                 <Route path="/cart" element={<Cart />} />
                                 <Route path="/checkout" element={<Checkout />} />
                                 <Route path="/product/:id" element={<ProductDetail />} />
+                                <Route path="/" element={<HomePage isSidebarActive={isSidebarActive} />} />
                             </Routes>
                         </div>
                         <div>

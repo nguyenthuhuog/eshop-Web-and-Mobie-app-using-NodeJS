@@ -16,12 +16,12 @@ const orderDetailRoutes = require('./routes/orderDetailRoutes');
 const productRoutes = require('./routes/productRoutes');
 const messageRoutes = require('./routes/messageRoutes');
 
-const VISIT_COUNT_FILE = path.join(__dirname, 'visitCount.json');
+const visit_count_file = path.join(__dirname, 'visitCount.json');
 
 // Function to read visit count from file
 const readVisitCount = () => {
   try {
-    const data = fs.readFileSync(VISIT_COUNT_FILE, 'utf8');
+    const data = fs.readFileSync(visit_count_file, 'utf8');
     return JSON.parse(data).visitCount;
   } catch (err) {
     return 0; // Default visit count if file doesn't exist
@@ -30,7 +30,7 @@ const readVisitCount = () => {
 
 // Function to write visit count to file
 const writeVisitCount = (count) => {
-  fs.writeFileSync(VISIT_COUNT_FILE, JSON.stringify({ visitCount: count }), 'utf8');
+  fs.writeFileSync(visit_count_file, JSON.stringify({ visitCount: count }), 'utf8');
 };
 
 // Initialize visit count
