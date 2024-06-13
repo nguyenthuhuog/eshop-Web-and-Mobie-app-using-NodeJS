@@ -1,43 +1,61 @@
-import React, { createContext, useEffect, useState } from 'react';
+import React, { createContext, useState, useEffect } from 'react';
 import axios from 'axios';
 
-export const ShopContext = createContext(null);
-
-const getDefaultCart = (products) => {
-  let cart = {};
-  products.forEach(product => {
-    cart[product.productID] = 0;
-  });
-  return cart;
-};
+export const ShopContext = createContext();
 
 export const ShopContextProvider = (props) => {
   const [products, setProducts] = useState([]);
   const [cartItems, setCartItems] = useState({});
 
-  const fetchProducts = async () => {
-    try {
-      const response = await axios.get('http://localhost:8080/api/products');
-      const fetchedProducts = response.data;
-      setProducts(fetchedProducts);
-      setCartItems(getDefaultCart(fetchedProducts));
-    } catch (error) {
-      console.error('Error fetching products:', error);
-    }
-  };
-
   useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await axios.get('http://localhost:8080/api/products');
+        setProducts(response.data);
+        setCartItems(getDefaultCart(response.data));
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      }
+    };
+
     fetchProducts();
   }, []);
+
+  const getDefaultCart = (products) => {
+    let cart = {};
+    for (let i = 0; i < products.length; i++) {
+      cart[products[i].productID] = 0;
+    }
+    return cart;
+  };
+
+  const addToCart = (productID) => {
+    setCartItems((prev) => ({
+      ...prev,
+      [productID]: prev[productID] + 1,
+    }));
+  };
+
+  const removeFromCart = (productID) => {
+    setCartItems((prev) => ({
+      ...prev,
+      [productID]: prev[productID] - 1,
+    }));
+  };
+
+  const updateCartItemCount = (newAmount, productID) => {
+    setCartItems((prev) => ({
+      ...prev,
+      [productID]: newAmount,
+    }));
+  };
 
   const getTotalCartAmount = () => {
     let totalAmount = 0;
     for (const item in cartItems) {
       if (cartItems[item] > 0) {
         let itemInfo = products.find((product) => product.productID === Number(item));
-        if (itemInfo && itemInfo.price) {
-          totalAmount += cartItems[item] * itemInfo.price;
-        }
+        totalAmount += cartItems[item] * itemInfo.price;
       }
     }
     return totalAmount;
@@ -51,29 +69,15 @@ export const ShopContextProvider = (props) => {
     return totalCount;
   };
 
-  const addToCart = (itemId) => {
-    setCartItems((prev) => ({ ...prev, [itemId]: (prev[itemId] || 0) + 1 }));
-  };
-
-  const removeFromCart = (itemId) => {
-    setCartItems((prev) => {
-      const updatedCount = (prev[itemId] || 1) - 1;
-      return { ...prev, [itemId]: updatedCount >= 0 ? updatedCount : 0 };
-    });
-  };
-
-  const updateCartItemCount = (newAmount, itemId) => {
-    setCartItems((prev) => ({ ...prev, [itemId]: newAmount }));
-  };
-
   const checkout = async () => {
     try {
       const productsToUpdate = Object.keys(cartItems).map(key => ({
         productID: Number(key),
         quantity: cartItems[key]
       }));
-      await axios.post('http://localhost:8080/api/checkout', { userID: 10000002, products: productsToUpdate }); // Giả sử userID = 10000002
-      setCartItems(getDefaultCart(products)); // Reset the cart after successful checkout
+
+      const response = await axios.post('http://localhost:8080/api/products/checkout', { userID: 10000002, products: productsToUpdate });
+      setCartItems(getDefaultCart(products));
     } catch (error) {
       console.error('Error during checkout:', error);
     }
@@ -83,13 +87,13 @@ export const ShopContextProvider = (props) => {
     products,
     cartItems,
     addToCart,
-    updateCartItemCount,
     removeFromCart,
+    updateCartItemCount,
     getTotalCartAmount,
-    getTotalCartCount,
     checkout,
-    setCartItems, // Ensure this is included in the context
-    getDefaultCart // Ensure this is included in the context
+    setCartItems,
+    getDefaultCart,
+    getTotalCartCount,
   };
 
   return (

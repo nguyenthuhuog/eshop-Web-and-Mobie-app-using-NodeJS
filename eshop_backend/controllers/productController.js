@@ -89,49 +89,24 @@ productController.getByCategoryName = (categoryName, callback) => {
   });
 };
 
-// Update stock quantities
+// Update stock quantities without using transactions
 productController.checkout = (userID, products, callback) => {
-  db.beginTransaction((err) => {
+  const productIDs = products.map(product => product.productID);
+  const quantities = products.map(product => product.quantity);
+
+  const updateStockQuery = `
+    UPDATE products
+    SET stock = CASE
+      ${products.map(product => `WHEN productID = ${product.productID} THEN stock - ${product.quantity}`).join(' ')}
+    END
+    WHERE productID IN (${productIDs.join(', ')});
+  `;
+
+  db.query(updateStockQuery, (err, result) => {
     if (err) {
       callback(err);
       return;
     }
-
-    const updateStockQuery = `
-      UPDATE products
-      SET stock = CASE
-        ${products.map(product => `WHEN productID = ${product.productID} THEN stock - ${product.quantity}`).join(' ')}
-      END
-      WHERE productID IN (${products.map(product => product.productID).join(', ')});
-    `;
-
-    db.query(updateStockQuery, (err, result) => {
-      if (err) {
-        return db.rollback(() => {
-          callback(err);
-        });
-      }
-
-      const clearCartQuery = "DELETE FROM cart WHERE userID = ?";
-
-      db.query(clearCartQuery, [userID], (err, result) => {
-        if (err) {
-          return db.rollback(() => {
-            callback(err);
-          });
-        }
-
-        db.commit((err) => {
-          if (err) {
-            return db.rollback(() => {
-              callback(err);
-            });
-          }
-
-          callback(null, { message: "Checkout successful and cart cleared" });
-        });
-      });
-    });
   });
 };
 
