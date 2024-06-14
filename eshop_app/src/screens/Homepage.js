@@ -1,20 +1,20 @@
 import React from 'react';
 import { View, Text, ScrollView, StyleSheet } from 'react-native';
 import Banner from '../components/Banner';
-import SaleNews from '../components/SaleNews';
-import ProductGrid from '../components/ProductGrid';
+import ProductGrid from '../product/ProductGrid';
 import News from '../components/News';
-import ChatComponent from '../components/ChatComponent';
+import Header from '../components/Header';
+import Footer from '../components/Footer';
 
-const HomePage = ({ isSidebarActive }) => {
+
+const HomePage = () => {
   return (
     <ScrollView style={styles.mainContainer}>
       <View style={styles.container}>
         <Banner />
-        <SaleNews />
-        <ChatComponent />
         <ProductGrid />
         <News />
+        {/* <Footer/> */}
       </View>
     </ScrollView>
   );
