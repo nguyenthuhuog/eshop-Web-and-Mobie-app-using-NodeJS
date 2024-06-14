@@ -21,8 +21,10 @@ const LoginModal = ({ show, onClose }) => {
     try {
       const response = await axios.post('http://localhost:8080/api/accounts/login', { username, password }, { withCredentials: true });
       console.log('Response data from user logged in:', response.data);
-      Cookies.set('userID', response.data.userID, { expires: 1 }); // Set cookie with userID, expires in 1 day
-      Cookies.set('isAdmin', response.data.isAdmin, { expires : 1});
+
+      const expireTime = new Date(new Date().getTime() + 15 * 60 * 1000); // 15'
+      Cookies.set('userID', response.data.userID, { expires: expireTime }); // Set cookie with userID, expires in 1 day
+      Cookies.set('isAdmin', response.data.isAdmin, { expires : expireTime});
       console.log(Cookies.get());
       // onClose();
       setUsername(''); 

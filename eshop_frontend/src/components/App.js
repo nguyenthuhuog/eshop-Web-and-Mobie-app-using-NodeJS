@@ -27,6 +27,7 @@ import { ShopContextProvider } from './product/ShopContextProvider';
 import Cart from './user/cart/Cart';
 import Checkout from './user/cart/Checkout';
 import { useNavigate } from 'react-router-dom';
+import AdModal from './AdModal';
 
 import '../css/homepage.css';
 import '../css/App.css';
@@ -34,7 +35,7 @@ import '../css/App.css';
 function App() {
     const [backendData, setBackendData] = useState([{}]);
     const [visitCount, setVisitCount] = useState(0);
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [isAdModalOpen, setIsAdModalOpen] = useState(false);
     const location = useLocation();
     const navigate = useNavigate();
 
@@ -50,16 +51,18 @@ function App() {
     }, [location.pathname]);
 
     useEffect(() => {
-        const checkLoginStatus = async () => {
-            try {
-                const response = await axios.get('http://localhost:8080/api/accounts/login-status', { withCredentials: true });
-                setIsLoggedIn(response.data.loggedIn);
-            } catch (error) {
-                console.error('Error checking login status:', error);
-            }
-        };
-        checkLoginStatus();
-    }, []);
+        console.log(Cookies.get());
+        const adModalShown = Cookies.get('adModalShown');
+        if (!adModalShown) {
+            // Nếu chưa hiển thị, đặt timeout 1 phút để hiển thị quảng cáo
+            const timer = setTimeout(() => {
+                setIsAdModalOpen(true);
+                Cookies.set('adModalShown', 'true', { expires: 1 }); 
+            }, 10 * 1000);
+
+            return () => clearTimeout(timer);
+        }
+    }, [location]);
 
     const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
     const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
@@ -75,12 +78,16 @@ function App() {
     const toggleSidebar = () => {
         setIsSidebarActive(!isSidebarActive);
     };
+    const handleCloseModal = () => {
+        setIsAdModalOpen(false);
+    };
 
     const handleLogout = async () => {
         try {
             await axios.post('http://localhost:8080/api/accounts/logout', {}, { withCredentials: true });
-            Cookies.remove(); // Remove the userID cookie
-            navigate('/homepage');
+            Cookies.remove('userID'); // Remove the userID cookie
+            Cookies.remove('isAdmin');
+            navigate('/');
         } catch (error) {
             console.error('Logout error:', error);
         }
@@ -89,6 +96,7 @@ function App() {
     return (
         <ShopContextProvider>
             <div className="App">
+                <AdModal isOpen={isAdModalOpen} onClose={handleCloseModal} />
                 <Header
                     openLoginModal={openLoginModal}
                     openRegisterModal={openRegisterModal}
@@ -104,7 +112,6 @@ function App() {
                                 <Route path="/mouse" element={<MousePage />} />
                                 <Route path="/computer" element={<ComputerPage />} />
                                 <Route path="/keyboard" element={<KeyboardPage />} />
-                                <Route path="/homepage" element={<HomePage isSidebarActive={isSidebarActive} />} />
                                 <Route path="/admin/homepage" element={<AdminHomepage />} />
                                 <Route path="/admincomputer" element={<AdminComputerPage />} />
                                 <Route path="/products" element={<ProductGrid />} />
