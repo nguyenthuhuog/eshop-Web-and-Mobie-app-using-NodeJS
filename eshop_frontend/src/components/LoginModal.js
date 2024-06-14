@@ -5,9 +5,11 @@ import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
 import '../css/homepage.css';
 
-const LoginModal = ({ show, onClose, setIsLoggedIn }) => {
+const LoginModal = ({ show, onClose }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [responseText, setresponseText] = useState('Please login to continue');
+
   const navigate = useNavigate();
 
   if (!show) {
@@ -19,13 +21,14 @@ const LoginModal = ({ show, onClose, setIsLoggedIn }) => {
     try {
       const response = await axios.post('http://localhost:8080/api/accounts/login', { username, password }, { withCredentials: true });
       console.log('Response data from user logged in:', response.data);
-      setIsLoggedIn(true);
       Cookies.set('userID', response.data.userID, { expires: 1 }); // Set cookie with userID, expires in 1 day
-      onClose();
-      if (response.data.isAdmin) {
+      Cookies.set('isAdmin', response.data.isAdmin, { expires : 1});
+      console.log(Cookies.get());
+      // onClose();
+      if (Cookies.get('isAdmin') == 1) {
         navigate('/admincomputer'); // Redirect to admin homepage if user is an admin
       } else {
-        navigate('/homepage'); // Redirect to user homepage otherwise
+        setresponseText('You have logged in, happy shopping');
       }
     } catch (error) {
       console.error('Login error:', error);
@@ -42,6 +45,7 @@ const LoginModal = ({ show, onClose, setIsLoggedIn }) => {
           <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} />
           <label>Password:</label>
           <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+          <h3>{responseText}</h3>
           <button type="submit">Login</button>
         </form>
       </div>

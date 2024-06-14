@@ -26,6 +26,7 @@ import ProductGrid from './product/ProductGrid';
 import { ShopContextProvider } from './product/ShopContextProvider';
 import Cart from './user/cart/Cart';
 import Checkout from './user/cart/Checkout';
+import { useNavigate } from 'react-router-dom';
 
 import '../css/homepage.css';
 import '../css/App.css';
@@ -35,10 +36,11 @@ function App() {
     const [visitCount, setVisitCount] = useState(0);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const location = useLocation();
+    const navigate = useNavigate();
 
     useEffect(() => {
         // Fetch and increment visit count for any page visit
-        fetch("/api/visit-count", { method: 'POST' }).then(
+        fetch("http://localhost:8080/api/visit-count", { method: 'POST' }).then(
             response => response.json()
         ).then(
             data => {
@@ -77,8 +79,8 @@ function App() {
     const handleLogout = async () => {
         try {
             await axios.post('http://localhost:8080/api/accounts/logout', {}, { withCredentials: true });
-            setIsLoggedIn(false);
-            Cookies.remove('userID'); // Remove the userID cookie
+            Cookies.remove(); // Remove the userID cookie
+            navigate('/homepage');
         } catch (error) {
             console.error('Logout error:', error);
         }
@@ -90,7 +92,6 @@ function App() {
                 <Header
                     openLoginModal={openLoginModal}
                     openRegisterModal={openRegisterModal}
-                    isLoggedIn={isLoggedIn}
                     handleLogout={handleLogout}
                 />
                 <div className={`wrapper ${isSidebarActive ? 'active' : ''}`}>
@@ -125,7 +126,7 @@ function App() {
                         <Footer visitCount={visitCount} />
                     </div>
                 </div>
-                <LoginModal show={isLoginModalOpen} onClose={closeLoginModal} setIsLoggedIn={setIsLoggedIn} />
+                <LoginModal show={isLoginModalOpen} onClose={closeLoginModal} />
                 <RegisterModal show={isRegisterModalOpen} onClose={closeRegisterModal} />
             </div>
         </ShopContextProvider>

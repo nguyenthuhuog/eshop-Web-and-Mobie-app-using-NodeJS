@@ -2,9 +2,10 @@ import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { ShopContext } from './product/ShopContextProvider';
 import logo from '../img/logo1.png';
+import Cookies from 'js-cookie';
 import '../css/homepage.css';
 
-const Header = ({ openLoginModal, openRegisterModal, isLoggedIn, handleLogout }) => {
+const Header = ({ openLoginModal, openRegisterModal, handleLogout }) => {
     const { getTotalCartCount } = useContext(ShopContext);
     const totalCartCount = getTotalCartCount();
 
@@ -52,7 +53,7 @@ const Header = ({ openLoginModal, openRegisterModal, isLoggedIn, handleLogout })
                             )}
                         </button>
                     </Link>
-                    {isLoggedIn ? (
+                    {Cookies.get('userID') ? (
                         <button className="btn btn-logout" onClick={handleLogout}>Logout</button>
                     ) : (
                         <>

@@ -34,10 +34,6 @@ commentController.getByProductId = (id, callback) => {
       callback(err, null);
       return;
     }
-    if (results.length === 0) {
-      callback({ message: `Comment with ID ${id} not found` }, null);
-      return;
-    }
     callback(null, results);
   });
 };
