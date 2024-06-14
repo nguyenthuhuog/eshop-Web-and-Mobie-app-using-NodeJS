@@ -89,47 +89,47 @@ productController.getByCategoryName = (categoryName, callback) => {
   });
 };
 
-// Update stock quantities
+// Update stock quantities without using transactions
 productController.checkout = (userID, products, callback) => {
-  db.beginTransaction((err) => {
+  // Calculate the total amount
+  let totalAmount = 0;
+  for (const product of products) {
+    totalAmount += product.quantity * product.price; // Assume each product has a price property
+  }
+
+  // Insert the order
+  const orderSql = "INSERT INTO orders (userID, orderDate, totalAmount) VALUES (?, CURDATE(), ?)";
+  db.query(orderSql, [userID, totalAmount], (err, orderResult) => {
     if (err) {
-      callback(err);
-      return;
+      return callback(err);
     }
 
-    const updateStockQuery = `
-      UPDATE products
-      SET stock = CASE
-        ${products.map(product => `WHEN productID = ${product.productID} THEN stock - ${product.quantity}`).join(' ')}
-      END
-      WHERE productID IN (${products.map(product => product.productID).join(', ')});
-    `;
+    const orderID = orderResult.insertId;
 
-    db.query(updateStockQuery, (err, result) => {
+    // Insert the order details
+    const orderDetailsSql = "INSERT INTO orderDetails (orderID, productID, quantity) VALUES ?";
+    const orderDetailsData = products.map(product => [orderID, product.productID, product.quantity]);
+
+    db.query(orderDetailsSql, [orderDetailsData], (err, orderDetailsResult) => {
       if (err) {
-        return db.rollback(() => {
-          callback(err);
-        });
+        return callback(err);
       }
 
-      const clearCartQuery = "DELETE FROM cart WHERE userID = ?";
+      // Update the product stock
+      const updateStockSql = `
+        UPDATE products
+        SET stock = CASE
+          ${products.map(product => `WHEN productID = ${product.productID} THEN stock - ${product.quantity}`).join(' ')}
+        END
+        WHERE productID IN (${products.map(product => product.productID).join(', ')});
+      `;
 
-      db.query(clearCartQuery, [userID], (err, result) => {
+      db.query(updateStockSql, (err, updateResult) => {
         if (err) {
-          return db.rollback(() => {
-            callback(err);
-          });
+          return callback(err);
         }
 
-        db.commit((err) => {
-          if (err) {
-            return db.rollback(() => {
-              callback(err);
-            });
-          }
-
-          callback(null, { message: "Checkout successful and cart cleared" });
-        });
+        callback(null, { message: 'Checkout successful', orderID });
       });
     });
   });

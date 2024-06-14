@@ -1,11 +1,9 @@
 import React, { useContext } from 'react';
-import { HomepageProvider, HomepageContext } from './HomepageContext';
-import Banner from '../../user/Banner';
-import SaleNews from './AdminSaleNews';
-import ProductGrid from '../../product/AdminProductGrid';
-import News from './AdminNews';
+import { HomepageProvider, HomepageContext } from './HomepageProvider';
+import Banner from '../../Banner';
+// import ProductGrid from '../product/AdminProductGrid';
 import '../../../css/homepage.css';
-import ChatComponent from './ChatComponent';
+// import ChatComponent from './ChatComponent';
 
 const HomePageContent = () => {
   const { isAdmin, toggleAdminMode } = useContext(HomepageContext);
@@ -17,10 +15,8 @@ const HomePageContent = () => {
           {isAdmin ? 'Switch to Viewer Mode' : 'Switch to Admin Mode'}
         </button>
         <Banner />
-        <SaleNews />
-        <ChatComponent />
-        <ProductGrid />
-        <News />
+        {/* <ChatComponent /> */}
+        {/* <ProductGrid /> */}
       </div>
     </div>
   );

@@ -1,13 +1,17 @@
 import React, { useContext, useState, useEffect } from 'react';
 import axios from 'axios';
+import Cookies from 'js-cookie';
 import { ShopContext } from '../../product/ShopContextProvider';
 import { useNavigate } from 'react-router-dom';
 import '../../../css/cart.css';
+import LoginModal from '../../LoginModal'; // Ensure this path is correct
 
 const Cart = () => {
   const { cartItems, products, removeFromCart, updateCartItemCount, addToCart, getTotalCartAmount, setCartItems, getDefaultCart } = useContext(ShopContext);
   const [productImages, setProductImages] = useState({});
-  const imageApiBase = 'http://localhost:8080/api/images';
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const api = 'http://localhost:8080/api/products';
+  // const imageApiBase = 'http://localhost:8080/api/images';
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -16,8 +20,8 @@ const Cart = () => {
       for (const productId in cartItems) {
         if (cartItems[productId] > 0) {
           try {
-            const imageResponse = await axios.get(`${imageApiBase}/productID/${productId}`);
-            images[productId] = imageResponse.data[0].image_url;
+            const imageResponse = await axios.get(`${api}/${productId}`);
+            images[productId] = imageResponse.data.image_url;
           } catch (error) {
             console.error(`Error fetching image for productID ${productId}:`, error);
           }
@@ -29,18 +33,31 @@ const Cart = () => {
   }, [cartItems]);
 
   const handleCheckout = async () => {
-    const productsToUpdate = Object.keys(cartItems).map(key => ({
-      productID: Number(key),
-      quantity: cartItems[key]
-    }));
-    try {
-      await axios.post('http://localhost:8080/api/checkout', { userID: 1, products: productsToUpdate }); // userID tạm thời đặt là 1
-      setCartItems(getDefaultCart(products)); // Reset the cart after successful checkout
-      navigate('/checkout');
-    } catch (error) {
-      console.error('Error during checkout:', error);
+    const userID = Cookies.get('userID');
+    if (!userID) {
+        setIsLoginModalOpen(true); // Show login modal if not logged in
+        return;
     }
-  };
+
+    const productsToUpdate = Object.keys(cartItems).map(key => {
+        const product = products.find(p => p.productID === Number(key));
+        return {
+            productID: Number(key),
+            quantity: cartItems[key],
+            price: product.price
+        };
+    });
+
+    try {
+        setCartItems(getDefaultCart(products));
+        navigate('/checkout');
+        const response = await axios.post('http://localhost:8080/api/products/checkout', { userID, products: productsToUpdate });
+        console.log(response.data);
+    } catch (error) {
+        console.error('Error during checkout:', error);
+        alert('Checkout failed. Please try again.');
+    }
+};
 
   const totalAmount = getTotalCartAmount();
 
@@ -81,6 +98,7 @@ const Cart = () => {
       ) : (
         <p>Your cart is empty</p>
       )}
+      <LoginModal show={isLoginModalOpen} onClose={() => setIsLoginModalOpen(false)} setIsLoggedIn={() => { /* handle setting logged-in state if needed */ }} />
     </div>
   );
 };
