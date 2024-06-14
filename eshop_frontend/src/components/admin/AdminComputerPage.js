@@ -5,6 +5,7 @@ import { Product } from '../product/Product';
 import AddProductForm from './product/AddProductForm'; // Import the AddProductForm component
 import '../../css/homepage.css';
 import '../../css/product.css';
+// import ProductGrid from './product/AdminProductGrid';
 
 const ComputerPageAdmin = () => {
   const [products, setProducts] = useState(PRODUCTS);
@@ -28,11 +29,7 @@ const ComputerPageAdmin = () => {
           </p>
         </div>
 
-        <div className="product-grid">
-          {products.map((product) => (
-            <Product key={product.id} data={product} deleteProduct={deleteProduct} />
-          ))}
-        </div>
+      {/* <ProductGrid></ProductGrid> */}
 
         <AddProductForm addProduct={addProduct} />
       </div>
