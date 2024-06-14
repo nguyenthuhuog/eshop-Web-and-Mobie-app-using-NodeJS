@@ -1,81 +1,60 @@
 // AddProductForm.js
 import React, { useState } from 'react';
+import axios from 'axios';
 
 const AddProductForm = ({ addProduct }) => {
-  const [productName, setProductName] = useState('');
-  const [price, setPrice] = useState('');
-  const [productImage, setProductImage] = useState('');
-  const [description, setDescription] = useState('');
-  const [stock, setStock] = useState('');
+  const api = 'http://localhost:8080/api/products';
+  const [post, setPost] = useState({
+    productName: '',
+    price: '',
+    productImage:'',
+    description:'',
+    stock: ''
+});
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const newProduct = {
-      id: Date.now(), // Simple unique ID generation
-      productName,
-      price: parseFloat(price),
-      productImage,
-      description,
-      stock: parseInt(stock, 10)
+      const handleInput = (event) => {
+        setPost({...post, [event.target.name]: event.target.value}) // đổi event thành value -> lưu đc giá trị input vào biến này (lỗi syntax)
+    }
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        try {
+            console.log(post);
+            // Send a POST request with the form data
+            const response = await axios.post(api, post); // ban đầu là {post}, t bỏ cái ngoặc thôi :v, input là 1 phần tử chứ k phải 1 list ý
+            // .then(response => console.log(response));
+    
+            console.log('Message sent successfully:', response.data); // chỗ này lỗi đọc data, bỏ dòng then bên trên là hết, chắc kiểu nếu then rồi thì sau đó response bị giải phóng luôn idk
+        } catch (error) {
+            console.error('Error sending message:', error);
+        }
     };
-    addProduct(newProduct);
-    // Reset form fields
-    setProductName('');
-    setPrice('');
-    setProductImage('');
-    setDescription('');
-    setStock('');
-  };
 
   return (
-    <form className="add-product-form" onSubmit={handleSubmit}>
-      <h3>Add New Product</h3>
-      <div>
-        <label>Product Name:</label>
-        <input 
-          type="text" 
-          value={productName} 
-          onChange={(e) => setProductName(e.target.value)} 
-          required 
-        />
-      </div>
-      <div>
-        <label>Price:</label>
-        <input 
-          type="number" 
-          value={price} 
-          onChange={(e) => setPrice(e.target.value)} 
-          required 
-        />
-      </div>
-      <div>
-        <label>Product Image URL:</label>
-        <input 
-          type="text" 
-          value={productImage} 
-          onChange={(e) => setProductImage(e.target.value)} 
-          required 
-        />
-      </div>
-      <div>
-        <label>Description:</label>
-        <textarea 
-          value={description} 
-          onChange={(e) => setDescription(e.target.value)} 
-          required 
-        ></textarea>
-      </div>
-      <div>
-        <label>Stock:</label>
-        <input 
-          type="number" 
-          value={stock} 
-          onChange={(e) => setStock(e.target.value)} 
-          required 
-        />
-      </div>
-      <button type="submit">Add Product</button>
-    </form>
+    <form onSubmit={handleSubmit}>
+    <div className="form-row">
+        <div className="form-group">
+            <label htmlFor="product-name">Product Name</label>
+            <input type="text" id="product-name" name="productName" value={post.productName} onChange={handleInput} required />
+        </div>
+        <div className="form-group">
+            <label htmlFor="price">Price</label>
+            <input type="number" id="price" name="price" value={post.price} onChange={handleInput} required />
+        </div>
+        <div className="form-group">
+            <label htmlFor="image">Product Image URL </label>
+            <input type="text" id="image" name="productImage" value={post.productImage} onChange={handleInput} required />
+        </div>
+        <div className="form-group">
+            <label htmlFor="description">Description</label>
+            <input type="text" id="description" name="description" value={post.description} onChange={handleInput} required />
+        </div>
+        <div className="form-group">
+            <label htmlFor="stock">Stock</label>
+            <input type="text" id="stock" name="stock" value={post.stock} onChange={handleInput} required />
+        </div>
+    </div>
+    <button type="submit">Add Product</button>
+</form>
   );
 };
 

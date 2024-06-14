@@ -6,6 +6,7 @@ export const ShopContext = createContext();
 export const ShopContextProvider = (props) => {
   const [products, setProducts] = useState([]);
   const [cartItems, setCartItems] = useState({});
+  const [errorMessages, setErrorMessages] = useState({});
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -30,11 +31,31 @@ export const ShopContextProvider = (props) => {
   };
 
   const addToCart = (productID) => {
-    setCartItems((prev) => ({
-      ...prev,
-      [productID]: prev[productID] + 1,
-    }));
+    const product = products.find((product) => product.productID === productID);
+    if (product) {
+      setCartItems((prev) => {
+        const currentQuantity = prev[productID] || 0;
+        if (currentQuantity < product.stock) {
+          return {
+            ...prev,
+            [productID]: currentQuantity + 1,
+          };
+        } else {
+          setErrorMessages((prev) => ({
+            ...prev,
+            [productID]: 'Cannot add more, stock limit reached',
+          }));
+          return prev; // No change to the cart items
+        }
+      });
+    } else {
+      setErrorMessages((prev) => ({
+        ...prev,
+        [productID]: 'Out of stock',
+      }));
+    }
   };
+  
 
   const removeFromCart = (productID) => {
     setCartItems((prev) => ({
@@ -75,9 +96,8 @@ export const ShopContextProvider = (props) => {
         productID: Number(key),
         quantity: cartItems[key]
       }));
-
-      const response = await axios.post('http://localhost:8080/api/products/checkout', { userID: 10000002, products: productsToUpdate });
-      setCartItems(getDefaultCart(products));
+      // const response = await axios.post('http://localhost:8080/api/products/checkout', { userID: 10000002, products: productsToUpdate });
+      // setCartItems(getDefaultCart(products));
     } catch (error) {
       console.error('Error during checkout:', error);
     }
@@ -94,6 +114,7 @@ export const ShopContextProvider = (props) => {
     setCartItems,
     getDefaultCart,
     getTotalCartCount,
+    errorMessages, 
   };
 
   return (

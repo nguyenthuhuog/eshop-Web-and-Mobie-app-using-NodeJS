@@ -6,7 +6,7 @@ import '../../css/homepage.css';
 
 const ProductGrid = ({ categoryName }) => {
   let api = 'http://localhost:8080/api/products';
-  let imageApiBase = 'http://localhost:8080/api/images';
+  // let imageApiBase = 'http://localhost:8080/api/images';
   const [products, setProducts] = useState([]);
   const { addToCart, cartItems } = useContext(ShopContext);
   const navigate = useNavigate();
@@ -17,19 +17,19 @@ const ProductGrid = ({ categoryName }) => {
       const response = await axios.get(api);
       const fetchedProducts = response.data;
       
-      const productsWithImages = await Promise.all(
-        fetchedProducts.map(async (product) => {
-          try {
-            const imageResponse = await axios.get(`${imageApiBase}/productID/${product.productID}`);
-            // imageResponse contain multiple images of one product
-            return { ...product, imageUrl: imageResponse.data[0].image_url };
-          } catch (error) {
-            console.error(`Error fetching image for productID ${product.productID}:`, error);
-            return product;
-          }
-        })
-      );
-      setProducts(productsWithImages);
+      // const productsWithImages = await Promise.all(
+      //   fetchedProducts.map(async (product) => {
+      //     try {
+      //       const imageResponse = await axios.get(`${imageApiBase}/productID/${product.productID}`);
+      //       // imageResponse contain multiple images of one product
+      //       return { ...product, imageUrl: imageResponse.data[0].image_url };
+      //     } catch (error) {
+      //       console.error(`Error fetching image for productID ${product.productID}:`, error);
+      //       return product;
+      //     }
+      //   })
+      // );
+      setProducts(fetchedProducts);
     } catch (error) {
       console.error('Error fetching products:', error);
     }
@@ -55,7 +55,7 @@ const ProductGrid = ({ categoryName }) => {
           products.map((product) => (
             <div className="product" key={product.productID} onClick={() => handleProductClick(product.productID)}>
               <h3>{product.productName}</h3>
-              <img src={product.imageUrl} alt={`Image of ${product.productName}`} />
+              <img src={product.image_url} alt={`Image of ${product.productName}`} />
               <p>Price: ${parseFloat(product.price).toFixed(2)}</p>
               <p>Stock: {product.stock}</p>
               <button className="btn-addToCart" onClick={(e) => handleAddToCart(e, product)}>
