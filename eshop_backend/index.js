@@ -4,8 +4,6 @@ const app = express();
 const cors = require('cors');
 const session = require('express-session');
 
-
-const accountController = require('./controllers/accountController');
 const accountRoutes = require('./routes/accountRoutes');
 const categoryRoutes = require('./routes/categoryRoutes');
 const commentRoutes = require('./routes/commentRoutes');
@@ -20,7 +18,9 @@ app.use(session({
   secret: 'your-secret-key', // Chuỗi bí mật để ký session ID cookie
   resave: false, // Không lưu session nếu không thay đổi
   saveUninitialized: true, // Lưu session mới nhưng không được sửa đổi
-  cookie: { secure: false } // Đặt thành true nếu sử dụng HTTPS
+  cookie: {
+    maxAge: 30 * 60 * 1000 // 30 phút
+  }
 }));
 app.use(cors({
   origin: 'http://localhost:3000', // Allow requests from this origin
