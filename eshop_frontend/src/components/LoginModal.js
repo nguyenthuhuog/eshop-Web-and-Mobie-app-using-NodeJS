@@ -25,6 +25,8 @@ const LoginModal = ({ show, onClose }) => {
       Cookies.set('isAdmin', response.data.isAdmin, { expires : 1});
       console.log(Cookies.get());
       // onClose();
+      setUsername(''); 
+      setPassword(''); 
       if (Cookies.get('isAdmin') == 1) {
         navigate('/admincomputer'); // Redirect to admin homepage if user is an admin
       } else {
