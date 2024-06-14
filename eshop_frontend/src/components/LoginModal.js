@@ -18,7 +18,7 @@ const LoginModal = ({ show, onClose, setIsLoggedIn }) => {
     e.preventDefault();
     try {
       const response = await axios.post('http://localhost:8080/api/accounts/login', { username, password }, { withCredentials: true });
-      console.log('User logged in:', response.data);
+      console.log('Response data from user logged in:', response.data);
       setIsLoggedIn(true);
       Cookies.set('userID', response.data.userID, { expires: 1 }); // Set cookie with userID, expires in 1 day
       onClose();

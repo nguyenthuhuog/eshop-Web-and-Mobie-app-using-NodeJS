@@ -27,7 +27,20 @@ commentController.getById = (id, callback) => {
     callback(null, results[0]);
   });
 };
-
+commentController.getByProductId = (id, callback) => {
+  const sqlString = "SELECT * FROM comments WHERE productID = ?";
+  db.query(sqlString, id, (err, results) => {
+    if (err) {
+      callback(err, null);
+      return;
+    }
+    if (results.length === 0) {
+      callback({ message: `Comment with ID ${id} not found` }, null);
+      return;
+    }
+    callback(null, results);
+  });
+};
 commentController.create = (commentData, callback) => {
   const sqlString = "INSERT INTO comments SET ?";
   db.query(sqlString, commentData, (err, result) => {

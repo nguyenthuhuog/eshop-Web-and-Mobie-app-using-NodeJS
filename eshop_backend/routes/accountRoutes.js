@@ -67,19 +67,23 @@ router.post('/login', (req, res) => {
   const { username, password } = req.body;
   accountController.login(username, password, (err, result) => {
     if (err) {
-      return res.status(err).json({ error: err.message || 'Login failed' });
+      return res.status(401).json({ error: err.message || 'Login failed' });
     }
     req.session.userId = result.userID;
+    req.session.username = result.username;
     req.session.isAdmin = result.isAdmin;
-    res.status(200).json({ message: 'Login successful', result });
+    res.cookie('user', result, { maxAge: 900000, httpOnly: true });
+    res.status(200).json(result);
   });
 });
 
 router.post('/logout', (req, res) => {
   req.session.destroy(err => {
     if (err) {
-      return res.status(500).json({ error: err.message || 'Internal Server Error' });
+      return res.status(500).json({ message: 'Logout failed' });
     }
+    res.clearCookie('userID'); // Ensure the userID cookie is cleared
+    res.clearCookie('user');
     res.status(200).json({message: 'Logout successful'});
   });
 });

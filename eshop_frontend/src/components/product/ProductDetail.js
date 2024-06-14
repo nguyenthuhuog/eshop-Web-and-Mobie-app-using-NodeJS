@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
+import Cookies from 'js-cookie';
+
 import { useParams } from 'react-router-dom';
 import { ShopContext } from './ShopContextProvider'; // Import ShopContext
 import '../../css/productdetail.css';
@@ -7,34 +9,42 @@ import '@fortawesome/fontawesome-free/css/all.min.css';
 
 const ProductDetail = () => {
     const { id } = useParams();
-    const [product, setProduct] = useState(null);
+    const [product, setProduct] = useState({
+        productID: 1,
+        productName: "",
+        categoryID: 1,
+        description: "",
+        price: "",
+        stock: 1,
+        image_url: ""
+      });
     const [quantity, setQuantity] = useState(1);
     const [quantityError, setQuantityError] = useState(false);
     const [comments, setComments] = useState([]);
     const [newComment, setNewComment] = useState('');
     const { addToCart } = useContext(ShopContext); // Use the ShopContext
     const api = `http://localhost:8080/api/products/${id}`;
-    // const imageApiBase = 'http://localhost:8080/api/images';
     const commentApiBase = 'http://localhost:8080/api/comments';
 
     const fetchProduct = async () => {
+        console.log("Call fetch product");
         try {
             const response = await axios.get(api);
             const fetchedProduct = response.data;
 
-            // const imageResponse = await axios.get(`${imageApiBase}/productID/${fetchedProduct.productID}`);
-            // const productWithImage = { ...fetchedProduct, imageUrl: imageResponse.data[0].image_url };
-
             setProduct(fetchedProduct);
             console.log('Product details with image:', fetchedProduct);
+            return Promise.all([fetchProduct.productID]);
         } catch (error) {
             console.error('Error fetching product details or image:', error);
         }
     };
 
-    const fetchComments = async () => {
+    const fetchComments = async (id) => {
+        console.log("Call fetch comment");
+        console.log("product saved in comment: ",product);
         try {
-            const response = await axios.get(`${commentApiBase}/productID`);
+            const response = await axios.get(`${commentApiBase}/productID/${id}`);
             console.log('Comments retrieved successfully:', response.data);
             setComments(response.data);
         } catch (error) {
@@ -42,9 +52,12 @@ const ProductDetail = () => {
         }
     };
 
-    useEffect(() => {
-        fetchProduct();
-        fetchComments();
+    useEffect( () => {
+        const update = async () => {
+            const id = await fetchProduct();
+            fetchComments(id);
+        }
+        update();
     }, [id]);
 
     const handleQuantityChange = (newQuantity) => {
@@ -63,11 +76,12 @@ const ProductDetail = () => {
     };
 
     const handleCommentSubmit = async (e) => {
+        console.log("Call add comment");
         e.preventDefault();
         const newCommentData = {
             content: newComment,
             productID: product.productID,
-            userID : 10000001, // tạm
+            userID : Cookies.get('userID'),
         };
 
         setNewComment('');
@@ -81,7 +95,7 @@ const ProductDetail = () => {
         } catch (error) {
             console.error('Error saving comment:', error);
         }
-        fetchComments();
+        fetchComments(product.productID);
     };
 
     if (!product) return <div>Loading...</div>;

@@ -13,6 +13,7 @@ const orderDetailRoutes = require('./routes/orderDetailRoutes');
 const productRoutes = require('./routes/productRoutes');
 const messageRoutes = require('./routes/messageRoutes');
 const productController = require('./controllers/productController');
+const { authMiddleware, adminMiddleware } = require('./middlewares/authMiddleware');
 
 const app = express();
 const visit_count_file = path.join(__dirname, 'visitCount.json');
@@ -46,13 +47,13 @@ app.use(cors({
 app.use(bodyParser.json());
 
 // Middleware to ensure user is authenticated
-const ensureAuthenticated = (req, res, next) => {
-  if (req.session.userId) {
-    next();
-  } else {
-    res.status(401).json({ message: 'You need to be logged in to access this route' });
-  }
-};
+// const ensureAuthenticated = (req, res, next) => {
+//   if (req.session.userId) {
+//     next();
+//   } else {
+//     res.status(401).json({ message: 'You need to be logged in to access this route' });
+//   }
+// };
 
 app.post('/api/visit-count', (req, res) => {
   visitCount++;
@@ -64,30 +65,30 @@ app.get('/api/visit-count', (req, res) => {
   res.json({ visitCount });
 });
 
-app.post('/api/accounts/login', (req, res) => {
-  const { username, password } = req.body;
-  accountController.login(username, password, (err, user) => {
-    if (err) {
-      return res.status(401).json({ message: 'Login failed' });
-    }
-    req.session.userId = user.userID;
-    req.session.username = user.username;
-    req.session.isAdmin = user.isAdmin; // Save isAdmin status in the session
-    res.cookie('user', user, { maxAge: 900000, httpOnly: true });
-    res.json(user);
-  });
-});
+// app.post('/api/accounts/login', (req, res) => {
+//   const { username, password } = req.body;
+//   accountController.login(username, password, (err, user) => {
+//     if (err) {
+//       return res.status(401).json({ message: 'Login failed' });
+//     }
+//     req.session.userId = user.userID;
+//     req.session.username = user.username;
+//     req.session.isAdmin = user.isAdmin; // Save isAdmin status in the session
+//     res.cookie('user', user, { maxAge: 900000, httpOnly: true });
+//     res.json(user);
+//   });
+// });
 
-app.post('/api/accounts/logout', (req, res) => {
-  req.session.destroy((err) => {
-    if (err) {
-      return res.status(500).json({ message: 'Logout failed' });
-    }
-    res.clearCookie('userID'); // Ensure the userID cookie is cleared
-    res.clearCookie('user');
-    res.json({ message: 'Logged out successfully' });
-  });
-});
+// app.post('/api/accounts/logout', (req, res) => {
+//   req.session.destroy((err) => {
+//     if (err) {
+//       return res.status(500).json({ message: 'Logout failed' });
+//     }
+//     res.clearCookie('userID'); // Ensure the userID cookie is cleared
+//     res.clearCookie('user');
+//     res.json({ message: 'Logged out successfully' });
+//   });
+// });
 
 // Endpoint to check if user is logged in
 app.get('/api/accounts/login-status', (req, res) => {
@@ -107,7 +108,7 @@ app.use('/api/products', productRoutes);
 app.use('/api/messages', messageRoutes);
 
 // Apply the middleware to the checkout route
-app.post('/api/products/checkout', ensureAuthenticated, (req, res) => {
+app.post('/api/products/checkout', authMiddleware, (req, res) => {
   const { userId } = req.session;
   const { products } = req.body; // Assume products is an array of { productID, quantity, price }
 

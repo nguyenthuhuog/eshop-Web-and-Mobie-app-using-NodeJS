@@ -1,3 +1,4 @@
+use electronic_store;
 drop table if exists images;
 drop table if exists orderDetails;
 drop table if exists orders;

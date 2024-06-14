@@ -23,7 +23,18 @@ router.get('/:id', (req, res) => {
       res.status(200).json(comment);
     }
   });
-});
+}); 
+router.get('/productID/:id', (req, res) => {
+  const id = req.params.id;
+  commentController.getByProductId(id, (err, comment) => {
+    if (err) {
+      console.error("Error:", err);
+      res.status(500).json({ error: err.message || "Internal Server Error" });
+    } else {
+      res.status(200).json(comment); 
+    }
+  });
+}); 
 
 router.post('/', (req, res) => {
   const commentData = req.body;
