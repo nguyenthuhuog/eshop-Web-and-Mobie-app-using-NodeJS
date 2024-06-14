@@ -101,12 +101,12 @@ productController.checkout = (userID, products, callback) => {
     END
     WHERE productID IN (${productIDs.join(', ')});
   `;
-
   db.query(updateStockQuery, (err, result) => {
     if (err) {
       callback(err);
       return;
     }
+    callback(null, result);
   });
 };
 

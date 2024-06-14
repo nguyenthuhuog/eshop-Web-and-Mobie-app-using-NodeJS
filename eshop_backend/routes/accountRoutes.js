@@ -77,11 +77,11 @@ router.post('/login', (req, res) => {
 });
 
 router.post('/logout', (req, res) => {
-  accountController.logout((err, result) => {
+  req.session.destroy(err => {
     if (err) {
       res.status(500).json({ error: err.message || 'Internal Server Error' });
     } else {
-      res.status(200).json(result);
+      res.status(200).json({message: 'Logout successful'});
     }
   });
 });

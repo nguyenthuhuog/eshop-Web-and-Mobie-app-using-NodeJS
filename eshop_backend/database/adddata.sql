@@ -1,3 +1,4 @@
+
 SET SQL_SAFE_UPDATES = 0;
 
 delete from images;
@@ -35,7 +36,9 @@ INSERT INTO products (productID, productName, categoryID, description, price, st
 
 INSERT INTO accounts (userID, username, password, firstName, lastName, email, phone, address, isAdmin) VALUES
 (10000001, 'admin', '$2a$10$e.TeFYG0yvnj8sn8z4eTOezg4sRWO/K4MMh6fuSn7GytH9UD6S.Ze', 'Trang', 'Bui', 'random@gmail.com', '0123456789', 'Hoang Mai, HN', TRUE),
-(10000002, 'huong', '$2a$10$lXONjQlRsmgWjXiFNmApqO/Zeef/kHJQ/fE9xWADLOWL.P.wFUwRC', 'Trang', 'Bui', 'adfsdf@gmail.com', '0123456789', 'Hoang Mai, HN', FALSE);
+(10000002, 'huong', '$2a$10$lXONjQlRsmgWjXiFNmApqO/Zeef/kHJQ/fE9xWADLOWL.P.wFUwRC', 'Trang', 'Bui', 'adfsdf@gmail.com', '0123456789', 'Hoang Mai, HN', FALSE),
+(10000003, 'hang', 'hang', 'Trang', 'Bui', 'adfadfsdf@gmail.com', '0123456789', 'Hoang Mai, HN', 	TRUE),
+(10000004, 'trang', 'trang', 'Trang', 'Bui', 'adfsddfaf@gmail.com', '0123456789', 'Hoang Mai, HN', FALSE);
 
 INSERT INTO comments (commentID, content, productID, userID) VALUES
 (5000001, 'Sản phẩm này thật tuyệt', 3000001, 10000002);
