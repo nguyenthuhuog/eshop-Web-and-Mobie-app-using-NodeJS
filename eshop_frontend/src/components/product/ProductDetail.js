@@ -1,12 +1,13 @@
+// src/screens/ProductDetail.js
 import React, { useState, useEffect, useContext } from 'react';
+import { View, Text, Image, Button, ScrollView, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
 import axios from 'axios';
-import { useParams } from 'react-router-dom';
-import { ShopContext } from './ShopContextProvider'; // Import ShopContext
-import '../../css/productdetail.css';
-import '@fortawesome/fontawesome-free/css/all.min.css';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import { ShopContext } from '../context/ShopContext'; // Import ShopContext
 
 const ProductDetail = () => {
-    const { id } = useParams();
+    const route = useRoute();
+    const { id } = route.params; // Get the id from the route params
     const [product, setProduct] = useState(null);
     const [quantity, setQuantity] = useState(1);
     const [quantityError, setQuantityError] = useState(false);
@@ -62,12 +63,11 @@ const ProductDetail = () => {
         }
     };
 
-    const handleCommentSubmit = async (e) => {
-        e.preventDefault();
+    const handleCommentSubmit = async () => {
         const newCommentData = {
             content: newComment,
             productID: product.productID,
-            userID : 10000001, // tạm
+            userID: 10000001, // temporary userID
         };
 
         setNewComment('');
@@ -84,58 +84,153 @@ const ProductDetail = () => {
         fetchComments();
     };
 
-    if (!product) return <div>Loading...</div>;
+    if (!product) return <Text>Loading...</Text>;
 
-    const productDetailsTitle = "Thông số sản phẩm";
+    const productDetailsTitle = "Product Specifications";
     const productDetails = product.description.split(';').map((detail, index) => (
-        <p key={index} className="product-details">{detail.trim()}</p>
+        <Text key={index} style={styles.productDetails}>{detail.trim()}</Text>
     ));
 
     return (
-        <div className="product-detail-page">
-            <div className="product-detail-container">
-                <div className="product-image">
-                    <img src={product.imageUrl} alt={product.productName} />
-                </div>
-                <div className="product-info">
-                    <h2 className="product-name">{product.productName}</h2>
-                    <p className="product-price">Price: ${parseFloat(product.price).toFixed(2)}</p>
-                    <div>
-                        <p className="product-details-title">{productDetailsTitle}</p>
+        <ScrollView style={styles.productDetailPage}>
+            <View style={styles.productDetailContainer}>
+                <Image source={{ uri: product.imageUrl }} style={styles.productImage} />
+                <View style={styles.productInfo}>
+                    <Text style={styles.productName}>{product.productName}</Text>
+                    <Text style={styles.productPrice}>Price: ${parseFloat(product.price).toFixed(2)}</Text>
+                    <View>
+                        <Text style={styles.productDetailsTitle}>{productDetailsTitle}</Text>
                         {productDetails}
-                    </div>
-                    <p className="product-stock">Stock: {product.stock}</p>
-                    <div className="cart-section">
-                        <div className="quantity-selector">
-                            <button onClick={() => handleQuantityChange(quantity - 1)} disabled={quantity <= 1}>-</button>
-                            <span>{quantity}</span>
-                            <button onClick={() => handleQuantityChange(quantity + 1)} disabled={quantity >= product.stock}>+</button>
-                        </div>
-                        <i className="fas fa-shopping-cart cart-icon" onClick={handleAddToCart}></i>
-                    </div>
-                    {quantityError && <p className="quantity-error">Cannot exceed available stock.</p>}
-                </div>
-            </div>
-            <div className="comments-section">
-                <h3>Comments</h3>
-                <ul>
-                    {comments.map((comment) => (
-                        <li key={comment.id}>
-                            User #{comment.userID}: {comment.content}
-                        </li>
-                    ))}
-                </ul>
-                <form onSubmit={handleCommentSubmit}>
-                    <textarea
-                        value={newComment}
-                        onChange={(e) => setNewComment(e.target.value)}
-                        placeholder="Write a comment..."
-                    ></textarea>
-                    <button type="submit">Submit</button>
-                </form>
-            </div>
-        </div>
+                    </View>
+                    <Text style={styles.productStock}>Stock: {product.stock}</Text>
+                    <View style={styles.cartSection}>
+                        <View style={styles.quantitySelector}>
+                            <TouchableOpacity onPress={() => handleQuantityChange(quantity - 1)} disabled={quantity <= 1}>
+                                <Text style={styles.quantityButton}>-</Text>
+                            </TouchableOpacity>
+                            <Text style={styles.quantity}>{quantity}</Text>
+                            <TouchableOpacity onPress={() => handleQuantityChange(quantity + 1)} disabled={quantity >= product.stock}>
+                                <Text style={styles.quantityButton}>+</Text>
+                            </TouchableOpacity>
+                        </View>
+                        <TouchableOpacity onPress={handleAddToCart} style={styles.cartButton}>
+                            <Text style={styles.cartButtonText}>Add to Cart</Text>
+                        </TouchableOpacity>
+                    </View>
+                    {quantityError && <Text style={styles.quantityError}>Cannot exceed available stock.</Text>}
+                </View>
+            </View>
+            <View style={styles.commentsSection}>
+                <Text style={styles.commentsTitle}>Comments</Text>
+                {comments.map((comment) => (
+                    <Text key={comment.id} style={styles.comment}>
+                        User #{comment.userID}: {comment.content}
+                    </Text>
+                ))}
+                <TextInput
+                    style={styles.commentInput}
+                    value={newComment}
+                    onChangeText={setNewComment}
+                    placeholder="Write a comment..."
+                />
+                <Button title="Submit" onPress={handleCommentSubmit} />
+            </View>
+        </ScrollView>
     );
 };
+
+const styles = StyleSheet.create({
+    productDetailPage: {
+        flex: 1,
+    },
+    productDetailContainer: {
+        flexDirection: 'row',
+        padding: 20,
+    },
+    productImage: {
+        width: 150,
+        height: 150,
+        marginRight: 20,
+    },
+    productInfo: {
+        flex: 1,
+    },
+    productName: {
+        fontSize: 24,
+        fontWeight: 'bold',
+    },
+    productPrice: {
+        fontSize: 20,
+        color: 'green',
+        marginVertical: 10,
+    },
+    productDetailsTitle: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        marginTop: 10,
+    },
+    productDetails: {
+        fontSize: 16,
+        marginVertical: 5,
+    },
+    productStock: {
+        fontSize: 16,
+        marginVertical: 10,
+    },
+    cartSection: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginVertical: 10,
+    },
+    quantitySelector: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginRight: 20,
+    },
+    quantityButton: {
+        fontSize: 20,
+        padding: 10,
+        borderWidth: 1,
+        borderColor: 'gray',
+        textAlign: 'center',
+    },
+    quantity: {
+        fontSize: 20,
+        paddingHorizontal: 20,
+    },
+    cartButton: {
+        backgroundColor: '#4682A9',
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+        borderRadius: 5,
+    },
+    cartButtonText: {
+        color: 'white',
+        fontSize: 16,
+    },
+    quantityError: {
+        color: 'red',
+        marginTop: 10,
+    },
+    commentsSection: {
+        padding: 20,
+    },
+    commentsTitle: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        marginBottom: 10,
+    },
+    comment: {
+        fontSize: 16,
+        marginBottom: 10,
+    },
+    commentInput: {
+        borderWidth: 1,
+        borderColor: 'gray',
+        borderRadius: 5,
+        padding: 10,
+        marginBottom: 10,
+    },
+});
 
 export default ProductDetail;
