@@ -1,5 +1,6 @@
 // src/navigation/AppNavigator.js
 import React, { useState, useEffect } from 'react';
+import { View, StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
@@ -8,9 +9,9 @@ import Footer from '../components/Footer';
 import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
 
-// import LoginModal from './LoginModal';
-// import RegisterModal from './RegisterModal';
-
+import LoginScreen from '../log/LoginScreen';
+import RegisterScreen from '../log/RegisterScreen';
+import ProfilePage from '../log/ProfilePage';
 // import AdminHomepage from './admin/homepage/AdminHomepage';
 // import AdminComputerPage from './admin/AdminComputerPage';
 
@@ -24,8 +25,10 @@ import Cart from '../screens/Cart';
 import Checkout from '../screens/Checkout';
 import ProductDetail from '../product/ProductDetail';
 import ProductGrid from '../product/ProductGrid';
-import axios from 'axios';
+import { ScrollView } from 'react-native-gesture-handler';
 
+import axios from 'axios';
+// import Cookies from 'js-cookie';
 
 const AppNavigator = () => {
     // State and effect hooks similar to React
@@ -49,7 +52,6 @@ const AppNavigator = () => {
     };
 
     useEffect(() => {
-        // Check login status
         checkLoginStatus();
     }, []);
 
@@ -61,16 +63,6 @@ const AppNavigator = () => {
             console.error('Error checking login status:', error);
         }
     };
-
-    // Modal state management
-    const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
-    const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
-
-    const openLoginModal = () => setIsLoginModalOpen(true);
-    const closeLoginModal = () => setIsLoginModalOpen(false);
-
-    const openRegisterModal = () => setIsRegisterModalOpen(true);
-    const closeRegisterModal = () => setIsRegisterModalOpen(false);
 
     // Sidebar state
     const [isSidebarActive, setIsSidebarActive] = useState(false);
@@ -84,7 +76,7 @@ const AppNavigator = () => {
         try {
             await axios.post('http://localhost:8080/api/accounts/logout', {}, { withCredentials: true });
             setIsLoggedIn(false);
-            // Additional logic to clear cookies or tokens
+            Cookies.remove('userID');
         } catch (error) {
             console.error('Logout error:', error);
         }
@@ -95,47 +87,57 @@ const AppNavigator = () => {
 
     return (
         <NavigationContainer>
-            {/* <Header
-                openLoginModal={openLoginModal}
-                openRegisterModal={openRegisterModal}
-                isLoggedIn={isLoggedIn}
-                handleLogout={handleLogout}
-            />
-            <Navbar toggleSidebar={toggleSidebar} />
-            <Sidebar /> */}
-            <Header                            
-            isSidebarActive={isSidebarActive}/>  
+            {isLoggedIn? (
+                <View style={styles.container}>
+                    <Header 
+                        toggleSidebar={toggleSidebar} 
+                        isSidebarActive={isSidebarActive}
+                        isLoggedIn={isLoggedIn} 
+                        handleLogout={handleLogout}/>  
+                    {isSidebarActive && <Sidebar/>}
 
-            <Stack.Navigator initialRouteName="Home">
-                <Stack.Screen name="Home">
-                    {props => (
-                        <HomePage
-                            {...props}
-                            openLoginModal={openLoginModal}
-                            openRegisterModal={openRegisterModal}
-                            isLoggedIn={isLoggedIn}
-                            handleLogout={handleLogout}
-                        />
-                    )}
-                </Stack.Screen>
-                <Stack.Screen name="Contact" component={Contact} />
-                <Stack.Screen name="MousePage" component={MousePage} />
-                <Stack.Screen name="KeyboardPage" component={KeyboardPage} />
-                <Stack.Screen name="ComputerPage" component={ComputerPage} />
-                {/* <Stack.Screen name="AdminHomepage" component={AdminHomepage} />
-                <Stack.Screen name="AdminComputerPage" component={AdminComputerPage} /> */}
-                <Stack.Screen name="ProductGrid" component={ProductGrid} />
-                <Stack.Screen name="Cart" component={Cart} />
-                <Stack.Screen name="Checkout" component={Checkout} />
-                <Stack.Screen name="ProductDetail" component={ProductDetail} />
-            </Stack.Navigator>
-
-            <Footer visitCount={visitCount} />
-            {/* Modals */}
-            {/* <LoginModal show={isLoginModalOpen} onClose={closeLoginModal} setIsLoggedIn={setIsLoggedIn} />
-            <RegisterModal show={isRegisterModalOpen} onClose={closeRegisterModal} /> */}
+                    <Stack.Navigator initialRouteName="HomePage">
+                    <Stack.Screen name="HomePage">
+                        {props => (
+                            <HomePage
+                                {...props}
+                                isLoggedIn={isLoggedIn}
+                                handleLogout={handleLogout}
+                            />
+                         )}
+                    </Stack.Screen>
+                    <Stack.Screen name="Contact" component={Contact} />
+                    <Stack.Screen name="MousePage" component={MousePage} />
+                    <Stack.Screen name="KeyboardPage" component={KeyboardPage} />
+                    <Stack.Screen name="ComputerPage" component={ComputerPage} />
+                    {/* <Stack.Screen name="AdminHomepage" component={AdminHomepage} />
+                    <Stack.Screen name="AdminComputerPage" component={AdminComputerPage} /> */}
+                    <Stack.Screen name="ProductGrid" component={ProductGrid} />
+                    <Stack.Screen name="Cart" component={Cart} />
+                    <Stack.Screen name="Checkout" component={Checkout} />
+                    <Stack.Screen name="ProfilePage" component={ProfilePage} />
+                 </Stack.Navigator>
+                <Footer visitCount={visitCount} />
+            </View>                           
+            ):(
+                <Stack.Navigator initialRouteName="Login" screenOptions={{headerShown: false}}>
+                    <Stack.Screen name="Login">
+                        {props => (
+                            <LoginScreen
+                                {...props}
+                                onLoginSuccess={() => setIsLoggedIn(true)}
+                            />
+                        )}
+                    </Stack.Screen>
+                    <Stack.Screen name="Register" component={RegisterScreen} />
+                </Stack.Navigator>
+            )}
         </NavigationContainer>
     );
 };
-
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+});
 export default AppNavigator;

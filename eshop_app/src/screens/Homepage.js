@@ -14,7 +14,6 @@ const HomePage = () => {
         <Banner />
         <ProductGrid />
         <News />
-        {/* <Footer/> */}
       </View>
     </ScrollView>
   );
