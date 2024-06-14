@@ -11,11 +11,7 @@ CREATE TABLE accounts (
     userID INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
 	username VARCHAR(50) UNIQUE,
     password VARCHAR(100),
-    firstName VARCHAR(50),
-    lastName VARCHAR(50),
-    email VARCHAR(100) UNIQUE,
-    phone VARCHAR(20),
-    address VARCHAR(255),
+    email VARCHAR(100),
     isAdmin BOOLEAN NOT NULL DEFAULT FALSE
 );
 CREATE TABLE categories (

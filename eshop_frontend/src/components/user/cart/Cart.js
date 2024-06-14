@@ -1,12 +1,15 @@
 import React, { useContext, useState, useEffect } from 'react';
 import axios from 'axios';
+import Cookies from 'js-cookie';
 import { ShopContext } from '../../product/ShopContextProvider';
 import { useNavigate } from 'react-router-dom';
 import '../../../css/cart.css';
+import LoginModal from '../../LoginModal'; // Ensure this path is correct
 
 const Cart = () => {
   const { cartItems, products, removeFromCart, updateCartItemCount, addToCart, getTotalCartAmount, setCartItems, getDefaultCart } = useContext(ShopContext);
   const [productImages, setProductImages] = useState({});
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const imageApiBase = 'http://localhost:8080/api/images';
   const navigate = useNavigate();
 
@@ -29,25 +32,31 @@ const Cart = () => {
   }, [cartItems]);
 
   const handleCheckout = async () => {
-    const productsToUpdate = Object.keys(cartItems).map(key => {
-      const product = products.find(p => p.productID === Number(key));
-      return {
-        productID: Number(key),
-        quantity: cartItems[key],
-        price: product.price // Include the price in the product data
-      };
-    });
-  
-    try {
-      setCartItems(getDefaultCart(products));
-      navigate('/checkout');
-      const response = await axios.post('http://localhost:8080/api/products/checkout', { userID: 10000002, products: productsToUpdate });
-      console.log(response.data);
-    } catch (error) {
-      console.error('Error during checkout:', error);
-      alert('Checkout failed. Please try again.');
+    const userID = Cookies.get('userID');
+    if (!userID) {
+        setIsLoginModalOpen(true); // Show login modal if not logged in
+        return;
     }
-  };
+
+    const productsToUpdate = Object.keys(cartItems).map(key => {
+        const product = products.find(p => p.productID === Number(key));
+        return {
+            productID: Number(key),
+            quantity: cartItems[key],
+            price: product.price
+        };
+    });
+
+    try {
+        setCartItems(getDefaultCart(products));
+        navigate('/checkout');
+        const response = await axios.post('http://localhost:8080/api/products/checkout', { userID, products: productsToUpdate });
+        console.log(response.data);
+    } catch (error) {
+        console.error('Error during checkout:', error);
+        alert('Checkout failed. Please try again.');
+    }
+};
 
   const totalAmount = getTotalCartAmount();
 
@@ -88,6 +97,7 @@ const Cart = () => {
       ) : (
         <p>Your cart is empty</p>
       )}
+      <LoginModal show={isLoginModalOpen} onClose={() => setIsLoginModalOpen(false)} setIsLoggedIn={() => { /* handle setting logged-in state if needed */ }} />
     </div>
   );
 };

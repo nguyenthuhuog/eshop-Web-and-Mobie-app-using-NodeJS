@@ -34,11 +34,11 @@ INSERT INTO products (productID, productName, categoryID, description, price, st
 (3000017, 'DAREU EK98 Keyboard', 40000003, 'Triple Mode: Type-C – BT – 2.4G; Keycaps: CHERRY profile, PBT Double-Shot; Cấu trúc: Gasket-Mount; Hỗ trợ hotswap switch Switch: DareU DREAM (Linear) / FIRE-FLY (Tactile) Pin: 4.000mAh; Led nền: RGB Kích thước: 392 x 150 x 40mm | Trọng lượng: 925g; Tương thích: Windows, Mac, Mobile; Keycaps: CHERRY profile, PBT Double-Shot; Cấu trúc: Gasket-Mount; Hỗ trợ hotswap switch với 3 chế độ kết nối: Bluetooth, Wireness, Dây USB -> Type-C', 1199000, 33),
 (3000018, 'Logitech PRO X Keyboard', 40000003, 'Bàn phím cơ Logitech Pro X 60 Lightspeed Wireless; Chuẩn kết nối: Wireless 2.4Ghz LightSpeed /Bluetooth / Dây USB; Layout Mini 60%; Switch quang học GX Optical Tactile; Keycap PBT DoubleShot Led RGB LIGHTSYNC; Tích hợp nút cuộn chỉnh âm thanh; Thời lượng pin (có thể sạc lại): lên tới 65 giờ', 4299000, 7);
 
-INSERT INTO accounts (userID, username, password, firstName, lastName, email, phone, address, isAdmin) VALUES
-(10000001, 'admin', '$2a$10$e.TeFYG0yvnj8sn8z4eTOezg4sRWO/K4MMh6fuSn7GytH9UD6S.Ze', 'Trang', 'Bui', 'random@gmail.com', '0123456789', 'Hoang Mai, HN', TRUE),
-(10000002, 'huong', '$2a$10$lXONjQlRsmgWjXiFNmApqO/Zeef/kHJQ/fE9xWADLOWL.P.wFUwRC', 'Trang', 'Bui', 'adfsdf@gmail.com', '0123456789', 'Hoang Mai, HN', FALSE),
-(10000003, 'hang', 'hang', 'Trang', 'Bui', 'adfadfsdf@gmail.com', '0123456789', 'Hoang Mai, HN', 	TRUE),
-(10000004, 'trang', 'trang', 'Trang', 'Bui', 'adfsddfaf@gmail.com', '0123456789', 'Hoang Mai, HN', FALSE);
+INSERT INTO accounts (userID, username, password, email, isAdmin) VALUES
+(10000001, 'admin', '$2a$10$e.TeFYG0yvnj8sn8z4eTOezg4sRWO/K4MMh6fuSn7GytH9UD6S.Ze', 'random@gmail.com', TRUE),
+(10000002, 'huong', '$2a$10$lXONjQlRsmgWjXiFNmApqO/Zeef/kHJQ/fE9xWADLOWL.P.wFUwRC', 'adfsdf@gmail.com', FALSE),
+(10000003, 'hang', 'hang', 'adfadfsdf@gmail.com', TRUE),
+(10000004, 'trang', 'trang', 'adfsddfaf@gmail.com', FALSE);
 
 INSERT INTO comments (commentID, content, productID, userID) VALUES
 (5000001, 'Sản phẩm này thật tuyệt', 3000001, 10000002);

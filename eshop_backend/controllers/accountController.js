@@ -80,7 +80,7 @@ accountController.login = (username, password, callback) => {
       callback(401); // login failed
       return;
     }
-    callback(null, result[0] ); // login succesful
+    callback(null, result[0]); // login successful
   });
 };
 
