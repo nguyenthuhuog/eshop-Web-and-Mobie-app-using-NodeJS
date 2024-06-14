@@ -1,6 +1,8 @@
+// src/App.js
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
-import Cookies from 'js-cookie'
+import Cookies from 'js-cookie';
+import axios from 'axios';
 
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import Footer from './Footer';
@@ -16,16 +18,17 @@ import KeyboardPage from './user/page/KeyboardPage';
 import ComputerPage from './user/page/ComputerPage';
 import HomePage from './user/homepage/HomePage';
 
+import AdminHomepage from './admin/homepage/AdminHomepage';
+import AdminComputerPage from './admin/AdminComputerPage';
+
 import ProductDetail from './product/ProductDetail';
 import ProductGrid from './product/ProductGrid';
 import { ShopContextProvider } from './product/ShopContextProvider';
-// import Shop from './Shop';
 import Cart from './user/cart/Cart';
 import Checkout from './user/cart/Checkout';
 
 import '../css/homepage.css';
 import '../css/App.css';
-import axios from 'axios';
 
 function App() {
     const [backendData, setBackendData] = useState([{}]);
@@ -80,7 +83,6 @@ function App() {
             console.error('Logout error:', error);
         }
     };
-    
 
     return (
         <ShopContextProvider>
@@ -102,6 +104,8 @@ function App() {
                                 <Route path="/computer" element={<ComputerPage />} />
                                 <Route path="/keyboard" element={<KeyboardPage />} />
                                 <Route path="/homepage" element={<HomePage isSidebarActive={isSidebarActive} />} />
+                                <Route path="/admin/homepage" element={<AdminHomepage />} />
+                                <Route path="/admincomputer" element={<AdminComputerPage />} />
                                 <Route path="/products" element={<ProductGrid />} />
                                 <Route path="/cart" element={<Cart />} />
                                 <Route path="/checkout" element={<Checkout />} />

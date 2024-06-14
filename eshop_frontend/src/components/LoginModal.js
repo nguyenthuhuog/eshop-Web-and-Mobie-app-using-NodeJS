@@ -1,11 +1,14 @@
+// src/LoginModal.js
 import React, { useState } from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
+import { useNavigate } from 'react-router-dom';
 import '../css/homepage.css';
 
 const LoginModal = ({ show, onClose, setIsLoggedIn }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate();
 
   if (!show) {
     return null;
@@ -19,6 +22,11 @@ const LoginModal = ({ show, onClose, setIsLoggedIn }) => {
       setIsLoggedIn(true);
       Cookies.set('userID', response.data.userID, { expires: 1 }); // Set cookie with userID, expires in 1 day
       onClose();
+      if (response.data.isAdmin) {
+        navigate('/admincomputer'); // Redirect to admin homepage if user is an admin
+      } else {
+        navigate('/homepage'); // Redirect to user homepage otherwise
+      }
     } catch (error) {
       console.error('Login error:', error);
     }

@@ -10,7 +10,6 @@ const accountController = require('./controllers/accountController');
 const accountRoutes = require('./routes/accountRoutes');
 const categoryRoutes = require('./routes/categoryRoutes');
 const commentRoutes = require('./routes/commentRoutes');
-const imageRoutes = require('./routes/imageRoutes');
 const orderRoutes = require('./routes/orderRoutes');
 const orderDetailRoutes = require('./routes/orderDetailRoutes');
 const productRoutes = require('./routes/productRoutes');
@@ -75,6 +74,7 @@ app.post('/api/accounts/login', (req, res) => {
     }
     req.session.userId = user.userID;
     req.session.username = user.username;
+    req.session.isAdmin = user.isAdmin; // Save isAdmin status in the session
     res.cookie('user', user, { maxAge: 900000, httpOnly: true });
     res.json(user);
   });
@@ -103,7 +103,6 @@ app.get('/api/accounts/login-status', (req, res) => {
 app.use('/api/accounts', accountRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/comments', commentRoutes);
-app.use('/api/images', imageRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/orderdetails', orderDetailRoutes);
 app.use('/api/products', productRoutes);

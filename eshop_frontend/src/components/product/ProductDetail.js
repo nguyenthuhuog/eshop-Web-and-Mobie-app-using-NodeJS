@@ -14,7 +14,7 @@ const ProductDetail = () => {
     const [newComment, setNewComment] = useState('');
     const { addToCart } = useContext(ShopContext); // Use the ShopContext
     const api = `http://localhost:8080/api/products/${id}`;
-    const imageApiBase = 'http://localhost:8080/api/images';
+    // const imageApiBase = 'http://localhost:8080/api/images';
     const commentApiBase = 'http://localhost:8080/api/comments';
 
     const fetchProduct = async () => {
@@ -22,11 +22,11 @@ const ProductDetail = () => {
             const response = await axios.get(api);
             const fetchedProduct = response.data;
 
-            const imageResponse = await axios.get(`${imageApiBase}/productID/${fetchedProduct.productID}`);
-            const productWithImage = { ...fetchedProduct, imageUrl: imageResponse.data[0].image_url };
+            // const imageResponse = await axios.get(`${imageApiBase}/productID/${fetchedProduct.productID}`);
+            // const productWithImage = { ...fetchedProduct, imageUrl: imageResponse.data[0].image_url };
 
-            setProduct(productWithImage);
-            console.log('Product details with image:', productWithImage);
+            setProduct(fetchedProduct);
+            console.log('Product details with image:', fetchedProduct);
         } catch (error) {
             console.error('Error fetching product details or image:', error);
         }
@@ -95,7 +95,7 @@ const ProductDetail = () => {
         <div className="product-detail-page">
             <div className="product-detail-container">
                 <div className="product-image">
-                    <img src={product.imageUrl} alt={product.productName} />
+                    <img src={product.image_url} alt={product.productName} />
                 </div>
                 <div className="product-info">
                     <h2 className="product-name">{product.productName}</h2>

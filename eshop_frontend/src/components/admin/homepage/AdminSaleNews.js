@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { HomepageContext } from './HomepageContext';
+import { HomepageContext } from './HomepageProvider';
 
 const SaleNews = () => {
   const { saleNewsData, setSaleNewsData, isAdmin } = useContext(HomepageContext);

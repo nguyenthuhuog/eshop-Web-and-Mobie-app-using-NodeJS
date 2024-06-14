@@ -10,7 +10,8 @@ const Cart = () => {
   const { cartItems, products, removeFromCart, updateCartItemCount, addToCart, getTotalCartAmount, setCartItems, getDefaultCart } = useContext(ShopContext);
   const [productImages, setProductImages] = useState({});
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
-  const imageApiBase = 'http://localhost:8080/api/images';
+  const api = 'http://localhost:8080/api/products';
+  // const imageApiBase = 'http://localhost:8080/api/images';
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -19,8 +20,8 @@ const Cart = () => {
       for (const productId in cartItems) {
         if (cartItems[productId] > 0) {
           try {
-            const imageResponse = await axios.get(`${imageApiBase}/productID/${productId}`);
-            images[productId] = imageResponse.data[0].image_url;
+            const imageResponse = await axios.get(`${api}/${productId}`);
+            images[productId] = imageResponse.data.image_url;
           } catch (error) {
             console.error(`Error fetching image for productID ${productId}:`, error);
           }

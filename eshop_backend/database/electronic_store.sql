@@ -25,6 +25,7 @@ CREATE TABLE products (
 	description LONGTEXT,
     price DECIMAL(10, 2),
     stock INT,
+    image_url VARCHAR(255),
     FOREIGN KEY (categoryID) REFERENCES categories(categoryID)
 );
 CREATE TABLE images (

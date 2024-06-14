@@ -70,17 +70,16 @@ accountController.delete = (id, callback) => {
 };
 
 accountController.login = (username, password, callback) => {
-  const sqlString = "SELECT * FROM accounts WHERE username = ? and password = ?";
-  db.query(sqlString, [username, password], (err, result) => {
+  const sqlString = "SELECT * FROM accounts WHERE username = ? AND password = ?";
+  db.query(sqlString, [username, password], (err, results) => {
     if (err) {
-      callback(err);
-      return;
+      return callback(err);
     }
-    if (result.length === 0) {
-      callback(401); // login failed
-      return;
+    if (results.length === 0) {
+      return callback(new Error('Invalid username or password'));
     }
-    callback(null, result[0]); // login successful
+    const user = results[0];
+    callback(null, user);
   });
 };
 

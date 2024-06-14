@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { HomepageContext } from './HomepageContext';
+import { HomepageContext } from '../homepage/HomepageProvider';
 import AddProductForm from './AddProductForm';
 
 const ProductGrid = () => {
