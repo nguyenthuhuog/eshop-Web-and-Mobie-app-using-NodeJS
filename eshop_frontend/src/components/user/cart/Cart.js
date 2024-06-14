@@ -29,10 +29,14 @@ const Cart = () => {
   }, [cartItems]);
 
   const handleCheckout = async () => {
-    const productsToUpdate = Object.keys(cartItems).map(key => ({
-      productID: Number(key),
-      quantity: cartItems[key]
-    }));
+    const productsToUpdate = Object.keys(cartItems).map(key => {
+      const product = products.find(p => p.productID === Number(key));
+      return {
+        productID: Number(key),
+        quantity: cartItems[key],
+        price: product.price // Include the price in the product data
+      };
+    });
   
     try {
       setCartItems(getDefaultCart(products));

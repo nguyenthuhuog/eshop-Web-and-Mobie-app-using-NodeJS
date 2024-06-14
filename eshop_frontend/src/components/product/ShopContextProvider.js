@@ -114,7 +114,7 @@ export const ShopContextProvider = (props) => {
     setCartItems,
     getDefaultCart,
     getTotalCartCount,
-    errorMessages,  // Add error messages to the context value
+    errorMessages, 
   };
 
   return (

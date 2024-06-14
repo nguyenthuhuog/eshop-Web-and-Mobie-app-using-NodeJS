@@ -34,7 +34,7 @@ const ProductDetail = () => {
 
     const fetchComments = async () => {
         try {
-            const response = await axios.get(commentApiBase);
+            const response = await axios.get(`${commentApiBase}/productID`);
             console.log('Comments retrieved successfully:', response.data);
             setComments(response.data);
         } catch (error) {
