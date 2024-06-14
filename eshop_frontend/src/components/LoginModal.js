@@ -22,10 +22,12 @@ const LoginModal = ({ show, onClose, setIsLoggedIn }) => {
       setIsLoggedIn(true);
       Cookies.set('userID', response.data.userID, { expires: 1 }); // Set cookie with userID, expires in 1 day
       onClose();
+      setUsername(''); 
+      setPassword(''); 
       if (response.data.isAdmin) {
         navigate('/admincomputer'); // Redirect to admin homepage if user is an admin
       } else {
-        navigate('/homepage'); // Redirect to user homepage otherwise
+        navigate('/homepage'); 
       }
     } catch (error) {
       console.error('Login error:', error);
