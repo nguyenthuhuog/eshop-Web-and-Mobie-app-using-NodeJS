@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { View, Text, Image, TouchableOpacity, TextInput, StyleSheet } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
-import { ShopContext } from '../product/ShopContextProvider';
+import { ShopContext } from './ShopContext';
 
 export const CartItem = (props) => {
   const { id, productName, price, productImage, stock } = props.data;
