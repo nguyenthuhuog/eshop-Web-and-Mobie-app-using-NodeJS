@@ -6,6 +6,7 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import { ShopContext } from '../context/ShopContext'; // Import ShopContext
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faShoppingCart } from '@fortawesome/free-solid-svg-icons'; 
+import { BASE_URL } from '../log/config';
 
 const ProductDetail = () => {
     const route = useRoute();
@@ -16,8 +17,8 @@ const ProductDetail = () => {
     const [comments, setComments] = useState([]);
     const [newComment, setNewComment] = useState('');
     const { addToCart } = useContext(ShopContext); // Use the ShopContext
-    const api = `http://10.136.8.29:8080/api/products/${id}`;
-    const commentApiBase = 'http://10.136.8.29:8080/api/comments';
+    const api = `${BASE_URL}/products/${id}`;
+    const commentApiBase = '${BASE_URL}/comments';
 
     const fetchProduct = async () => {
         console.log("Call fetch product");

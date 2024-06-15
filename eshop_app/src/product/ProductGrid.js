@@ -3,12 +3,13 @@ import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
 import { ShopContext } from '../context/ShopContext';
+import { BASE_URL } from '../log/config';
 
 const ProductGrid = ({ categoryName }) => {
   const [products, setProducts] = useState([]);
   const { addToCart, cartItems } = useContext(ShopContext);
   const navigation = useNavigation();
-  const api = 'http://10.136.8.29:8080/api/products'; // Define your API base URL here
+  const api = `${BASE_URL}/products`; // Define your API base URL here
 
   const fetchProducts = async () => {
     try {

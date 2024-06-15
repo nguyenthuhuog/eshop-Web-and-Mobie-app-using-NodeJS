@@ -34,10 +34,10 @@ INSERT INTO products (productID, productName, categoryID, description, price, st
 (3000018, 'Logitech PRO X Keyboard', 40000003, 'Bàn phím cơ Logitech Pro X 60 Lightspeed Wireless; Chuẩn kết nối: Wireless 2.4Ghz LightSpeed /Bluetooth / Dây USB; Layout Mini 60%; Switch quang học GX Optical Tactile; Keycap PBT DoubleShot Led RGB LIGHTSYNC; Tích hợp nút cuộn chỉnh âm thanh; Thời lượng pin (có thể sạc lại): lên tới 65 giờ', 4299000, 7, 'https://hanoicomputercdn.com/media/product/82686_ban_phim_co_logitech_pro_x_60_lightspeed_wireless_black_1.jpg');
 
 INSERT INTO accounts (userID, username, password, email, isAdmin) VALUES
-(10000001, 'admin', '$2a$10$e.TeFYG0yvnj8sn8z4eTOezg4sRWO/K4MMh6fuSn7GytH9UD6S.Ze', 'random@gmail.com', TRUE),
-(10000002, 'huong', '$2a$10$lXONjQlRsmgWjXiFNmApqO/Zeef/kHJQ/fE9xWADLOWL.P.wFUwRC', 'adfsdf@gmail.com', FALSE),
-(10000003, 'hang', 'hang', 'adfadfsdf@gmail.com', TRUE),
-(10000004, 'trang', 'trang', 'adfsddfaf@gmail.com', FALSE);
+(10000001, 'hang', 'hang', 'adfadfsdf@gmail.com', TRUE),
+(10000002, 'trang', 'trang', 'adfsddfaf@gmail.com', FALSE),
+(10000003, 'admin', 'admin', 'admin@gmail.com', TRUE);
+
 
 INSERT INTO comments (commentID, content, productID, userID) VALUES
 (5000001, 'Sản phẩm này thật tuyệt', 3000001, 10000002);

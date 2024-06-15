@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, ImageBackground } from 'react-native';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
+import { BASE_URL } from './config';
 
 export default function RegisterScreen() {
     const [username, setUsername] = useState('');
@@ -12,7 +13,7 @@ export default function RegisterScreen() {
 
     const handleSubmit = async () => {
         try {
-            const response = await axios.post('http://10.136.8.29:8080/api/accounts', { username, password, email });
+            const response = await axios.post(`${BASE_URL}/accounts`, { username, password, email });
             console.log('User registered:', response.data);
             navigation.navigate('Login');
         } catch (error) {

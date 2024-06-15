@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
-const Footer = ({ visitCount }) => {
+const Footer = ({visitCount}) => {
     return (
         <View style={styles.footer}>
             <Text>Contact Us: 1900. 2900</Text>

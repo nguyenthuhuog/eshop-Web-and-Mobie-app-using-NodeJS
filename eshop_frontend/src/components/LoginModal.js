@@ -1,5 +1,5 @@
 // src/LoginModal.js
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
@@ -8,9 +8,10 @@ import '../css/homepage.css';
 const LoginModal = ({ show, onClose, responseText, setresponseText }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-
   const navigate = useNavigate();
 
+  // if not logged in the reset response
+  if(!Cookies.get('userID')) setresponseText("Please log in to continue");
   if (!show) {
     return null;
   }
@@ -25,7 +26,6 @@ const LoginModal = ({ show, onClose, responseText, setresponseText }) => {
       Cookies.set('userID', response.data.userID, { expires: expireTime }); // Set cookie with userID, expires in 1 day
       Cookies.set('isAdmin', response.data.isAdmin, { expires : expireTime});
       console.log(Cookies.get());
-      // onClose();
       setUsername(''); 
       setPassword(''); 
       if (response.data.isAdmin === 1) {
@@ -35,8 +35,12 @@ const LoginModal = ({ show, onClose, responseText, setresponseText }) => {
         setresponseText('You have logged in, happy shopping');
       }
     } catch (error) {
+      if (error.response.status === 401) {
+        setresponseText('Username or password are wrong, please try again');
+        console.log('here');
+      }
       console.error('Login error:', error);
-    }      
+    } 
   }
 
   return (

@@ -4,13 +4,14 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ShopContext } from '../context/ShopContext';
 import { useNavigation } from '@react-navigation/native';
+import { BASE_URL } from '../log/config';
 
 const Cart = () => {
   const { cartItems, products, removeFromCart, updateCartItemCount, 
     addToCart, getTotalCartAmount, setCartItems, getDefaultCart } = useContext(ShopContext);
   const [productImages, setProductImages] = useState({});
 
-  const api = 'http://10.136.8.29:8080/api/products';
+  const api = `${BASE_URL}/products`;
   const navigation = useNavigation();
 
   useEffect(() => {
@@ -51,7 +52,7 @@ const Cart = () => {
     try {
         setCartItems(getDefaultCart(products));
         navigation.navigate('Checkout');
-        const response = await axios.post('http://10.136.8.29:8080/api/products/checkout', { userID, products: productsToUpdate });
+        const response = await axios.post(`${BASE_URL}/products/checkout`, { userID, products: productsToUpdate });
         console.log(response.data);
     } catch (error) {
         console.error('Error during checkout:', error);
