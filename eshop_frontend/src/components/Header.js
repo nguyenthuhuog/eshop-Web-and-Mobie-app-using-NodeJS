@@ -8,6 +8,7 @@ import '../css/homepage.css';
 const Header = ({ openLoginModal, openRegisterModal, handleLogout }) => {
     const { getTotalCartCount } = useContext(ShopContext);
     const totalCartCount = getTotalCartCount();
+    const isAdmin = Cookies.get('isAdmin') === '1';
 
     return (
         <div id="header">
@@ -45,14 +46,17 @@ const Header = ({ openLoginModal, openRegisterModal, handleLogout }) => {
                         <i className="fas fa-newspaper"></i>
                         <span>Tech news</span>
                     </button>
+                    {!isAdmin && (
                     <Link to="/cart">
                         <button className="btn-cart">
-                            <i className="fas fa-shopping-cart"></i>
+                        <i className="fas fa-shopping-cart"></i>
                             {totalCartCount > 0 && (
                                 <span className="cart-count">{totalCartCount}</span>
                             )}
                         </button>
-                    </Link>
+                        </Link>
+                    )}
+                    
                     {Cookies.get('userID') ? (
                         <button className="btn btn-logout" onClick={handleLogout}>Logout</button>
                     ) : (
