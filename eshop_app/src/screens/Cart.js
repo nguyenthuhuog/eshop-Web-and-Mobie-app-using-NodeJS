@@ -1,14 +1,14 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { View, Text, Button, FlatList, Image, TextInput, StyleSheet } from 'react-native';
+import { View, Text, FlatList, Image, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { ShopContext } from '../context/ShopContext';
+import { ShopContext } from '../context/ShopContextProvider';
 import { useNavigation } from '@react-navigation/native';
 import { BASE_URL } from '../log/config';
+import Navbar from '../components/Navbar';
 
-const Cart = () => {
-  const { cartItems, products, removeFromCart, updateCartItemCount, 
-    addToCart, getTotalCartAmount, setCartItems, getDefaultCart } = useContext(ShopContext);
+const Cart = ({ toggleSidebar }) => {
+  const { cartItems, products, removeFromCart, updateCartItemCount, addToCart, getTotalCartAmount, setCartItems, getDefaultCart } = useContext(ShopContext);
   const [productImages, setProductImages] = useState({});
 
   const api = `${BASE_URL}/products`;
@@ -32,82 +32,90 @@ const Cart = () => {
     fetchProductImages();
   }, [cartItems]);
 
-
   const handleCheckout = async () => {
     const userID = await AsyncStorage.getItem('userID');
-    // if (!userID) {
-    //     setIsLoginModalOpen(true); // Show login modal if not logged in
-    //     return;
-    // }
-
     const productsToUpdate = Object.keys(cartItems).map(key => {
-        const product = products.find(p => p.productID === Number(key));
-        return {
-            productID: Number(key),
-            quantity: cartItems[key],
-            price: product.price
-        };
+      const product = products.find(p => p.productID === Number(key));
+      return {
+        productID: Number(key),
+        quantity: cartItems[key],
+        price: product.price
+      };
     });
 
     try {
-        setCartItems(getDefaultCart(products));
-        navigation.navigate('Checkout');
-        const response = await axios.post(`${BASE_URL}/products/checkout`, { userID, products: productsToUpdate });
-        console.log(response.data);
+      setCartItems(getDefaultCart(products));
+      navigation.navigate('Checkout');
+      const response = await axios.post(`${BASE_URL}/products/checkout`, { userID, products: productsToUpdate });
+      console.log(response.data);
     } catch (error) {
-        console.error('Error during checkout:', error);
-        alert('Checkout failed. Please try again.');
+      console.error('Error during checkout:', error);
+      alert('Checkout failed. Please try again.');
     }
   };
 
   const totalAmount = getTotalCartAmount();
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Your Cart</Text>
-      <FlatList
-        data={products}
-        keyExtractor={(item) => item.productID.toString()}
-        renderItem={({ item: product }) => {
-          if (cartItems[product.productID] > 0) {
-            return (
-              <View key={product.productID} style={styles.cartItem}>
+    <View style={styles.mainContainer}>
+      <Navbar toggleSidebar={toggleSidebar} />
+      <View style={styles.container}>
+        <Text style={styles.title}>Your Cart</Text>
+        <FlatList
+          data={products.filter(product => cartItems[product.productID] > 0)}
+          keyExtractor={(item) => item.productID.toString()}
+          renderItem={({ item: product }) => (
+            <View key={product.productID} style={styles.cartItem}>
+              {productImages[product.productID] ? (
                 <Image source={{ uri: productImages[product.productID] }} style={styles.productImage} />
-                <View style={styles.description}>
-                  <Text style={styles.productName}>{product.productName}</Text>
-                  <Text>Price: ${parseFloat(product.price).toFixed(2)}</Text>
-                  <View style={styles.countHandler}>
-                    <Button title="-" onPress={() => removeFromCart(product.productID)} />
-                    <TextInput
-                      style={styles.input}
-                      value={cartItems[product.productID].toString()}
-                      onChangeText={(value) => updateCartItemCount(Number(value), product.productID)}
-                      keyboardType="numeric"
-                    />
-                    <Button title="+" onPress={() => addToCart(product.productID)} />
-                  </View>
+              ) : (
+                <Image source={require('../img/background.jpg')} style={styles.productImage} />
+              )}
+              <View style={styles.description}>
+                <Text style={styles.productName}>{product.productName}</Text>
+                <Text>Price: ${parseFloat(product.price).toFixed(2)}</Text>
+                <View style={styles.countHandler}>
+                  <TouchableOpacity onPress={() => removeFromCart(product.productID)} style={styles.button}>
+                    <Text style={styles.buttonText}>-</Text>
+                  </TouchableOpacity>
+                  <TextInput
+                    style={styles.input}
+                    value={cartItems[product.productID].toString()}
+                    onChangeText={(value) => updateCartItemCount(Number(value), product.productID)}
+                    keyboardType="numeric"
+                  />
+                  <TouchableOpacity onPress={() => addToCart(product.productID)} style={styles.button}>
+                    <Text style={styles.buttonText}>+</Text>
+                  </TouchableOpacity>
                 </View>
               </View>
-            );
-          }
-          return null;
-        }}
-      />
-      {totalAmount > 0 ? (
-        <View style={styles.checkout}>
-          <Text style={styles.totalAmount}>Total Amount: ${totalAmount.toFixed(2)}</Text>
-          <Button title="Checkout" onPress={handleCheckout} />
-          <Button title="Continue Shopping" onPress={() => navigation.navigate('Homepage')} />
-        </View>
-      ) : (
-        <Text>Your cart is empty</Text>
-      )}
-      {/* <LoginModal visible={isLoginModalOpen} onClose={() => setIsLoginModalOpen(false)} /> */}
+            </View>
+          )}
+          ListFooterComponent={() => (
+            totalAmount > 0 ? (
+              <View style={styles.checkout}>
+                <Text style={styles.totalAmount}>Total Amount: ${totalAmount.toFixed(2)}</Text>
+                <TouchableOpacity style={styles.buttonCart} onPress={handleCheckout}>
+                  <Text style={styles.buttonText}>Checkout</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.buttonCart} onPress={() => navigation.navigate('HomePage')}>
+                  <Text style={styles.buttonText}>Continue Shopping</Text>
+                </TouchableOpacity>
+              </View>
+            ) : (
+              <Text style={styles.emptyCartText}>Your cart is empty</Text>
+            )
+          )}
+        />
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  mainContainer: {
+    flex: 1,
+  },
   container: {
     flex: 1,
     padding: 20,
@@ -147,6 +155,28 @@ const styles = StyleSheet.create({
   totalAmount: {
     fontSize: 18,
     marginBottom: 10,
+  },
+  buttonCart: {
+    backgroundColor: '#4682A9',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+    marginTop: 10,
+  },
+  button: {
+    backgroundColor: '#4682A9',
+    padding: 10,
+    borderRadius: 5,
+    marginHorizontal: 5,
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 16,
+  },
+  emptyCartText: {
+    textAlign: 'center',
+    marginTop: 20,
+    fontSize: 16,
   },
 });
 
