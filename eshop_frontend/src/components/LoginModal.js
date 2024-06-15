@@ -29,7 +29,7 @@ const LoginModal = ({ show, onClose }) => {
       // onClose();
       setUsername(''); 
       setPassword(''); 
-      if (Cookies.get('isAdmin') == 1) {
+      if (Cookies.get('isAdmin') === 1) {
         navigate('/admincomputer'); // Redirect to admin homepage if user is an admin
       } else {
         setresponseText('You have logged in, happy shopping');
@@ -37,6 +37,8 @@ const LoginModal = ({ show, onClose }) => {
     } catch (error) {
       console.error('Login error:', error);
     }
+    setresponseText('Please login to continue');
+      
   }
 
   return (

@@ -15,7 +15,7 @@ const Checkout = () => {
       </div>
       <div className="checkout">
         <div className="totalAmount">
-        <button style = {{marginLeft: 60}} onClick={() => navigate('/Homepage')}>Continue Shopping</button>
+        <button style = {{marginLeft: 60}} onClick={() => navigate('/')}>Continue Shopping</button>
         </div>
       </div>
     </div>
