@@ -1,6 +1,7 @@
 // src/context/ShopContext.js
 import React, { createContext, useState, useEffect } from 'react';
 import axios from 'axios';
+import { BASE_URL } from '../log/config';
 
 export const ShopContext = createContext();
 
@@ -11,7 +12,7 @@ export const ShopContextProvider = ({ children }) => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get('http://10.136.8.29:8080/api/products');
+        const response = await axios.get(`${BASE_URL}/products`);
         setProducts(response.data);
         setCartItems(getDefaultCart(response.data));
       } catch (error) {

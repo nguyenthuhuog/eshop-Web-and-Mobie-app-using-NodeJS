@@ -4,6 +4,9 @@ import { View, Text, Image, Button, ScrollView, TextInput, StyleSheet, Touchable
 import axios from 'axios';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { ShopContext } from '../context/ShopContext'; // Import ShopContext
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { faShoppingCart } from '@fortawesome/free-solid-svg-icons'; 
+import { BASE_URL } from '../log/config';
 
 const ProductDetail = () => {
     const route = useRoute();
@@ -14,20 +17,22 @@ const ProductDetail = () => {
     const [comments, setComments] = useState([]);
     const [newComment, setNewComment] = useState('');
     const { addToCart } = useContext(ShopContext); // Use the ShopContext
-    const api = `http://10.136.8.29:8080/api/products/${id}`;
-    const commentApiBase = 'http://10.136.8.29:8080/api/comments';
+    const api = `${BASE_URL}/products/${id}`;
+    const commentApiBase = '${BASE_URL}/comments';
 
     const fetchProduct = async () => {
+        console.log("Call fetch product");
         try {
             const response = await axios.get(api);
             const fetchedProduct = response.data;
 
             setProduct(fetchedProduct);
             console.log('Product details with image:', fetchedProduct);
+            return Promise.all([fetchProduct.productID]);
         } catch (error) {
             console.error('Error fetching product details or image:', error);
         }
-    };
+    };    
 
     const fetchComments = async () => {
         try {
@@ -90,7 +95,7 @@ const ProductDetail = () => {
     return (
         <ScrollView style={styles.productDetailPage}>
             <View style={styles.productDetailContainer}>
-                <Image source={{ uri: product.imageUrl }} style={styles.productImage} />
+                <Image source={{ uri: product.image_url }} style={styles.productImage} />
                 <View style={styles.productInfo}>
                     <Text style={styles.productName}>{product.productName}</Text>
                     <Text style={styles.productPrice}>Price: ${parseFloat(product.price).toFixed(2)}</Text>
@@ -110,7 +115,7 @@ const ProductDetail = () => {
                             </TouchableOpacity>
                         </View>
                         <TouchableOpacity onPress={handleAddToCart} style={styles.cartButton}>
-                            <Text style={styles.cartButtonText}>Add to Cart</Text>
+                            <FontAwesomeIcon icon={faShoppingCart} style={styles.icon} />
                         </TouchableOpacity>
                     </View>
                     {quantityError && <Text style={styles.quantityError}>Cannot exceed available stock.</Text>}
@@ -140,13 +145,13 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     productDetailContainer: {
-        flexDirection: 'row',
         padding: 20,
     },
     productImage: {
-        width: 150,
-        height: 150,
-        marginRight: 20,
+        width: '100%',
+        height: 300,
+        borderRadius: 10,
+        marginBottom: 20,
     },
     productInfo: {
         flex: 1,
@@ -202,7 +207,7 @@ const styles = StyleSheet.create({
     },
     cartButtonText: {
         color: 'white',
-        fontSize: 16,
+        fontSize: 13,
     },
     quantityError: {
         color: 'red',

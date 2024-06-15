@@ -4,9 +4,10 @@ import { View, Text, TextInput, Button, Modal, StyleSheet} from 'react-native';
 import axios from 'axios';
 import Navbar from '../components/Navbar';
 import { ScrollView } from 'react-native-gesture-handler';
+import { BASE_URL } from '../log/config';
 
 const Contact = ({toggleSidebar}) => {
-  const api = 'http://10.136.8.29:8080/api/messages';
+  const api = `${BASE_URL}/messages`;
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [post, setPost] = useState({
     firstName: '',

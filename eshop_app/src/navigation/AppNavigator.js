@@ -9,7 +9,7 @@ import Sidebar from '../components/Sidebar';
 
 import LoginScreen from '../log/LoginScreen';
 import RegisterScreen from '../log/RegisterScreen';
-import ProfilePage from '../log/ProfilePage';
+// import ProfilePage from '../log/ProfilePage';
 
 import HomePage from '../screens/HomePage';
 import Contact from '../screens/Contact';
@@ -21,6 +21,7 @@ import Cart from '../screens/Cart';
 import Checkout from '../screens/Checkout';
 import ProductDetail from '../product/ProductDetail';
 import ProductGrid from '../product/ProductGrid';
+import { BASE_URL } from '../log/config';
 
 import axios from 'axios';
 
@@ -39,7 +40,7 @@ const AppNavigator = () => {
 
     const checkLoginStatus = async () => {
         try {
-            const response = await axios.get('http://10.136.8.29:8080/api/accounts/login-status', { withCredentials: true });
+            const response = await axios.get(`${BASE_URL}/accounts/login-status`, { withCredentials: true });
             setIsLoggedIn(response.data.loggedIn);
         } catch (error) {
             console.error('Error checking login status:', error);
@@ -48,7 +49,7 @@ const AppNavigator = () => {
 
     const fetchVisitCount = async () => {
         try {
-            const response = await fetch("http://10.136.8.29:8080/api/visit-count", { method: 'POST' });
+            const response = await fetch(`${BASE_URL}/visit-count`, { method: 'POST' });
             const data = await response.json();
             setVisitCount(data.visitCount);
         } catch (error) {
@@ -67,7 +68,7 @@ const AppNavigator = () => {
 
     const handleLogout = async () => {
         try {
-            await axios.post('http://10.136.8.29:8080/api/accounts/logout', {}, { withCredentials: true });
+            await axios.post(`${BASE_URL}/api/accounts/logout`, {}, { withCredentials: true });
             setIsLoggedIn(false);
             // Cookies.remove('userID');
         } catch (error) {
@@ -77,7 +78,7 @@ const AppNavigator = () => {
 
     // const onLoginSuccess = async () => {
     //     try {
-    //         await axios.post('http://10.136.8.29:8080/api/accounts/logout', {}, { withCredentials: true });
+    //         await axios.post('${BASE_URL}/api/accounts/logout', {}, { withCredentials: true });
     //         setIsLoggedIn(true);
     //         // Cookies.remove('userID');
     //     } catch (error) {
@@ -180,9 +181,9 @@ const AppNavigator = () => {
                                 />
                             )}
                         </Stack.Screen>
-                        <Stack.Screen name="ProfilePage">
+                        <Stack.Screen name="ProductDetail">
                             {props => (
-                                <ProfilePage
+                                <ProductDetail
                                     {...props}
                                     toggleSidebar={toggleSidebar}
                                     isSidebarActive={isSidebarActive}
