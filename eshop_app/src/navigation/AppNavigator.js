@@ -9,7 +9,7 @@ import Sidebar from '../components/Sidebar';
 
 import LoginScreen from '../log/LoginScreen';
 import RegisterScreen from '../log/RegisterScreen';
-import ProfilePage from '../log/ProfilePage';
+// import ProfilePage from '../log/ProfilePage';
 
 import HomePage from '../screens/HomePage';
 import Contact from '../screens/Contact';
@@ -180,9 +180,9 @@ const AppNavigator = () => {
                                 />
                             )}
                         </Stack.Screen>
-                        <Stack.Screen name="ProfilePage">
+                        <Stack.Screen name="ProductDetail">
                             {props => (
-                                <ProfilePage
+                                <ProductDetail
                                     {...props}
                                     toggleSidebar={toggleSidebar}
                                     isSidebarActive={isSidebarActive}

@@ -10,39 +10,21 @@ const ProductGrid = ({ categoryName }) => {
   const navigation = useNavigation();
   const api = 'http://10.136.8.29:8080/api/products'; // Define your API base URL here
 
+  const fetchProducts = async () => {
+    try {
+      let apiEndpoint = api;
+      if (categoryName != null) apiEndpoint = `${api}/byCategory/${categoryName}`;
+      const response = await axios.get(apiEndpoint);
+      const fetchedProducts = response.data;
+      setProducts(fetchedProducts);
+    } catch (error) {
+      console.error('Error fetching products:', error);
+    }
+  };
+
   useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        let apiUrl = api; // Assign the base API URL to a variable
-        if (categoryName != null) {
-          apiUrl = `${api}/byCategory/${categoryName}`; // Append category name if provided
-        }
-        const response = await axios.get(apiUrl); // Use apiUrl instead of api
-        const fetchedProducts = response.data;
-        setProducts(fetchedProducts);
-      } catch (error) {
-        console.error('Error fetching products:', error);
-      }
-    };
-
-    fetchProducts(); // Call fetchProducts inside useEffect
-
-    // This block is commented out as it's not currently used
-    /*
-    useEffect(() => {
-      const checkAdminStatus = async () => {
-        try {
-          const response = await axios.get('http://localhost:8080/api/accounts/login-status', { withCredentials: true });
-          setIsAdmin(response.data.isAdmin);
-        } catch (error) {
-          console.error('Error checking admin status:', error);
-        }
-      };
-
-      checkAdminStatus();
-    }, []);
-    */
-  }, [categoryName]); // useEffect dependency on categoryName
+    fetchProducts();
+  }, [categoryName]); // Call fetchProducts inside useEffect
 
   return (
     <View style={styles.productGrid}>
@@ -54,7 +36,10 @@ const ProductGrid = ({ categoryName }) => {
             onPress={() => navigation.navigate('ProductDetail', { id: product.productID })}
           >
             <Text style={styles.productName}>{product.productName}</Text>
-            <Image source={{ uri: product.image_url }} alt={`Image of ${product.productName}`} />
+            <Image 
+              source={{ uri: product.image_url }} alt={`Image of ${product.productName}`} 
+              style={styles.productImage}
+            />
             <Text style={styles.productPrice}>Price: ${parseFloat(product.price).toFixed(2)}</Text>
             <Text style={styles.productStock}>Stock: {product.stock}</Text>
             <TouchableOpacity
