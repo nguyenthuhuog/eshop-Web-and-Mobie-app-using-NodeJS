@@ -564,6 +564,9 @@ h3 {
   #header .shop-name,
   #header .auth-buttons div button span{
     display: none;
+  }  
+  #header .auth-buttons div button .cart-count{
+    display: inline;
   }
   .sidebar {
     width: 80px;
