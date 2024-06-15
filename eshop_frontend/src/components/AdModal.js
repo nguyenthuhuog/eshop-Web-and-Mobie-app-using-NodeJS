@@ -36,7 +36,10 @@ const AdModal = ({ isOpen, onClose }) => {
                     &times;
                 </button>
                 <div className="ad-modal-content">
-                    <ProductGridComponent product = {products}/>
+                    <h3>Maybe you are interested in</h3>
+                    <>
+                        <ProductGridComponent product = {products}/>
+                    </>
                 </div>
             </div>
         </div>

@@ -1,6 +1,6 @@
 // ComputerPage.js
 import React, { useState } from 'react';
-import { PRODUCTS } from '../products'; // Import the PRODUCTS array
+// import { PRODUCTS } from '../products'; // Import the PRODUCTS array
 import { Product } from '../product/Product';
 import AddProductForm from './product/AddProductForm'; // Import the AddProductForm component
 import '../../css/homepage.css';
@@ -8,16 +8,6 @@ import '../../css/product.css';
 // import ProductGrid from './product/AdminProductGrid';
 
 const ComputerPageAdmin = () => {
-  const [products, setProducts] = useState(PRODUCTS);
-
-  const addProduct = (newProduct) => {
-    setProducts([...products, newProduct]);
-  };
-
-  const deleteProduct = (productId) => {
-    setProducts(products.filter(product => product.id !== productId));
-  };
-
   return (
     <div className="container">
       <div className="main">
@@ -31,7 +21,7 @@ const ComputerPageAdmin = () => {
 
       {/* <ProductGrid></ProductGrid> */}
 
-        <AddProductForm addProduct={addProduct} />
+        <AddProductForm />
       </div>
     </div>
   );

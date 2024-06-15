@@ -60,8 +60,10 @@ productController.update = (id, productData, callback) => {
 
 // Delete product by ID
 productController.delete = (id, callback) => {
-  const sqlString = "DELETE FROM products WHERE productID = ?";
-  db.query(sqlString, id, (err, result) => {
+  const sqlString = `DELETE FROM orderDetails WHERE productID = ?;
+                     DELETE FROM comments WHERE productID = ?;
+                     DELETE FROM products WHERE productID = ?`;
+  db.query(sqlString, [id, id, id], (err, result) => {
     if (err) {
       callback(err);
       return;
@@ -89,12 +91,12 @@ productController.getByCategoryName = (categoryName, callback) => {
   });
 };
 
-// Update stock quantities without using transactions
+// Update stock quantities 
 productController.checkout = (userID, products, callback) => {
   // Calculate the total amount
   let totalAmount = 0;
   for (const product of products) {
-    totalAmount += product.quantity * product.price; // Assume each product has a price property
+    totalAmount += product.quantity * product.price; 
   }
 
   // Insert the order

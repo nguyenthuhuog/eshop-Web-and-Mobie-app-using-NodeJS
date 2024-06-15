@@ -36,6 +36,8 @@ function App() {
     const [backendData, setBackendData] = useState([{}]);
     const [visitCount, setVisitCount] = useState(0);
     const [isAdModalOpen, setIsAdModalOpen] = useState(false);
+    const [responseText, setresponseText] = useState('Please login to continue');
+
     const location = useLocation();
     const navigate = useNavigate();
 
@@ -57,7 +59,9 @@ function App() {
             // Nếu chưa hiển thị, đặt timeout 1 phút để hiển thị quảng cáo
             const timer = setTimeout(() => {
                 setIsAdModalOpen(true);
-                Cookies.set('adModalShown', 'true', { expires: 1 }); 
+                
+                const expireTime = new Date(new Date().getTime() + 15 * 60 * 1000); // 15'
+                Cookies.set('adModalShown', 'true', { expires: expireTime }); 
             }, 10 * 1000);
 
             return () => clearTimeout(timer);
@@ -87,6 +91,8 @@ function App() {
             await axios.post('http://localhost:8080/api/accounts/logout', {}, { withCredentials: true });
             Cookies.remove('userID'); // Remove the userID cookie
             Cookies.remove('isAdmin');
+            Cookies.remove('adModalShown');
+            setresponseText('Please login to continue');
             navigate('/');
         } catch (error) {
             console.error('Logout error:', error);
@@ -133,7 +139,7 @@ function App() {
                         <Footer visitCount={visitCount} />
                     </div>
                 </div>
-                <LoginModal show={isLoginModalOpen} onClose={closeLoginModal} />
+                <LoginModal show={isLoginModalOpen} onClose={closeLoginModal} responseText={responseText} setresponseText={setresponseText}/>
                 <RegisterModal show={isRegisterModalOpen} onClose={closeRegisterModal} />
             </div>
         </ShopContextProvider>

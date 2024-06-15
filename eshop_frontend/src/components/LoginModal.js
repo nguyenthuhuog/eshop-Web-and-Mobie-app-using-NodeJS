@@ -5,10 +5,9 @@ import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
 import '../css/homepage.css';
 
-const LoginModal = ({ show, onClose }) => {
+const LoginModal = ({ show, onClose, responseText, setresponseText }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [responseText, setresponseText] = useState('Please login to continue');
 
   const navigate = useNavigate();
 
@@ -29,16 +28,15 @@ const LoginModal = ({ show, onClose }) => {
       // onClose();
       setUsername(''); 
       setPassword(''); 
-      if (Cookies.get('isAdmin') === 1) {
+      if (response.data.isAdmin === 1) {
+        setresponseText('Welcom Admin, happy working');
         navigate('/admincomputer'); // Redirect to admin homepage if user is an admin
       } else {
         setresponseText('You have logged in, happy shopping');
       }
     } catch (error) {
       console.error('Login error:', error);
-    }
-    setresponseText('Please login to continue');
-      
+    }      
   }
 
   return (

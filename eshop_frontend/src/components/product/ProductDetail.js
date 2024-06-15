@@ -49,10 +49,10 @@ const ProductDetail = () => {
 
             // Calculate rating
             let totalRate = 0;
-            comments.forEach((comment) => {
+            response.data.forEach((comment) => {
                 totalRate += parseFloat(comment.rate ? comment.rate : 5.0);
             });
-            setTotalRating(totalRate / comments.length);
+            setTotalRating(totalRate / response.data.length);
         } catch (error) {
             console.error('Error fetching comments:', error);
         }
@@ -122,10 +122,21 @@ const ProductDetail = () => {
             const response = await axios.delete(api);
             if (response.status === 200) {
                 console.log('Product deleted successfully');
-                // navigate('/products'); // Redirect to the products list page
+                navigate(-1); // Redirect to the products list page
             }
         } catch (error) {
             console.error('Error deleting product:', error);
+        }
+    };
+    const handleDeleteComment = async (id) => {
+        try {
+            const response = await axios.delete(`${commentApiBase}/${id}`);
+            if (response.status === 200) {
+                console.log('Comment deleted successfully');
+            }
+            fetchComments();
+        } catch (error) {
+            console.error('Error deleting comment:', error);
         }
     };
 
@@ -183,7 +194,7 @@ const ProductDetail = () => {
                         <li key={comment.id}>
                             User #{comment.userID} : {comment.content} (Rating: {parseFloat(comment.rate ? comment.rate : 5.0).toFixed(1)}/5.0)
                             {isAdmin && (
-                                <button className="fa-solid fa-trash" ></button>
+                                    <button className="fa-solid fa-trash" onClick={() => handleDeleteComment(comment.commentID)}></button>
                             )}
                         </li>
                     )) : (
@@ -197,13 +208,11 @@ const ProductDetail = () => {
                         placeholder="Write a comment..."
                     ></textarea>
                     <label>
-                        Rating:
-                        <input
-                            type="number"
+                        Rating: 
+                        <input type="range" step="0.5" min="0" max="5"
                             value={newRating}
-                            onChange={(e) => setNewRating(e.target.value)}
-                            min="0.5" max="5" step="0.5"
-                        />
+                            onChange={(e) => setNewRating(e.target.value)}/>
+                        {newRating}
                     </label>
                     <button type="submit">Submit</button>
                 </form>

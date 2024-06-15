@@ -11,7 +11,6 @@ const Cart = () => {
   const [productImages, setProductImages] = useState({});
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const api = 'http://localhost:8080/api/products';
-  // const imageApiBase = 'http://localhost:8080/api/images';
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -46,7 +45,7 @@ const Cart = () => {
             quantity: cartItems[key],
             price: product.price
         };
-    });
+    }).filter(product => product.quantity !== null);
 
     try {
         setCartItems(getDefaultCart(products));
