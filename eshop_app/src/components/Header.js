@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, Image, TextInput, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faPhone, faMapMarker, faHeadset, faNewspaper, faShoppingCart, faSignIn, faSignOut, faUserPlus, faPerson } from '@fortawesome/free-solid-svg-icons'; 
+import { faPhone, faMapMarker, faHeadset, faShoppingCart, faSignIn, faSignOut, faUserPlus, faPerson } from '@fortawesome/free-solid-svg-icons'; 
 import logo from '../img/logo1.png';
 import Navbar from '../components/Navbar';
 
@@ -25,9 +25,9 @@ const Header = ({isLoggedIn, handleLogout, toggleSidebar }) => {
                 <Text style={styles.shopName}>H2T Computer Shop</Text>
             </View>
 
-            <View style={styles.searchBar}>
+            {/* <View style={styles.searchBar}>
                 <TextInput placeholder="Search for products..." style={styles.searchInput} />
-            </View>
+            </View> */}
 
             <View style={styles.authButtons}>
                 <View style={styles.buttonRow}>
