@@ -1,10 +1,13 @@
 // src/screens/KeyboardPage.js
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import ProductGrid from '../product/ProductGrid';
+import Navbar from '../components/Navbar';
 
-const KeyboardPage = () => {
+const KeyboardPage = ({toggleSidebar}) => {
   return (
+    <ScrollView style={styles.mainContainer}>
+      <Navbar toggleSidebar={toggleSidebar} />
     <View style={styles.container}>
       <Text style={styles.title}>Keyboard</Text>
       <Text style={styles.description}>
@@ -12,10 +15,14 @@ const KeyboardPage = () => {
       </Text>
       <ProductGrid categoryName="keyboard" />
     </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
+  mainContainer: {
+    flex: 1,
+  },
   container: {
     padding: 20,
   },

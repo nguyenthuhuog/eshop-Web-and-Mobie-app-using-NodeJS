@@ -1,11 +1,13 @@
 // src/screens/Cart.js
 import React, { useContext, useState, useEffect } from 'react';
-import { View, Text, Image, Button, FlatList, StyleSheet } from 'react-native';
+import { View, Text, Image, Button, FlatList, StyleSheet} from 'react-native';
 import axios from 'axios';
 import { ShopContext } from '../context/ShopContext';
 import { useNavigation } from '@react-navigation/native';
+import Navbar from '../components/Navbar';
+import { ScrollView } from 'react-native-gesture-handler';
 
-const Cart = () => {
+const Cart = ({toggleSidebar}) => {
   const { cartItems, products, removeFromCart, updateCartItemCount, addToCart, getTotalCartAmount, setCartItems, getDefaultCart } = useContext(ShopContext);
   const [productImages, setProductImages] = useState({});
   const imageApiBase = 'http://10.136.8.29:8080/api/images';
@@ -46,6 +48,9 @@ const Cart = () => {
   const totalAmount = getTotalCartAmount();
 
   return (
+  <ScrollView style={styles.mainContainer}>
+    <Navbar toggleSidebar={toggleSidebar} /> 
+    <View style={styles.container}>   
     <View style={styles.cart}>
       <Text style={styles.title}>Your Cart</Text>
       <FlatList
@@ -81,10 +86,18 @@ const Cart = () => {
         <Text>Your cart is empty</Text>
       )}
     </View>
+    </View>
+  </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
+  mainContainer: {
+    flex: 1,
+  },
+  container: {
+    padding: 20,
+  },
   cart: {
     padding: 20,
   },

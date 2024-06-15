@@ -1,9 +1,11 @@
 // src/screens/Contact.js
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, Modal, StyleSheet } from 'react-native';
+import { View, Text, TextInput, Button, Modal, StyleSheet} from 'react-native';
 import axios from 'axios';
+import Navbar from '../components/Navbar';
+import { ScrollView } from 'react-native-gesture-handler';
 
-const Contact = () => {
+const Contact = ({toggleSidebar}) => {
   const api = 'http://10.136.8.29:8080/api/messages';
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [post, setPost] = useState({
@@ -37,34 +39,36 @@ const Contact = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.heading}>Contact Us</Text>
-      <View style={styles.form}>
-        <TextInput
-          style={styles.input}
-          placeholder="First Name"
-          value={post.firstName}
-          onChangeText={(value) => handleInput('firstName', value)}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Last Name"
-          value={post.lastName}
-          onChangeText={(value) => handleInput('lastName', value)}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Email"
-          value={post.email}
-          onChangeText={(value) => handleInput('email', value)}
-        />
-        <TextInput
-          style={styles.textarea}
-          placeholder="Message"
-          value={post.message}
-          onChangeText={(value) => handleInput('message', value)}
-        />
-        <Button title="Submit" onPress={handleSubmit} />
+    <ScrollView style={styles.mainContainer}>
+      <Navbar toggleSidebar={toggleSidebar} />
+      <View style={styles.container}>
+        <Text style={styles.heading}>Contact Us</Text>
+        <View style={styles.form}>
+          <TextInput
+            style={styles.input}
+            placeholder="First Name"
+            value={post.firstName}
+            onChangeText={(value) => handleInput('firstName', value)}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Last Name"
+            value={post.lastName}
+            onChangeText={(value) => handleInput('lastName', value)}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Email"
+            value={post.email}
+            onChangeText={(value) => handleInput('email', value)}
+          />
+          <TextInput
+            style={styles.textarea}
+            placeholder="Message"
+            value={post.message}
+            onChangeText={(value) => handleInput('message', value)}
+          />
+          <Button title="Submit" onPress={handleSubmit} />
       </View>
 
       <Modal visible={isModalOpen} transparent={true} animationType="slide">
@@ -76,10 +80,14 @@ const Contact = () => {
         </View>
       </Modal>
     </View>
+  </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
+  mainContainer: {
+    flex: 1,
+  },
   container: {
     padding: 20,
   },
