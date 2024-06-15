@@ -39,3 +39,9 @@
 .contact-form-footer button:hover {
     background-color: #629ad3;
 }
+
+@media (max-width: 800px) {
+    .contact-form-footer{
+        width: 600px;
+    }
+}
