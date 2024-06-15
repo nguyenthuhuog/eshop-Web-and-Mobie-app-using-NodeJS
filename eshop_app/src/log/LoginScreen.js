@@ -11,7 +11,10 @@ export default function LoginScreen() {
 
     const handleSubmit = async () => {
         try {
-            const response = await axios.post('http://localhost:8080/api/accounts/login', { username, password }, { withCredentials: true });
+            console.log(username);
+            console.log(password);
+
+            const response = await axios.post('http://10.136.8.29:8080/api/accounts/login', { username, password }, { withCredentials: true });
             console.log('User logged in:', response.data);
             navigation.navigate('HomePage');
         } catch (error) {

@@ -57,7 +57,7 @@ const AppNavigator = () => {
 
     const checkLoginStatus = async () => {
         try {
-            const response = await axios.get('http://localhost:8080/api/accounts/login-status', { withCredentials: true });
+            const response = await axios.get('http://10.136.8.29:8080/api/accounts/login-status', { withCredentials: true });
             setIsLoggedIn(response.data.loggedIn);
         } catch (error) {
             console.error('Error checking login status:', error);
@@ -74,7 +74,7 @@ const AppNavigator = () => {
     // Logout functionality
     const handleLogout = async () => {
         try {
-            await axios.post('http://localhost:8080/api/accounts/logout', {}, { withCredentials: true });
+            await axios.post('http://10.136.8.29:8080/api/accounts/logout', {}, { withCredentials: true });
             setIsLoggedIn(false);
             Cookies.remove('userID');
         } catch (error) {

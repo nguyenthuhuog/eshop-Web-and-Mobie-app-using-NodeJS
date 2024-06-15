@@ -14,9 +14,9 @@ const ProductDetail = () => {
     const [comments, setComments] = useState([]);
     const [newComment, setNewComment] = useState('');
     const { addToCart } = useContext(ShopContext); // Use the ShopContext
-    const api = `http://localhost:8080/api/products/${id}`;
-    const imageApiBase = 'http://localhost:8080/api/images';
-    const commentApiBase = 'http://localhost:8080/api/comments';
+    const api = `http://10.136.8.29:8080/api/products/${id}`;
+    const imageApiBase = 'http://10.136.8.29:8080/api/images';
+    const commentApiBase = 'http://10.136.8.29:8080/api/comments';
 
     const fetchProduct = async () => {
         try {

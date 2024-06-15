@@ -40,20 +40,13 @@ app.use(session({
   cookie: { secure: false, maxAge: 900000 } // 15 minutes
 }));
 app.use(cookieParser());
+
 app.use(cors({
   origin: 'http://localhost:3000',
   credentials: true,
 }));
-app.use(bodyParser.json());
 
-// Middleware to ensure user is authenticated
-// const ensureAuthenticated = (req, res, next) => {
-//   if (req.session.userId) {
-//     next();
-//   } else {
-//     res.status(401).json({ message: 'You need to be logged in to access this route' });
-//   }
-// };
+app.use(bodyParser.json());
 
 app.post('/api/visit-count', (req, res) => {
   visitCount++;
@@ -64,31 +57,6 @@ app.post('/api/visit-count', (req, res) => {
 app.get('/api/visit-count', (req, res) => {
   res.json({ visitCount });
 });
-
-// app.post('/api/accounts/login', (req, res) => {
-//   const { username, password } = req.body;
-//   accountController.login(username, password, (err, user) => {
-//     if (err) {
-//       return res.status(401).json({ message: 'Login failed' });
-//     }
-//     req.session.userId = user.userID;
-//     req.session.username = user.username;
-//     req.session.isAdmin = user.isAdmin; // Save isAdmin status in the session
-//     res.cookie('user', user, { maxAge: 900000, httpOnly: true });
-//     res.json(user);
-//   });
-// });
-
-// app.post('/api/accounts/logout', (req, res) => {
-//   req.session.destroy((err) => {
-//     if (err) {
-//       return res.status(500).json({ message: 'Logout failed' });
-//     }
-//     res.clearCookie('userID'); // Ensure the userID cookie is cleared
-//     res.clearCookie('user');
-//     res.json({ message: 'Logged out successfully' });
-//   });
-// });
 
 // Endpoint to check if user is logged in
 app.get('/api/accounts/login-status', (req, res) => {
@@ -122,5 +90,5 @@ app.post('/api/products/checkout', authMiddleware, (req, res) => {
 
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+  console.log('Server is running on port ${PORT}');
 });

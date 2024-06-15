@@ -9,8 +9,8 @@ const ProductGrid = ({ categoryName }) => {
   const [products, setProducts] = useState([]);
   const { addToCart, cartItems } = useContext(ShopContext);
   const navigation = useNavigation();
-  const apiBase = 'http://localhost:8080/api/products';
-  const imageApiBase = 'http://localhost:8080/api/images';
+  const apiBase = 'http://10.136.8.29:8080/api/products';
+  const imageApiBase = 'http://10.136.8.29:8080/api/images';
 
   useEffect(() => {
     const fetchProducts = async () => {

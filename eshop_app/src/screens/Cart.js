@@ -8,7 +8,7 @@ import { useNavigation } from '@react-navigation/native';
 const Cart = () => {
   const { cartItems, products, removeFromCart, updateCartItemCount, addToCart, getTotalCartAmount, setCartItems, getDefaultCart } = useContext(ShopContext);
   const [productImages, setProductImages] = useState({});
-  const imageApiBase = 'http://localhost:8080/api/images';
+  const imageApiBase = 'http://10.136.8.29:8080/api/images';
   const navigation = useNavigation();
 
   useEffect(() => {
@@ -35,7 +35,7 @@ const Cart = () => {
       quantity: cartItems[key]
     }));
     try {
-      await axios.post('http://localhost:8080/api/products/checkout', { userID: 10000002, products: productsToUpdate });
+      await axios.post('http://10.136.8.29:8080/api/products/checkout', { userID: 10000002, products: productsToUpdate });
       setCartItems(getDefaultCart(products));
       navigation.navigate('Checkout');
     } catch (error) {

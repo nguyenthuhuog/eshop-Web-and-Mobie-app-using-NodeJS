@@ -4,7 +4,7 @@ import { View, Text, TextInput, Button, Modal, StyleSheet } from 'react-native';
 import axios from 'axios';
 
 const Contact = () => {
-  const api = 'http://localhost:8080/api/messages';
+  const api = 'http://10.136.8.29:8080/api/messages';
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [post, setPost] = useState({
     firstName: '',
