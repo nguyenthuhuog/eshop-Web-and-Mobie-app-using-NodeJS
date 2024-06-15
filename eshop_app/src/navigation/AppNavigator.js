@@ -1,4 +1,3 @@
-// src/navigation/AppNavigator.js
 import React, { useState, useEffect } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
@@ -12,8 +11,6 @@ import Sidebar from '../components/Sidebar';
 import LoginScreen from '../log/LoginScreen';
 import RegisterScreen from '../log/RegisterScreen';
 import ProfilePage from '../log/ProfilePage';
-// import AdminHomepage from './admin/homepage/AdminHomepage';
-// import AdminComputerPage from './admin/AdminComputerPage';
 
 import HomePage from '../screens/HomePage';
 import Contact from '../screens/Contact';
@@ -28,16 +25,13 @@ import ProductGrid from '../product/ProductGrid';
 import { ScrollView } from 'react-native-gesture-handler';
 
 import axios from 'axios';
-// import Cookies from 'js-cookie';
 
 const AppNavigator = () => {
-    // State and effect hooks similar to React
     const [backendData, setBackendData] = useState([{}]);
     const [visitCount, setVisitCount] = useState(0);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
 
     useEffect(() => {
-        // Fetch visit count
         fetchVisitCount();
     }, []);
 
@@ -64,62 +58,49 @@ const AppNavigator = () => {
         }
     };
 
-    // Sidebar state
     const [isSidebarActive, setIsSidebarActive] = useState(false);
 
     const toggleSidebar = () => {
         setIsSidebarActive(!isSidebarActive);
     };
 
-    // Logout functionality
     const handleLogout = async () => {
         try {
             await axios.post('http://10.136.8.29:8080/api/accounts/logout', {}, { withCredentials: true });
             setIsLoggedIn(false);
-            Cookies.remove('userID');
+            // Cookies.remove('userID');
         } catch (error) {
             console.error('Logout error:', error);
         }
     };
 
-    // React Navigation stack setup
     const Stack = createStackNavigator();
 
     return (
         <NavigationContainer>
-            {isLoggedIn? (
+            {isLoggedIn ? (
                 <View style={styles.container}>
                     <Header 
                         toggleSidebar={toggleSidebar} 
                         isSidebarActive={isSidebarActive}
                         isLoggedIn={isLoggedIn} 
-                        handleLogout={handleLogout}/>  
-                    {isSidebarActive && <Sidebar/>}
-
+                        handleLogout={handleLogout}
+                    />  
+                    {isSidebarActive && <Sidebar />}
                     <Stack.Navigator initialRouteName="HomePage">
-                    <Stack.Screen name="HomePage">
-                        {props => (
-                            <HomePage
-                                {...props}
-                                isLoggedIn={isLoggedIn}
-                                handleLogout={handleLogout}
-                            />
-                         )}
-                    </Stack.Screen>
-                    <Stack.Screen name="Contact" component={Contact} />
-                    <Stack.Screen name="MousePage" component={MousePage} />
-                    <Stack.Screen name="KeyboardPage" component={KeyboardPage} />
-                    <Stack.Screen name="ComputerPage" component={ComputerPage} />
-                    {/* <Stack.Screen name="AdminHomepage" component={AdminHomepage} />
-                    <Stack.Screen name="AdminComputerPage" component={AdminComputerPage} /> */}
-                    <Stack.Screen name="ProductGrid" component={ProductGrid} />
-                    <Stack.Screen name="Cart" component={Cart} />
-                    <Stack.Screen name="Checkout" component={Checkout} />
-                    <Stack.Screen name="ProfilePage" component={ProfilePage} />
-                 </Stack.Navigator>
-                <Footer visitCount={visitCount} />
-            </View>                           
-            ):(
+                        <Stack.Screen name="HomePage" component={HomePage} />
+                        <Stack.Screen name="Contact" component={Contact} />
+                        <Stack.Screen name="MousePage" component={MousePage} />
+                        <Stack.Screen name="KeyboardPage" component={KeyboardPage} />
+                        <Stack.Screen name="ComputerPage" component={ComputerPage} />
+                        <Stack.Screen name="ProductGrid" component={ProductGrid} />
+                        <Stack.Screen name="Cart" component={Cart} />
+                        <Stack.Screen name="Checkout" component={Checkout} />
+                        <Stack.Screen name="ProfilePage" component={ProfilePage} />
+                    </Stack.Navigator>
+                    <Footer visitCount={visitCount} />
+                </View>
+            ) : (
                 <Stack.Navigator initialRouteName="Login" screenOptions={{headerShown: false}}>
                     <Stack.Screen name="Login">
                         {props => (
@@ -135,9 +116,11 @@ const AppNavigator = () => {
         </NavigationContainer>
     );
 };
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
 });
+
 export default AppNavigator;

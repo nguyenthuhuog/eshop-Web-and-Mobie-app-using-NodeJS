@@ -15,7 +15,6 @@ const ProductDetail = () => {
     const [newComment, setNewComment] = useState('');
     const { addToCart } = useContext(ShopContext); // Use the ShopContext
     const api = `http://10.136.8.29:8080/api/products/${id}`;
-    const imageApiBase = 'http://10.136.8.29:8080/api/images';
     const commentApiBase = 'http://10.136.8.29:8080/api/comments';
 
     const fetchProduct = async () => {
@@ -23,11 +22,8 @@ const ProductDetail = () => {
             const response = await axios.get(api);
             const fetchedProduct = response.data;
 
-            const imageResponse = await axios.get(`${imageApiBase}/productID/${fetchedProduct.productID}`);
-            const productWithImage = { ...fetchedProduct, imageUrl: imageResponse.data[0].image_url };
-
-            setProduct(productWithImage);
-            console.log('Product details with image:', productWithImage);
+            setProduct(fetchedProduct);
+            console.log('Product details with image:', fetchedProduct);
         } catch (error) {
             console.error('Error fetching product details or image:', error);
         }

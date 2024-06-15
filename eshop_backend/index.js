@@ -41,10 +41,33 @@ app.use(session({
 }));
 app.use(cookieParser());
 
-app.use(cors({
-  origin: 'http://localhost:3000',
-  credentials: true,
-}));
+// app.use(cors({
+//   origin: 'http://localhost:3000',
+//   credentials: true,
+// }));
+
+const allowedOrigins = [
+  'http://localhost:3000',
+  'http://10.136.8.29:8081'
+];
+
+// CORS configuration
+const corsOptions = {
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+
+    if (allowedOrigins.indexOf(origin) === -1) {
+      const msg = `The CORS policy for this site does not allow access from the specified Origin: ${origin}`;
+      return callback(new Error(msg), false);
+    }
+    return callback(null, true);
+  },
+  credentials: true, // Enable the Access-Control-Allow-Credentials CORS header
+};
+
+app.use(cors(corsOptions));
+
 
 app.use(bodyParser.json());
 
