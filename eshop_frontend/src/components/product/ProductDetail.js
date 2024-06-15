@@ -9,7 +9,7 @@ import UpdateModal from './UpdateModal'; // Import EditProductModal
 import '../../css/productdetail.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
-const ProductDetail = () => {
+const ProductDetail = ({setIsLoginModalOpen}) => {
     const { id } = useParams();
     const navigate = useNavigate(); // Initialize useNavigate
     const [product, setProduct] = useState(null);
@@ -19,7 +19,6 @@ const ProductDetail = () => {
     const [newComment, setNewComment] = useState('');
     const [newRating, setNewRating] = useState(5);
     const [totalRating, setTotalRating] = useState(5);
-    const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false); // State for EditProductModal
     const { addToCart } = useContext(ShopContext); // Use the ShopContext
     const isAdmin = Cookies.get('isAdmin') === '1';
@@ -187,12 +186,22 @@ const ProductDetail = () => {
                 </div>
             </div>
             <div className="comments-section">
-                <h3>Overall rating: {totalRating.toFixed(1)}/5.0</h3>
+                <h3 style={{ fontSize: '30px', color: '#3498db' }}>Overall rating: {totalRating.toFixed(1)}/5.0</h3>
                 <h3>Comments</h3>
                 <ul>
                     {comments.length > 0 ? comments.map((comment) => (
                         <li key={comment.id}>
-                            User #{comment.userID} : {comment.content} (Rating: {parseFloat(comment.rate ? comment.rate : 5.0).toFixed(1)}/5.0)
+                            {/* User #{comment.userID} {comment.username} {comment.email}: {comment.content} (Rating: {parseFloat(comment.rate ? comment.rate : 5.0).toFixed(1)}/5.0) */}
+                            <div>
+                                <span style={{ color: '#3498db' }}>{comment.username}</span>
+                                <span style={{ marginLeft: '10px', color: '#e74c3c' }}>{parseFloat(comment.rate ? comment.rate : 5.0).toFixed(1)}/5.0</span>
+                            </div>
+                            <div style={{ fontSize: '12px', fontStyle: 'italic' }}>
+                                User ID: {comment.userID} | Email: {comment.email}
+                            </div>
+                            <div style={{ fontSize: '16px', marginTop: '10px' }}>
+                                {comment.content}
+                            </div>
                             {isAdmin && (
                                     <button className="fa-solid fa-trash" onClick={() => handleDeleteComment(comment.commentID)}></button>
                             )}
@@ -207,17 +216,17 @@ const ProductDetail = () => {
                         onChange={(e) => setNewComment(e.target.value)}
                         placeholder="Write a comment..."
                     ></textarea>
-                    <label>
-                        Rating: 
-                        <input type="range" step="0.5" min="0" max="5"
-                            value={newRating}
-                            onChange={(e) => setNewRating(e.target.value)}/>
-                        {newRating}
-                    </label>
+                    <div style={{ color: '#3498db', fontWeight: 'bold', fontSize: '16px' }}>
+                        <p>Rating:  {newRating}/5.0</p>
+                        <input
+                            type="range" step="0.5" min="0" max="5"
+                            value={newRating} onChange={(e) => setNewRating(e.target.value)}
+                            style={{ verticalAlign: 'middle' }}
+                        />
+                    </div>
                     <button type="submit">Submit</button>
                 </form>
             </div>
-            <LoginModal show={isLoginModalOpen} onClose={() => setIsLoginModalOpen(false)} setIsLoggedIn={() => { /* handle setting logged-in state if needed */ }} />
             <UpdateModal show={isEditModalOpen} onClose={() => setIsEditModalOpen(false)} product={product} onUpdate={fetchProduct} />
         </div>
     );

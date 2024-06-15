@@ -4,12 +4,10 @@ import Cookies from 'js-cookie';
 import { ShopContext } from '../../product/ShopContextProvider';
 import { useNavigate } from 'react-router-dom';
 import '../../../css/cart.css';
-import LoginModal from '../../LoginModal'; // Ensure this path is correct
 
-const Cart = () => {
+const Cart = ({setIsLoginModalOpen}) => {
   const { cartItems, products, removeFromCart, updateCartItemCount, addToCart, getTotalCartAmount, setCartItems, getDefaultCart } = useContext(ShopContext);
   const [productImages, setProductImages] = useState({});
-  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const api = 'http://localhost:8080/api/products';
   const navigate = useNavigate();
 
@@ -34,8 +32,8 @@ const Cart = () => {
   const handleCheckout = async () => {
     const userID = Cookies.get('userID');
     if (!userID) {
-        setIsLoginModalOpen(true); // Show login modal if not logged in
-        return;
+      setIsLoginModalOpen(true); // Show login modal if not logged in
+      return;
     }
 
     const productsToUpdate = Object.keys(cartItems).map(key => {
@@ -97,7 +95,6 @@ const Cart = () => {
       ) : (
         <p>Your cart is empty</p>
       )}
-      <LoginModal show={isLoginModalOpen} onClose={() => setIsLoginModalOpen(false)} setIsLoggedIn={() => { /* handle setting logged-in state if needed */ }} />
     </div>
   );
 };

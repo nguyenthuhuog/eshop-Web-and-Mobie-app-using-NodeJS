@@ -129,6 +129,9 @@
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
+.product-name button {
+    font-size: 80%;
+}
 .comments-section h3 {
     margin-bottom: 10px;
 }
@@ -168,4 +171,23 @@
     border: none;
     border-radius: 5px;
     cursor: pointer;
+}
+@media screen and (max-width: 800px) {
+    .product-detail-container {
+        flex-direction: column;
+        margin-left: 60px; /* Xóa margin-left để các phần tử không bị lệch khi chuyển sang layout dọc */
+    }
+
+    .product-image {
+        margin-bottom: 20px; /* Thêm khoảng cách dưới ảnh để tách biệt với các phần tử khác */
+    }
+
+    .product-info {
+        text-align: center; /* Căn giữa nội dung trong trường hợp layout dọc */
+    }
+    .product-details-title,
+    .product-stock,
+    .product-details {
+        text-align: left;
+    }
 }

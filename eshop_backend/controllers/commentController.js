@@ -28,7 +28,11 @@ commentController.getById = (id, callback) => {
   });
 };
 commentController.getByProductId = (id, callback) => {
-  const sqlString = "SELECT * FROM comments WHERE productID = ?";
+  const sqlString = `SELECT comments.commentID, comments.rate, comments.content, comments.userID,
+                            accounts.username, accounts.email 
+                     FROM comments 
+                     JOIN accounts ON comments.userID = accounts.userID 
+                     WHERE comments.productID = ?`;
   db.query(sqlString, id, (err, results) => {
     if (err) {
       callback(err, null);
