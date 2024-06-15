@@ -53,16 +53,16 @@ function App() {
     }, [location.pathname]);
 
     useEffect(() => {
-        console.log(Cookies.get());
+        console.log("Current cookies: ", Cookies.get());
         const adModalShown = Cookies.get('adModalShown');
         if (!adModalShown) {
             // Nếu chưa hiển thị, đặt timeout 1 phút để hiển thị quảng cáo
             const timer = setTimeout(() => {
                 setIsAdModalOpen(true);
                 
-                const expireTime = new Date(new Date().getTime() + 15 * 60 * 1000); // 15'
+                const expireTime = new Date(new Date().getTime() + 5 * 60 * 1000); // 5'
                 Cookies.set('adModalShown', 'true', { expires: expireTime }); 
-            }, 10 * 1000);
+            }, 10 * 1000); //10s
 
             return () => clearTimeout(timer);
         }
@@ -121,9 +121,9 @@ function App() {
                                 <Route path="/admin/homepage" element={<AdminHomepage />} />
                                 <Route path="/admincomputer" element={<AdminComputerPage />} />
                                 <Route path="/products" element={<ProductGrid />} />
-                                <Route path="/cart" element={<Cart />} />
+                                <Route path="/cart" element={<Cart setIsLoginModalOpen={setIsLoginModalOpen}/>} />
                                 <Route path="/checkout" element={<Checkout />} />
-                                <Route path="/product/:id" element={<ProductDetail />} />
+                                <Route path="/product/:id" element={<ProductDetail setIsLoginModalOpen={setIsLoginModalOpen}/>} />
                                 <Route path="/" element={<HomePage isSidebarActive={isSidebarActive} />} />
                             </Routes>
                         </div>

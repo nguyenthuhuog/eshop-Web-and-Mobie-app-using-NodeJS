@@ -45,6 +45,15 @@
     margin-bottom: 20px;
 }
 
+.ad-model-products {
+    /* display: inline-block;  */
+    display: flex; 
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+
+}
 .shop-now-button {
     background-color: #28a745;
     color: white;
