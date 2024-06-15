@@ -1,8 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import ProductGrid from '../../product/ProductGrid';
-// import { PRODUCTS } from '../../products'; // Import the PRODUCTS array
-// import { Product } from '../../product/Product';
 import '../../../css/homepage.css';
 import '../../../css/product.css';
 

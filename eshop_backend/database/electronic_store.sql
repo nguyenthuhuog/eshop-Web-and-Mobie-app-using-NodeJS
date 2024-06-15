@@ -1,5 +1,4 @@
 use electronic_store;
-drop table if exists images;
 drop table if exists orderDetails;
 drop table if exists orders;
 drop table if exists comments;
@@ -28,12 +27,6 @@ CREATE TABLE products (
     stock INT,
     image_url VARCHAR(255),
     FOREIGN KEY (categoryID) REFERENCES categories(categoryID)
-);
-CREATE TABLE images (
-    imageID INT AUTO_INCREMENT PRIMARY KEY,
-    productID INT,
-    image_url VARCHAR(255),
-    FOREIGN KEY (productID) REFERENCES products(productID)
 );
 CREATE TABLE comments (
     commentID INT AUTO_INCREMENT PRIMARY KEY,

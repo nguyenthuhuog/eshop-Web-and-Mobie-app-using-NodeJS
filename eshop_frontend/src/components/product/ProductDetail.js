@@ -1,16 +1,17 @@
 import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
-
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom'; // Import useNavigate
 import { ShopContext } from './ShopContextProvider'; // Import ShopContext
 import LoginModal from '../LoginModal'; // Ensure this path is correct
+import UpdateModal from './UpdateModal'; // Import EditProductModal
 
 import '../../css/productdetail.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
 const ProductDetail = () => {
     const { id } = useParams();
+    const navigate = useNavigate(); // Initialize useNavigate
     const [product, setProduct] = useState(null);
     const [quantity, setQuantity] = useState(1);
     const [quantityError, setQuantityError] = useState(false);
@@ -19,7 +20,10 @@ const ProductDetail = () => {
     const [newRating, setNewRating] = useState(5);
     const [totalRating, setTotalRating] = useState(5);
     const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false); // State for EditProductModal
     const { addToCart } = useContext(ShopContext); // Use the ShopContext
+    const isAdmin = Cookies.get('isAdmin') === '1';
+
     const api = `http://localhost:8080/api/products/${id}`;
     const commentApiBase = 'http://localhost:8080/api/comments';
 
@@ -43,12 +47,12 @@ const ProductDetail = () => {
             console.log('Comments retrieved successfully:', response.data);
             setComments(response.data);
 
-            //calculate rating
-            var totalRate = 0;
-            comments.map((comment) => (
-                totalRate += parseFloat(comment.rate ? comment.rate : 5.0)
-            ))
-            setTotalRating(totalRate/comments.length);
+            // Calculate rating
+            let totalRate = 0;
+            response.data.forEach((comment) => {
+                totalRate += parseFloat(comment.rate ? comment.rate : 5.0);
+            });
+            setTotalRating(totalRate / response.data.length);
         } catch (error) {
             console.error('Error fetching comments:', error);
         }
@@ -63,7 +67,6 @@ const ProductDetail = () => {
             fetchComments();
         }
     }, [product]);
-
 
     const handleQuantityChange = (newQuantity) => {
         if (newQuantity >= 1 && newQuantity <= product.stock) {
@@ -91,7 +94,7 @@ const ProductDetail = () => {
             content: newComment,
             productID: product.productID,
             rate: newRating,
-            userID : Cookies.get('userID'),
+            userID: Cookies.get('userID'),
         };
 
         setNewComment('');
@@ -109,6 +112,34 @@ const ProductDetail = () => {
         fetchComments();
     };
 
+    const handleEditClick = () => {
+        console.log('he');
+        setIsEditModalOpen(true); // Open the edit modal
+    };
+
+    const handleDelete = async () => {
+        try {
+            const response = await axios.delete(api);
+            if (response.status === 200) {
+                console.log('Product deleted successfully');
+                navigate(-1); // Redirect to the products list page
+            }
+        } catch (error) {
+            console.error('Error deleting product:', error);
+        }
+    };
+    const handleDeleteComment = async (id) => {
+        try {
+            const response = await axios.delete(`${commentApiBase}/${id}`);
+            if (response.status === 200) {
+                console.log('Comment deleted successfully');
+            }
+            fetchComments();
+        } catch (error) {
+            console.error('Error deleting comment:', error);
+        }
+    };
+
     if (!product) return <div>Loading...</div>;
 
     const productDetailsTitle = "Thông số sản phẩm";
@@ -123,31 +154,48 @@ const ProductDetail = () => {
                     <img src={product.image_url} alt={product.productName} />
                 </div>
                 <div className="product-info">
-                    <h2 className="product-name">{product.productName}</h2>
+                    <h2 className="product-name">{product.productName}
+                    {isAdmin && (
+                        <button className="fa-solid fa-trash" onClick={handleDelete}></button>
+                    )}
+                    </h2>
                     <p className="product-price">Price: ${parseFloat(product.price).toFixed(2)}</p>
                     <div>
                         <p className="product-details-title">{productDetailsTitle}</p>
                         {productDetails}
                     </div>
-                    <p className="product-stock">Stock: {product.stock}</p>
-                    <div className="cart-section">
-                        <div className="quantity-selector">
-                            <button onClick={() => handleQuantityChange(quantity - 1)} disabled={quantity <= 1}>-</button>
-                            <span>{quantity}</span>
-                            <button onClick={() => handleQuantityChange(quantity + 1)} disabled={quantity >= product.stock}>+</button>
+                    <div>
+                        <p className="product-stock">Stock: {product.stock}</p>
+                        <div className="cart-section">
+                            <div className="quantity-selector">
+                                {!isAdmin ? (
+                                    <>
+                                        <button onClick={() => handleQuantityChange(quantity - 1)} disabled={quantity <= 1}>-</button>
+                                        <span>{quantity}</span>
+                                        <button onClick={() => handleQuantityChange(quantity + 1)} disabled={quantity >= product.stock}>+</button>
+                                        <i className="fas fa-shopping-cart cart-icon" onClick={handleAddToCart}></i>
+                                    </>
+                                ) : (
+                                    <><p> Edit: </p>
+                                    <button className="fas fa-pen-alt" onClick={handleEditClick}></button>
+                                    </>
+                                )}
+                            </div>
                         </div>
-                        <i className="fas fa-shopping-cart cart-icon" onClick={handleAddToCart}></i>
                     </div>
                     {quantityError && <p className="quantity-error">Cannot exceed available stock.</p>}
                 </div>
             </div>
             <div className="comments-section">
-                <h3>Overal rating: {totalRating.toFixed(1)}/5.0</h3>
+                <h3>Overall rating: {totalRating.toFixed(1)}/5.0</h3>
                 <h3>Comments</h3>
                 <ul>
                     {comments.length > 0 ? comments.map((comment) => (
                         <li key={comment.id}>
                             User #{comment.userID} : {comment.content} (Rating: {parseFloat(comment.rate ? comment.rate : 5.0).toFixed(1)}/5.0)
+                            {isAdmin && (
+                                    <button className="fa-solid fa-trash" onClick={() => handleDeleteComment(comment.commentID)}></button>
+                            )}
                         </li>
                     )) : (
                         <p>No comments yet. Be the first to comment!</p>
@@ -160,18 +208,17 @@ const ProductDetail = () => {
                         placeholder="Write a comment..."
                     ></textarea>
                     <label>
-                        Rating:
-                        <input
-                            type="number"
+                        Rating: 
+                        <input type="range" step="0.5" min="0" max="5"
                             value={newRating}
-                            onChange={(e) => setNewRating(e.target.value)}
-                            min="0.5" max="5" step="0.5"
-                        />
+                            onChange={(e) => setNewRating(e.target.value)}/>
+                        {newRating}
                     </label>
                     <button type="submit">Submit</button>
                 </form>
             </div>
             <LoginModal show={isLoginModalOpen} onClose={() => setIsLoginModalOpen(false)} setIsLoggedIn={() => { /* handle setting logged-in state if needed */ }} />
+            <UpdateModal show={isEditModalOpen} onClose={() => setIsEditModalOpen(false)} product={product} onUpdate={fetchProduct} />
         </div>
     );
 };

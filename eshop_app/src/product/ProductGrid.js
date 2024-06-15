@@ -1,4 +1,3 @@
-// components/ProductGrid.js
 import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import axios from 'axios';
@@ -9,35 +8,41 @@ const ProductGrid = ({ categoryName }) => {
   const [products, setProducts] = useState([]);
   const { addToCart, cartItems } = useContext(ShopContext);
   const navigation = useNavigation();
-  const apiBase = 'http://localhost:8080/api/products';
-  const imageApiBase = 'http://localhost:8080/api/images';
+  const api = 'http://10.136.8.29:8080/api/products'; // Define your API base URL here
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const api = categoryName ? `${apiBase}/byCategory/${categoryName}` : apiBase;
-        const response = await axios.get(api);
+        let apiUrl = api; // Assign the base API URL to a variable
+        if (categoryName != null) {
+          apiUrl = `${api}/byCategory/${categoryName}`; // Append category name if provided
+        }
+        const response = await axios.get(apiUrl); // Use apiUrl instead of api
         const fetchedProducts = response.data;
-
-        const productsWithImages = await Promise.all(
-          fetchedProducts.map(async (product) => {
-            try {
-              const imageResponse = await axios.get(`${imageApiBase}/productID/${product.productID}`);
-              return { ...product, imageUrl: imageResponse.data[0].image_url };
-            } catch (error) {
-              console.error(`Error fetching image for productID ${product.productID}:`, error);
-              return product;
-            }
-          })
-        );
-        setProducts(productsWithImages);
+        setProducts(fetchedProducts);
       } catch (error) {
         console.error('Error fetching products:', error);
       }
     };
 
-    fetchProducts();
-  }, [categoryName]);
+    fetchProducts(); // Call fetchProducts inside useEffect
+
+    // This block is commented out as it's not currently used
+    /*
+    useEffect(() => {
+      const checkAdminStatus = async () => {
+        try {
+          const response = await axios.get('http://localhost:8080/api/accounts/login-status', { withCredentials: true });
+          setIsAdmin(response.data.isAdmin);
+        } catch (error) {
+          console.error('Error checking admin status:', error);
+        }
+      };
+
+      checkAdminStatus();
+    }, []);
+    */
+  }, [categoryName]); // useEffect dependency on categoryName
 
   return (
     <View style={styles.productGrid}>
@@ -49,7 +54,7 @@ const ProductGrid = ({ categoryName }) => {
             onPress={() => navigation.navigate('ProductDetail', { id: product.productID })}
           >
             <Text style={styles.productName}>{product.productName}</Text>
-            <Image source={{ uri: product.imageUrl }} style={styles.productImage} />
+            <Image source={{ uri: product.image_url }} alt={`Image of ${product.productName}`} />
             <Text style={styles.productPrice}>Price: ${parseFloat(product.price).toFixed(2)}</Text>
             <Text style={styles.productStock}>Stock: {product.stock}</Text>
             <TouchableOpacity

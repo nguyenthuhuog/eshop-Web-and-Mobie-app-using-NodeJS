@@ -3,8 +3,6 @@ import { View, Text, ScrollView, StyleSheet } from 'react-native';
 import Banner from '../components/Banner';
 import ProductGrid from '../product/ProductGrid';
 import News from '../components/News';
-import Header from '../components/Header';
-import Footer from '../components/Footer';
 
 
 const HomePage = () => {
@@ -14,7 +12,6 @@ const HomePage = () => {
         <Banner />
         <ProductGrid />
         <News />
-        {/* <Footer/> */}
       </View>
     </ScrollView>
   );

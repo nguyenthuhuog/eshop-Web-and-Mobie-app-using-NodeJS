@@ -1,7 +1,6 @@
 
 SET SQL_SAFE_UPDATES = 0;
 
-delete from images;
 delete from orderDetails;
 delete from orders;
 delete from comments;
@@ -49,65 +48,3 @@ INSERT INTO orders (orderID, userID, orderDate, totalAmount) VALUES
 INSERT INTO orderDetails (orderDetailID, orderID, productID, quantity) VALUES
 (70000001, 60000001, 3000001, 1),
 (70000002, 60000001, 3000002, 1);
-
-INSERT INTO images (imageID, productID, image_url) VALUES
-(90000001, 3000001, 'https://hanoicomputercdn.com/media/product/76816_laptop_acer_aspire_7_a715_76_53pj__nh_qgesv_007___6_.jpg'),
-(90000002, 3000001, 'https://hanoicomputercdn.com/media/product/76816_laptop_acer_aspire_7_a715_76_53pj__nh_qgesv_007___1_.jpg'),
-(90000003, 3000001, 'https://hanoicomputercdn.com/media/product/76816_laptop_acer_aspire_7_a715_76_53pj__nh_qgesv_007___2_.jpg'),
-(90000004, 3000001, 'https://hanoicomputercdn.com/media/product/76816_laptop_acer_aspire_7_a715_76_53pj__nh_qgesv_007___5_.jpg'),
-(90000005, 3000001, 'https://hanoicomputercdn.com/media/product/76816_laptop_acer_aspire_7_a715_76_53pj__nh_qgesv_007___4_.jpg'),
-(90000006, 3000002, 'https://hanoicomputercdn.com/media/product/81297_laptop_asus_vivobook_a1505va_l1491w___3_.jpg'),
-(90000007, 3000002, 'https://hanoicomputercdn.com/media/product/81297_laptop_asus_vivobook_a1505va_l1491w___1_.jpg'),
-(90000008, 3000002, 'https://hanoicomputercdn.com/media/product/81297_laptop_asus_vivobook_a1505va_l1491w___6_.jpg'),
-(90000009, 3000002, 'https://hanoicomputercdn.com/media/product/81297_laptop_asus_vivobook_a1505va_l1491w___5_.jpg'),
-(90000010, 3000002, 'https://hanoicomputercdn.com/media/product/81297_laptop_asus_vivobook_a1505va_l1491w___4_.jpg'),
-(90000011, 3000003, 'https://hanoicomputercdn.com/media/product/77617_laptop_lenovo_ideapad_slim_5_14ilr8__82xd007qvn__5.jpg'),
-(90000012, 3000003, 'https://hanoicomputercdn.com/media/product/77617_laptop_lenovo_ideapad_slim_5_14ilr8__82xd007qvn__4.jpg'),
-(90000013, 3000003, 'https://hanoicomputercdn.com/media/product/77617_laptop_lenovo_ideapad_slim_5_14ilr8__82xd007qvn__3.jpg'),
-(90000014, 3000003, 'https://hanoicomputercdn.com/media/product/77617_laptop_lenovo_ideapad_slim_5_14ilr8__82xd007qvn__2.jpg'),
-(90000015, 3000003, 'https://hanoicomputercdn.com/media/product/77617_laptop_lenovo_ideapad_slim_5_14ilr8__82xd007qvn__1.jpg'),
-(90000016, 3000004, 'https://hanoicomputercdn.com/media/product/76261_laptop_dell_vostro_3430__71015716_.jpg'),
-(90000017, 3000004, 'https://hanoicomputercdn.com/media/product/76262_laptop_dell_vostro_3430__71015715_.jpg'),
-(90000018, 3000004, 'https://hanoicomputercdn.com/media/product/76261_laptop_dell_vostro_3430__71011905_.jpg'),
-(90000019, 3000004, 'https://hanoicomputercdn.com/media/product/76262_laptop_dell_vostro_3430__71015717_.jpg'),
-(90000020, 3000004, 'https://hanoicomputercdn.com/media/product/76261_laptop_dell_vostro_3430__71011906_.jpg'),
-(90000021, 3000005, 'https://hanoicomputercdn.com/media/product/82681_laptop_apple_macbook_air__z15s006j7_.jpg'),
-(90000022, 3000005, 'https://hanoicomputercdn.com/media/product/82681_laptop_apple_macbook_air__z15s006j7__4.jpg'),
-(90000023, 3000005, 'https://hanoicomputercdn.com/media/product/82681_laptop_apple_macbook_air__z15s006j7__3.jpg'),
-(90000024, 3000005, 'https://hanoicomputercdn.com/media/product/82681_laptop_apple_macbook_air__z15s006j7__2.jpg'),
-(90000025, 3000005, 'https://hanoicomputercdn.com/media/product/82681_laptop_apple_macbook_air__z15s006j7__1.jpg'),
-(90000026, 3000006, 'https://hanoicomputercdn.com/media/product/71766_laptop_lg_gram_14z90r_6.png'),
-(90000027, 3000006, 'https://hanoicomputercdn.com/media/product/71766_laptop_lg_gram_14z90r_1.png'),
-(90000028, 3000006, 'https://hanoicomputercdn.com/media/product/71766_laptop_lg_gram_14z90r_3.png'),
-(90000029, 3000006, 'https://hanoicomputercdn.com/media/product/71766_laptop_lg_gram_14z90r_4.png'),
-(90000030, 3000006, 'https://hanoicomputercdn.com/media/product/71766_laptop_lg_gram_14z90r_2.png'),
-(90000031, 3000007, 'https://hanoicomputercdn.com/media/product/70572_chuot_khong_day_gaming_asus_rog_harpe_ace_aim_lab_black_p713_bluetooth_wireless_usb_rgb_1.jpg'),
-(90000032, 3000007, 'https://hanoicomputercdn.com/media/product/70572_chuot_khong_day_gaming_asus_rog_harpe_ace_aim_lab_black_p713_bluetooth_wireless_usb_rgb_6.jpg'),
-(90000033, 3000007, 'https://hanoicomputercdn.com/media/product/70572_chuot_khong_day_gaming_asus_rog_harpe_ace_aim_lab_black_p713_bluetooth_wireless_usb_rgb_5.jpg'),
-(90000034, 3000007, 'https://hanoicomputercdn.com/media/product/70572_chuot_khong_day_gaming_asus_rog_harpe_ace_aim_lab_black_p713_bluetooth_wireless_usb_rgb_2.jpg'),
-(90000035, 3000007, 'https://hanoicomputercdn.com/media/product/70572_chuot_khong_day_gaming_asus_rog_harpe_ace_aim_lab_black_p713_bluetooth_wireless_usb_rgb_3.jpg'),
-(90000036, 3000008, 'https://hanoicomputercdn.com/media/product/29034_tong_the_mouse_logitech_g402_usb_black.jpg'),
-(90000037, 3000008, 'https://hanoicomputercdn.com/media/product/29034_phan_lung_mouse_logitech_g402_usb_black.jpg'),
-(90000038, 3000008, 'https://hanoicomputercdn.com/media/product/29034_mat_truoc_mouse_logitech_g402_usb_black.jpg'),
-(90000039, 3000008, 'https://hanoicomputercdn.com/media/product/29034_mat_hong_ben_trai_mouse_logitech_g402_usb_black.jpg'),
-(90000040, 3000008, 'https://hanoicomputercdn.com/media/product/29034_kich_thuoc_chuot_choi_game_logitech_g402_hyperion_fury_usb_black.jpg'),
-(90000041, 3000009, 'https://hanoicomputercdn.com/media/product/60354_chuot_edra_em624_trang_usb_0001_2.jpg'),
-(90000042, 3000009, 'https://hanoicomputercdn.com/media/product/60354_chuot_edra_em624_trang_usb_0002_3.jpg'),
-(90000043, 3000009, 'https://hanoicomputercdn.com/media/product/60354_chuot_edra_em624_trang_usb_0000_1.jpg'),
-(90000044, 3000009, 'https://hanoicomputercdn.com/media/product/60354_chuot_edra_em624_trang_usb_02.JPG'),
-(90000045, 3000009, 'https://hanoicomputercdn.com/media/product/60354_chuot_edra_em624_trang_usb_05.JPG'),
-(90000046, 3000010, 'https://hanoicomputercdn.com/media/product/70489_chuot_khong_day_rapoo_m500_silent_mau_xanh_wireless_bluetooth_1.jpg'),
-(90000047, 3000010, 'https://hanoicomputercdn.com/media/product/70489_chuot_khong_day_rapoo_m500_silent_mau_xanh_wireless_bluetooth_4.jpg'),
-(90000048, 3000011, 'https://hanoicomputercdn.com/media/product/70488_chuot_khong_day_rapoo_m500_silent_mau_xam_wireless_bluetooth_1.jpg'),
-(90000049, 3000011, 'https://hanoicomputercdn.com/media/product/81517_chuot_gaming_co_day_machenike_m7_pro_wired_white_2.jpg'),
-(90000050, 3000012, 'https://hanoicomputercdn.com/media/product/80761_chuot_vi_tinh_co_day_dib_optical_travel_usb_mouse.jpg'),
-(90000051, 3000013, 'https://bizweb.dktcdn.net/thumb/1024x1024/100/329/122/products/ban-phim-co-khong-day-asus-rog-strix-scope-ii-96-wireless-5.jpg?v=1706610874147'),
-(90000052, 3000013, 'https://bizweb.dktcdn.net/thumb/1024x1024/100/329/122/products/ban-phim-co-khong-day-asus-rog-strix-scope-ii-96-wireless.jpg?v=1706610875947'),
-(90000053, 3000013, 'https://bizweb.dktcdn.net/thumb/1024x1024/100/329/122/products/ban-phim-co-khong-day-asus-rog-strix-scope-ii-96-wireless-2.jpg?v=1706610874147'),
-(90000054, 3000014, 'https://hanoicomputercdn.com/media/product/78542_ban_phim_akko_3098_ds_matcha_red_bean_gateron_cap_yellow_switch___cu_dep_99.jpg'),
-(90000055, 3000014, 'https://product.hstatic.net/200000722513/product/im-co-akko-3098-ds-matcha-red-bean-04_03b5117b95304a0da1fa223acf1ebc31_fa25fe2082ed43e38c36b8a8d036f583_grande.jpg'),
-(90000056, 3000015, 'https://newmen.vn/wp-content/uploads/2023/09/4.jpg'),
-(90000057, 3000015, 'https://newmen.vn/wp-content/uploads/2023/09/3.jpg'),
-(90000058, 3000016, 'https://edravn.com/media/product/519_ek506_3.jpg'),
-(90000059, 3000017, 'https://hanoicomputercdn.com/media/product/83010_ban_phim_co_dareu_ek98_pro_proto_3_modes_pbt_rgb_dream_switch__3_.jpg'),
-(90000060, 3000018, 'https://hanoicomputercdn.com/media/product/82686_ban_phim_co_logitech_pro_x_60_lightspeed_wireless_black_1.jpg');

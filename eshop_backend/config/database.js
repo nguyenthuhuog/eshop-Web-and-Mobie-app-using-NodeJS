@@ -7,7 +7,8 @@ const pool = mysql.createPool({
   database: 'electronic_store',
   waitForConnections: true,
   connectionLimit: 10,
-  queueLimit: 0
+  queueLimit: 0,
+  multipleStatements: true 
 });
 
 pool.getConnection((err, connection) => {
