@@ -5,7 +5,7 @@ import Navbar from '../components/Navbar';
 import { Modal, Portal, Provider } from 'react-native-paper';
 import { BASE_URL } from '../log/config';
 
-const Contact = ({ toggleSidebar }) => {
+const Contact = ({toggleSidebar, handleLogout}) => {
   const api = `${BASE_URL}/messages`;
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [post, setPost] = useState({
@@ -48,7 +48,7 @@ const Contact = ({ toggleSidebar }) => {
   return (
     <Provider>
       <ScrollView style={styles.mainContainer}>
-        <Navbar toggleSidebar={toggleSidebar} />
+      <Navbar toggleSidebar={toggleSidebar} handleLogout={handleLogout} />
         <View style={styles.container}>
           <Text style={styles.heading}>Contact Us</Text>
           <View style={styles.form}>

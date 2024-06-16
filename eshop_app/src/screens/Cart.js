@@ -7,7 +7,7 @@ import { useNavigation } from '@react-navigation/native';
 import { BASE_URL } from '../log/config';
 import Navbar from '../components/Navbar';
 
-const Cart = ({ toggleSidebar }) => {
+const Cart = ({ toggleSidebar, handleLogout }) => {
   const { cartItems, products, removeFromCart, updateCartItemCount, addToCart, getTotalCartAmount, setCartItems, getDefaultCart } = useContext(ShopContext);
   const [productImages, setProductImages] = useState({});
 
@@ -58,7 +58,7 @@ const Cart = ({ toggleSidebar }) => {
 
   return (
     <View style={styles.mainContainer}>
-      <Navbar toggleSidebar={toggleSidebar} />
+         <Navbar toggleSidebar={toggleSidebar} handleLogout={handleLogout} />
       <View style={styles.container}>
         <Text style={styles.title}>Your Cart</Text>
         <FlatList

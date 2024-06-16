@@ -4,10 +4,10 @@ import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import ProductGrid from '../product/ProductGrid';
 import Navbar from '../components/Navbar';
 
-const ComputerPage = ({toggleSidebar}) => {
+const ComputerPage = ({toggleSidebar, handleLogout}) => {
   return (
     <ScrollView style={styles.mainContainer}>
-      <Navbar toggleSidebar={toggleSidebar} />
+         <Navbar toggleSidebar={toggleSidebar} handleLogout={handleLogout} />
 
       <View style={styles.container}>
         <Text style={styles.title}>Laptop</Text>
