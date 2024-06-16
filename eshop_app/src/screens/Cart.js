@@ -45,8 +45,8 @@ const Cart = ({ toggleSidebar, handleLogout }) => {
 
     try {
       setCartItems(getDefaultCart(products));
-      navigation.navigate('Checkout');
       const response = await axios.post(`${BASE_URL}/products/checkout`, { userID, products: productsToUpdate }, {withCredentials: true});
+      navigation.navigate('Checkout');
       console.log(response.data);
     } catch (error) {
       console.error('Error during checkout:', error);
