@@ -12,7 +12,10 @@ export default function LoginScreen() {
 
     const storeUserID = async (userID) => {
         try {
-            await AsyncStorage.setItem('userID', userID.toString()); // Ensure userID is a string
+            await AsyncStorage.setItem('userID', userID.toString()); 
+            // await AsyncStorage.setItem('username', username); 
+            // await AsyncStorage.setItem('email', email); 
+
         } catch (error) {
             console.error('Error storing userID:', error);
         }

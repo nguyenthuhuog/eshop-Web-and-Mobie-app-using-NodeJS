@@ -4,11 +4,11 @@ import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import ProductGrid from '../product/ProductGrid';
 import Navbar from '../components/Navbar';
 
-const KeyboardPage = ({toggleSidebar}) => {
+const KeyboardPage = ({toggleSidebar, handleLogout}) => {
   return (
     <ScrollView style={styles.mainContainer}>
-      <Navbar toggleSidebar={toggleSidebar} />
-    <View style={styles.container}>
+    <Navbar toggleSidebar={toggleSidebar} handleLogout={handleLogout} />
+       <View style={styles.container}>
       <Text style={styles.title}>Keyboard</Text>
       <Text style={styles.description}>
         A keyboard is an input device for a computer, used to enter data and control computer functions. The keyboard includes a series of pressing keys, alphanumeric keys, special characters and function keys to perform tasks.
