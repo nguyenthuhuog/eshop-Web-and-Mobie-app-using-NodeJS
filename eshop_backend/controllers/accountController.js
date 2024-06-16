@@ -78,8 +78,7 @@ accountController.login = (username, password, callback) => {
     if (results.length === 0) {
       return callback(new Error('Invalid username or password'));
     }
-    const user = results[0];
-    callback(null, user);
+    callback(null, results[0]);
   });
 };
 

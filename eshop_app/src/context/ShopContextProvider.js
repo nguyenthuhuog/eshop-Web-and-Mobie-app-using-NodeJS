@@ -12,7 +12,7 @@ export const ShopContextProvider = ({ children }) => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get(`${BASE_URL}/products`);
+        const response = await axios.get(`${BASE_URL}/products`, {withCredentials: true});
         setProducts(response.data);
         setCartItems(getDefaultCart(response.data));
       } catch (error) {
@@ -96,7 +96,7 @@ export const ShopContextProvider = ({ children }) => {
         productID: Number(key),
         quantity: cartItems[key]
       }));
-      // const response = await axios.post('http://localhost:8080/api/products/checkout', { userID: 10000002, products: productsToUpdate });
+      // const response = await axios.post('http://localhost:8080/api/products/checkout', { userID: 10000002, products: productsToUpdate }, {withCredentials: true});
       // setCartItems(getDefaultCart(products));
     } catch (error) {
       console.error('Error during checkout:', error);

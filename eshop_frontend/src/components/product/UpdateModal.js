@@ -34,7 +34,7 @@ const UpdateModal = ({ show, onClose, product, onUpdate }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.put(`http://localhost:8080/api/products/${product.productID}`, formData);
+            const response = await axios.put(`http://localhost:8080/api/products/${product.productID}`, formData, {withCredentials: true});
             if (response.status === 200) {
                 onUpdate();
                 onClose();

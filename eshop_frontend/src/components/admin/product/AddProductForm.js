@@ -24,7 +24,7 @@ const AddProductForm = () => {
     try {
       console.log(post);
       // Send a POST request with the form data
-      const response = await axios.post(api, post);
+      const response = await axios.post(api, post, {withCredentials: true});
       console.log('Product added successfully:', response.data);
       setMessage('Product successfully added to the database!');
       // Reset form

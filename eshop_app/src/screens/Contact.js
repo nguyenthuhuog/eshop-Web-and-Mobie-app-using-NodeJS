@@ -27,7 +27,7 @@ const Contact = ({ toggleSidebar }) => {
     }
 
     try {
-      await axios.post(api, post);
+      await axios.post(api, post, {withCredentials: true});
       setIsModalOpen(true);
       setError('');
     } catch (error) {

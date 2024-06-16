@@ -27,7 +27,7 @@ const ProductDetail = ({ toggleSidebar }) => {
 
   const fetchProduct = async () => {
     try {
-      const response = await axios.get(api);
+      const response = await axios.get(api, {withCredentials: true});
       setProduct(response.data);
     } catch (error) {
       console.error('Error fetching product details:', error);
@@ -38,7 +38,7 @@ const ProductDetail = ({ toggleSidebar }) => {
     try {
       if (!product) return; // Check if product is null before fetching comments
 
-      const response = await axios.get(`${commentApiBase}/productID/${product.productID}`);
+      const response = await axios.get(`${commentApiBase}/productID/${product.productID}`, {withCredentials: true});
       setComments(response.data);
 
       let totalRate = 0;
@@ -94,7 +94,7 @@ const ProductDetail = ({ toggleSidebar }) => {
       setNewComment('');
       setNewRating(5);
   
-      const response = await axios.post(commentApiBase, newCommentData);
+      const response = await axios.post(commentApiBase, newCommentData, {withCredentials: true});
       if (response.status === 201) {
         console.log('Comment saved successfully:', response.data);
         fetchComments(); // Fetch comments again after successful submission

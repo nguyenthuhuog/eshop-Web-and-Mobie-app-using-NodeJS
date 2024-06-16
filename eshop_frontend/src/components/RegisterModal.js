@@ -27,7 +27,7 @@ const RegisterModal = ({ show, onClose }) => {
     event.preventDefault();
     try {
       setRegistering(true); // Set registering state to true to disable submit button
-      const response = await axios.post(api, formData);
+      const response = await axios.post(api, formData, {withCredentials: true});
       console.log('User registered successfully:', response.data);
       setSuccessMessage('Registration successful! You can now use your new account to log in.');
       setTimeout(() => {

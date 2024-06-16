@@ -70,9 +70,9 @@ router.post('/login', (req, res) => {
       return res.status(401).json({ error: err.message || 'Login failed' });
     }
     req.session.userId = result.userID;
-    req.session.username = result.username;
     req.session.isAdmin = result.isAdmin;
-    res.cookie('user', result, { maxAge: 900000, httpOnly: true });
+    req.session.save();
+  
     res.status(200).json(result);
   });
 });
@@ -82,10 +82,10 @@ router.post('/logout', (req, res) => {
     if (err) {
       return res.status(500).json({ message: 'Logout failed' });
     }
-    res.clearCookie('userID'); // Ensure the userID cookie is cleared
-    res.clearCookie('user');
-    res.status(200).json({message: 'Logout successful'});
   });
+  res.clearCookie('userID'); // Ensure the userID cookie is cleared
+  res.clearCookie('user');
+  res.status(200).json({message: 'Logout successful'});
 });
 
 // Route to check login status
