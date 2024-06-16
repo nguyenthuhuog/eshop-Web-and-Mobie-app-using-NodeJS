@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { View, Text, Image, Button, ScrollView, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, Image, ScrollView, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useRoute } from '@react-navigation/native';
@@ -10,7 +10,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
 import Slider from '@react-native-community/slider';
 
-const ProductDetail = ({ toggleSidebar }) => {
+const ProductDetail = ({ toggleSidebar, handleLogout }) => {
   const route = useRoute();
   const { id } = route.params;
   const [product, setProduct] = useState(null);
@@ -27,7 +27,7 @@ const ProductDetail = ({ toggleSidebar }) => {
 
   const fetchProduct = async () => {
     try {
-      const response = await axios.get(api);
+      const response = await axios.get(api, {withCredentials: true});
       setProduct(response.data);
     } catch (error) {
       console.error('Error fetching product details:', error);
@@ -38,7 +38,7 @@ const ProductDetail = ({ toggleSidebar }) => {
     try {
       if (!product) return; // Check if product is null before fetching comments
 
-      const response = await axios.get(`${commentApiBase}/productID/${product.productID}`);
+      const response = await axios.get(`${commentApiBase}/productID/${product.productID}`, {withCredentials: true});
       setComments(response.data);
 
       let totalRate = 0;
@@ -94,7 +94,7 @@ const ProductDetail = ({ toggleSidebar }) => {
       setNewComment('');
       setNewRating(5);
   
-      const response = await axios.post(commentApiBase, newCommentData);
+      const response = await axios.post(commentApiBase, newCommentData, {withCredentials: true});
       if (response.status === 201) {
         console.log('Comment saved successfully:', response.data);
         fetchComments(); // Fetch comments again after successful submission
@@ -103,8 +103,6 @@ const ProductDetail = ({ toggleSidebar }) => {
       console.error('Error saving comment:', error);
     }
   };
-  
-  
 
   if (!product) return <Text>Loading...</Text>;
 
@@ -115,7 +113,7 @@ const ProductDetail = ({ toggleSidebar }) => {
 
   return (
     <ScrollView style={styles.mainContainer}>
-      <Navbar toggleSidebar={toggleSidebar} />
+      <Navbar toggleSidebar={toggleSidebar} handleLogout={handleLogout} />
       <View style={styles.container}>
         <View style={styles.productDetailContainer}>
           <Image source={{ uri: product.image_url }} style={styles.productImage} />
@@ -149,10 +147,10 @@ const ProductDetail = ({ toggleSidebar }) => {
           <Text style={styles.commentsTitle}>Overall rating: {totalRating.toFixed(1)}/5.0</Text>
           <Text style={styles.commentsTitle}>Comments</Text>
           {comments.length > 0 ? comments.map((comment) => (
-            <Text key={comment.id} style={styles.comment}>
-              <Text> User #{comment.userID}: {comment.content} (Rating: {parseFloat(comment.rate ? comment.rate : 5.0).toFixed(1)}/5.0)
-              </Text>
-            </Text>
+            <View key={comment.id} style={styles.comment}>
+              <Text>User {comment.username} #{comment.userID}: {comment.content} (Rating: {parseFloat(comment.rate ? comment.rate : 5.0).toFixed(1)}/5.0)</Text>
+              <Text>Email: {comment.email}</Text>
+            </View>
           )) : (
             <Text>No comments yet. Be the first to comment!</Text>
           )}
@@ -175,7 +173,7 @@ const ProductDetail = ({ toggleSidebar }) => {
           />
           <TouchableOpacity onPress={handleCommentSubmit} style={styles.submitButton}>
             <Text style={styles.submitButtonText}>Submit</Text>
-          </TouchableOpacity>        
+          </TouchableOpacity>
         </View>
       </View>
     </ScrollView>

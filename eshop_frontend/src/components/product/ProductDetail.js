@@ -3,7 +3,6 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 import { useParams, useNavigate } from 'react-router-dom'; // Import useNavigate
 import { ShopContext } from './ShopContextProvider'; // Import ShopContext
-import LoginModal from '../LoginModal'; // Ensure this path is correct
 import UpdateModal from './UpdateModal'; // Import EditProductModal
 
 import '../../css/productdetail.css';
@@ -29,7 +28,7 @@ const ProductDetail = ({setIsLoginModalOpen}) => {
     const fetchProduct = async () => {
         console.log("Call fetch product");
         try {
-            const response = await axios.get(api);
+            const response = await axios.get(api, {withCredentials: true});
             const fetchedProduct = response.data;
 
             setProduct(fetchedProduct);
@@ -42,7 +41,7 @@ const ProductDetail = ({setIsLoginModalOpen}) => {
 
     const fetchComments = async () => {
         try {
-            const response = await axios.get(`${commentApiBase}/productID/${product.productID}`);
+            const response = await axios.get(`${commentApiBase}/productID/${product.productID}`, {withCredentials: true});
             console.log('Comments retrieved successfully:', response.data);
             setComments(response.data);
 
@@ -100,7 +99,7 @@ const ProductDetail = ({setIsLoginModalOpen}) => {
         setNewRating(5);
 
         try {
-            const response = await axios.post(commentApiBase, newCommentData);
+            const response = await axios.post(commentApiBase, newCommentData, {withCredentials: true});
 
             if (response.status === 201) {
                 console.log('Comment saved successfully:', response.data);
@@ -118,7 +117,7 @@ const ProductDetail = ({setIsLoginModalOpen}) => {
 
     const handleDelete = async () => {
         try {
-            const response = await axios.delete(api);
+            const response = await axios.delete(api, {withCredentials: true});
             if (response.status === 200) {
                 console.log('Product deleted successfully');
                 navigate(-1); // Redirect to the products list page
@@ -129,7 +128,7 @@ const ProductDetail = ({setIsLoginModalOpen}) => {
     };
     const handleDeleteComment = async (id) => {
         try {
-            const response = await axios.delete(`${commentApiBase}/${id}`);
+            const response = await axios.delete(`${commentApiBase}/${id}`, {withCredentials: true});
             if (response.status === 200) {
                 console.log('Comment deleted successfully');
             }

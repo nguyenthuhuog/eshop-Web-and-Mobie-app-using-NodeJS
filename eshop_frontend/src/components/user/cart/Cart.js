@@ -17,7 +17,7 @@ const Cart = ({setIsLoginModalOpen}) => {
       for (const productId in cartItems) {
         if (cartItems[productId] > 0) {
           try {
-            const imageResponse = await axios.get(`${api}/${productId}`);
+            const imageResponse = await axios.get(`${api}/${productId}`, {withCredentials: true});
             images[productId] = imageResponse.data.image_url;
           } catch (error) {
             console.error(`Error fetching image for productID ${productId}:`, error);
@@ -35,7 +35,6 @@ const Cart = ({setIsLoginModalOpen}) => {
       setIsLoginModalOpen(true); // Show login modal if not logged in
       return;
     }
-
     const productsToUpdate = Object.keys(cartItems).map(key => {
         const product = products.find(p => p.productID === Number(key));
         return {
@@ -48,7 +47,8 @@ const Cart = ({setIsLoginModalOpen}) => {
     try {
         setCartItems(getDefaultCart(products));
         navigate('/checkout');
-        const response = await axios.post('http://localhost:8080/api/products/checkout', { userID, products: productsToUpdate });
+        const response = await axios.post('http://localhost:8080/api/products/checkout', 
+          { userID, products: productsToUpdate }, {withCredentials: true});
         console.log(response.data);
     } catch (error) {
         console.error('Error during checkout:', error);

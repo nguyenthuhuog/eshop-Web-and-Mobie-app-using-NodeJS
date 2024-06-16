@@ -12,7 +12,7 @@ const AdModal = ({ isOpen, onClose }) => {
 
     const fetchProducts = async () => {
         try {
-            const response = await axios.get(`${api}`);
+            const response = await axios.get(`${api}`, {withCredentials: true});
             const uniqueIds = getRandomIds(0, response.data.length - 1, 3)
             for (var i=0; i<uniqueIds.length; i++)
                 setProducts((prevProducts) => [...prevProducts, response.data[uniqueIds[i]]]);

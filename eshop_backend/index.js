@@ -35,16 +35,11 @@ let visitCount = readVisitCount();
 
 app.use(session({
   secret: 'your-secret-key',
-  resave: false,
+  resave: true,
   saveUninitialized: true,
   cookie: { secure: false, maxAge: 900000 } // 15 minutes
 }));
 app.use(cookieParser());
-
-// app.use(cors({
-//   origin: 'http://localhost:3000',
-//   credentials: true,
-// }));
 
 const allowedOrigins = [
   'http://localhost:3000',

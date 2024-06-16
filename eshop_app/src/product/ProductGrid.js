@@ -15,7 +15,7 @@ const ProductGrid = ({ categoryName }) => {
     try {
       let apiEndpoint = api;
       if (categoryName != null) apiEndpoint = `${api}/byCategory/${categoryName}`;
-      const response = await axios.get(apiEndpoint);
+      const response = await axios.get(apiEndpoint, {withCredentials: true});
       const fetchedProducts = response.data;
       setProducts(fetchedProducts);
     } catch (error) {

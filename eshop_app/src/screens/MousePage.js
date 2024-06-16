@@ -5,10 +5,10 @@ import ProductGrid from '../product/ProductGrid';
 import Navbar from '../components/Navbar';
 import { ScrollView } from 'react-native-gesture-handler';
 
-const MousePage = ({toggleSidebar}) => {
+const MousePage = ({toggleSidebar, handleLogout}) => {
   return (
     <ScrollView style={styles.mainContainer}>
-      <Navbar toggleSidebar={toggleSidebar} />
+      <Navbar toggleSidebar={toggleSidebar} handleLogout={handleLogout} />
       <View style={styles.container}>
       <Text style={styles.title}>Mouse</Text>
       <Text style={styles.description}>

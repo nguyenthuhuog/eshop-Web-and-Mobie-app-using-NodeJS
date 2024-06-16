@@ -13,7 +13,7 @@ export default function RegisterScreen() {
 
     const handleSubmit = async () => {
         try {
-            const response = await axios.post(`${BASE_URL}/accounts`, { username, password, email });
+            const response = await axios.post(`${BASE_URL}/accounts`, { username, password, email }, {withCredentials: true});
             console.log('User registered:', response.data);
             navigation.navigate('Login');
         } catch (error) {

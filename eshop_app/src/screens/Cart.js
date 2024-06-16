@@ -7,7 +7,7 @@ import { useNavigation } from '@react-navigation/native';
 import { BASE_URL } from '../log/config';
 import Navbar from '../components/Navbar';
 
-const Cart = ({ toggleSidebar }) => {
+const Cart = ({ toggleSidebar, handleLogout }) => {
   const { cartItems, products, removeFromCart, updateCartItemCount, addToCart, getTotalCartAmount, setCartItems, getDefaultCart } = useContext(ShopContext);
   const [productImages, setProductImages] = useState({});
 
@@ -20,7 +20,7 @@ const Cart = ({ toggleSidebar }) => {
       for (const productId in cartItems) {
         if (cartItems[productId] > 0) {
           try {
-            const imageResponse = await axios.get(`${api}/${productId}`);
+            const imageResponse = await axios.get(`${api}/${productId}`, {withCredentials: true});
             images[productId] = imageResponse.data.image_url;
           } catch (error) {
             console.error(`Error fetching image for productID ${productId}:`, error);
@@ -46,7 +46,7 @@ const Cart = ({ toggleSidebar }) => {
     try {
       setCartItems(getDefaultCart(products));
       navigation.navigate('Checkout');
-      const response = await axios.post(`${BASE_URL}/products/checkout`, { userID, products: productsToUpdate });
+      const response = await axios.post(`${BASE_URL}/products/checkout`, { userID, products: productsToUpdate }, {withCredentials: true});
       console.log(response.data);
     } catch (error) {
       console.error('Error during checkout:', error);
@@ -58,7 +58,7 @@ const Cart = ({ toggleSidebar }) => {
 
   return (
     <View style={styles.mainContainer}>
-      <Navbar toggleSidebar={toggleSidebar} />
+         <Navbar toggleSidebar={toggleSidebar} handleLogout={handleLogout} />
       <View style={styles.container}>
         <Text style={styles.title}>Your Cart</Text>
         <FlatList
