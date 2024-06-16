@@ -8,14 +8,12 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 export default function LoginScreen() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
     const navigation = useNavigation();
 
     const storeUserID = async (userID) => {
         try {
             await AsyncStorage.setItem('userID', userID.toString()); 
-            // await AsyncStorage.setItem('username', username); 
-            // await AsyncStorage.setItem('email', email); 
-
         } catch (error) {
             console.error('Error storing userID:', error);
         }
@@ -23,15 +21,14 @@ export default function LoginScreen() {
 
     const handleSubmit = async () => {
         try {
-            console.log(username);
-            console.log(password);
+            setError(''); // Clear previous error message
 
             const response = await axios.post(`${BASE_URL}/accounts/login`, { username, password }, { withCredentials: true });
-            console.log('User logged in:', response.data); 
-            storeUserID(response.data.userID); // Use response.data.userID
+            storeUserID(response.data.userID);
             navigation.navigate('HomePage');
         } catch (error) {
             console.error('Login error:', error);
+            setError('Login failed. Please check your username and password and try again.');
         }
     };
 
@@ -39,6 +36,7 @@ export default function LoginScreen() {
         <ImageBackground source={require('../img/background.jpg')} style={styles.background}>
             <View style={styles.container}>
                 <Text style={styles.title}>Login</Text>
+                {error ? <Text style={styles.error}>{error}</Text> : null}
                 <TextInput
                     style={styles.input}
                     placeholder="Username"
@@ -86,6 +84,11 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         marginBottom: 20,
         color: '#333',
+    },
+    error: {
+        color: 'red',
+        marginBottom: 15,
+        fontSize: 16,
     },
     input: {
         width: '100%',

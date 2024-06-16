@@ -32,7 +32,20 @@ const Cart = ({ toggleSidebar, handleLogout }) => {
     fetchProductImages();
   }, [cartItems]);
 
+  // const storeUserID = async (userID) => {
+  //   try {
+  //       await AsyncStorage.setItem('userID', userID.toString()); 
+  //       // await AsyncStorage.setItem('username', username); 
+  //       // await AsyncStorage.setItem('email', email); 
+
+  //   } catch (error) {
+  //       console.error('Error storing userID:', error);
+  //   }
+  // };
+  
+
   const handleCheckout = async () => {
+    // storeUserID(response.data.userID); // Use response.data.userID
     const userID = await AsyncStorage.getItem('userID');
     const productsToUpdate = Object.keys(cartItems).map(key => {
       const product = products.find(p => p.productID === Number(key));

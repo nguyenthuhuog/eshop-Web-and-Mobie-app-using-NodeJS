@@ -4,7 +4,8 @@ const productController = require('../controllers/productController');
 const { authMiddleware, adminMiddleware } = require('../middlewares/authMiddleware');
 
 // Checkout route - should be defined before any routes that take an ID parameter
-router.post('/checkout',authMiddleware, (req, res) => {
+// router.post('/checkout',authMiddleware, (req, res) => {
+  router.post('/checkout', (req, res) => {
   const { userID, products } = req.body; 
   productController.checkout(userID, products, (err, result) => {
     if (err) {

@@ -41,6 +41,12 @@ app.use(session({
 }));
 app.use(cookieParser());
 
+app.get('/', (req, res) => {
+  const sessionData = req.session;
+
+  // Access session data
+});
+
 const allowedOrigins = [
   'http://localhost:3000',
   'http://10.136.13.234:8081'

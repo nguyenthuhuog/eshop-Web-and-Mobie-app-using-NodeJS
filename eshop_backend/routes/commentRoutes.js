@@ -37,7 +37,9 @@ router.get('/productID/:id', (req, res) => {
   });
 }); 
 
-router.post('/',authMiddleware, (req, res) => {
+// router.post('/',authMiddleware, (req, res) => {
+router.post('/', (req, res) => {
+
   const commentData = req.body;
   commentController.create(commentData, (err, newComment) => {
     if (err) {

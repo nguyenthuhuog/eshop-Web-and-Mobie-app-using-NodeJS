@@ -72,7 +72,7 @@ router.post('/login', (req, res) => {
     req.session.userId = result.userID;
     req.session.isAdmin = result.isAdmin;
     req.session.save();
-  
+    console.log(req.session);
     res.status(200).json(result);
   });
 });
