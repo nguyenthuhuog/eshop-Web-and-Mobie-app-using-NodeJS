@@ -70,3 +70,10 @@
   .product-preview .product {
     width: 100%;
   }
+@media screen and (max-width: 800px) {
+  .main2{
+    margin-inline: -70px;
+    font-size: 80%;
+    font-weight: bold;
+  }
+}

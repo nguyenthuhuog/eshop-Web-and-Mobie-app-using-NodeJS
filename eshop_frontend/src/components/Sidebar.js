@@ -5,6 +5,7 @@ import Cookies from 'js-cookie';
 import '../css/homepage.css';
 
 const Sidebar = () => {
+    const isAdmin = Cookies.get('isAdmin') === '1';
     return (
         <div className="sidebar">
             <div className="sidebar__inner">
@@ -27,7 +28,7 @@ const Sidebar = () => {
                             <span className="title">Keyboards</span>
                         </Link>
                     </li>
-                    {Cookies.get('isAdmin') && (
+                    {isAdmin && (
                         <li>
                             <Link to="/admincomputer">
                                 <span className="icon"><i className="fas fa-pencil"></i></span>

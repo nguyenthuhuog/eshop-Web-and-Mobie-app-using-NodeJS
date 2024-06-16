@@ -29,7 +29,7 @@ import Checkout from './user/cart/Checkout';
 import { useNavigate } from 'react-router-dom';
 import AdModal from './AdModal';
 
-import '../css/homepage.css';
+// import '../css/homepage.css';
 import '../css/App.css';
 
 function App() {
@@ -37,6 +37,7 @@ function App() {
     const [visitCount, setVisitCount] = useState(0);
     const [isAdModalOpen, setIsAdModalOpen] = useState(false);
     const [responseText, setresponseText] = useState('Please login to continue');
+    const isAdmin = Cookies.get('isAdmin') === '1';
 
     const location = useLocation();
     const navigate = useNavigate();
@@ -55,7 +56,7 @@ function App() {
     useEffect(() => {
         console.log("Current cookies: ", Cookies.get());
         const adModalShown = Cookies.get('adModalShown');
-        if (!adModalShown) {
+        if (!adModalShown && !isAdmin) {
             // Nếu chưa hiển thị, đặt timeout 1 phút để hiển thị quảng cáo
             const timer = setTimeout(() => {
                 setIsAdModalOpen(true);
