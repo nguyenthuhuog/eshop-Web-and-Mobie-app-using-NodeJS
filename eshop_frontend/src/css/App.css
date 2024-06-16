@@ -14,6 +14,8 @@ html, body, #root {
 .wrapper {
   flex: 1;
   display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
 /* .main_container {
@@ -65,12 +67,25 @@ html, body, #root {
   padding: 30px;
 } */
 
-#footer {
+#footer { 
+  position: relative; 
+  z-index: 3; 
   background-color: #91C8E4;
   padding: 20px;
   color: white;
   text-align: center;
+  bottom: 0;
 }
+
+#footer .contact-info-footer {
+  background-color: #91C8E4;
+  height: 20%;
+  color: white;
+  padding: 20px;
+  text-align: center;
+  bottom: 0;
+}
+
 @media screen and (max-width: 800px) {
   .wrapper.active .content {
     margin-left: none;

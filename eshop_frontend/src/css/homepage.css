@@ -315,13 +315,9 @@ body{
 }
 
 .main_container {
-    flex: 1; /* Ensures the main container takes up the remaining space */
-    /* display: flex; */
-    /* flex-direction: column;
-    margin-top: 30px;
-    margin-left: 30px;
-    padding: 30px;
-    transition: all 0.3s ease; */
+    flex: 1;
+    display: flex;
+    flex-direction: column;
 }
 
 .main_container .container .banner {
@@ -462,7 +458,7 @@ body{
   margin-left: 80px;
 }
 
-#footer { 
+/* #footer { 
     position: relative; 
     z-index: 3; 
     background-color: #91C8E4;
@@ -470,7 +466,7 @@ body{
     color: white;
     text-align: center;
     bottom: 0;
-}
+} */
 
 #footer .contact-info-footer {
     background-color: #91C8E4;
@@ -505,8 +501,9 @@ body{
 }
 
 .qrcode {
+    margin: auto;
     margin-top: 150px;
-    margin-left: 600px;
+    
 }
 
 .qrcode img {
@@ -564,7 +561,6 @@ h3 {
   #header .search-bar input[type="text"]::placeholder{
     visibility: hidden;
   }
-  #header .shop-name,
   #header .auth-buttons div button span{
     display: none;
   }  
@@ -600,6 +596,9 @@ h3 {
       width: calc(50% - 30px);
       font-size: 90%;
     }
+  .qrcode {
+      margin-left: 200px;
+    }
   }
 
 @media screen and (max-width: 1200px) {
@@ -613,5 +612,8 @@ h3 {
   .wrapper.active .main_container .container{
     width: 100%;
     margin-left: 0px;
+  }
+  .qrcode{
+    margin: auto;
   }
 } 

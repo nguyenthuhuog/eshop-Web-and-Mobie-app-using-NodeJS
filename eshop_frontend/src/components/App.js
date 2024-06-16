@@ -29,7 +29,7 @@ import Checkout from './user/cart/Checkout';
 import { useNavigate } from 'react-router-dom';
 import AdModal from './AdModal';
 
-import '../css/homepage.css';
+// import '../css/homepage.css';
 import '../css/App.css';
 
 function App() {
