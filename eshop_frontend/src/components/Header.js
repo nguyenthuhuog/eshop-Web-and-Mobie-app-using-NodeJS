@@ -16,10 +16,10 @@ const Header = ({ openLoginModal, openRegisterModal, handleLogout }) => {
                 <Link to="/"><img src={logo} alt="Logo" /></Link>
             </div>
             <div className="shop-name">H2T Computer Shop</div>
-            <div className="search-bar">
+            {/* <div className="search-bar">
                 <input type="text" placeholder="Search for products..." />
                 <i className="fas fa-search"></i>
-            </div>
+            </div> */}
             <div className="auth-buttons">
                 <div className="contact-info">
                     <button onClick={() => window.location.href = 'tel:19001900'}>

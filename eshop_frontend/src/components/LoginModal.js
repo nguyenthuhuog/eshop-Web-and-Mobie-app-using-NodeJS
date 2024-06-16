@@ -11,7 +11,10 @@ const LoginModal = ({ show, onClose, responseText, setresponseText }) => {
   const navigate = useNavigate();
 
   // if not logged in the reset response
-  if(!Cookies.get('userID')) setresponseText("Please log in to continue");
+  useEffect(() => {
+    if(!Cookies.get('userID')) setresponseText("Please log in to continue");
+  }, [username]);
+  
   if (!show) {
     return null;
   }
@@ -37,7 +40,6 @@ const LoginModal = ({ show, onClose, responseText, setresponseText }) => {
     } catch (error) {
       if (error.response.status === 401) {
         setresponseText('Username or password are wrong, please try again');
-        console.log('here');
       }
       console.error('Login error:', error);
     } 

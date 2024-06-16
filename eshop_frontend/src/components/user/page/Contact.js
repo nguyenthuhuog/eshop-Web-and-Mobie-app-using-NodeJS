@@ -43,7 +43,16 @@ const Contact = () => {
 
     return (
         <div className="container">
-            <h1 style={{ paddingTop: '60px' }}>Contact Us</h1>
+        <div className="item">
+            <h2>About us</h2>
+            <p>
+            Welcome to Tech Haven! We're your premier destination for high-quality computers, 
+            accessories, and exceptional tech support. Whether you're a gamer, professional, 
+            or casual user, we offer a wide range of products to meet your needs. Our team of experts 
+            is dedicated to providing personalized service, ensuring you find the perfect computer solution. 
+            We pride ourselves on our competitive prices and reliable customer service.           
+            </p>
+        </div>
             <div className="contact-form-footer">
                 <h2>Get in Touch</h2>
                 <form onSubmit={handleSubmit}>
