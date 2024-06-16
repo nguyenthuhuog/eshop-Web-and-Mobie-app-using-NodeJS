@@ -77,7 +77,7 @@ function App() {
     const openRegisterModal = () => setIsRegisterModalOpen(true);
     const closeRegisterModal = () => setIsRegisterModalOpen(false);
 
-    const [isSidebarActive, setIsSidebarActive] = useState(false);
+    const [isSidebarActive, setIsSidebarActive] = useState(true);
 
     const toggleSidebar = () => {
         setIsSidebarActive(!isSidebarActive);
