@@ -172,7 +172,6 @@ body{
     background-color: #91C8E4;
 }
 
-/* Modal Styling */
 .modal {
   display: none;
   position: fixed;
@@ -426,7 +425,6 @@ body{
   color: #0f3249;
 }
 
-/* after adding active class */
 .wrapper.active .sidebar{
     width: 80px;
   }
@@ -597,7 +595,8 @@ h3 {
       font-size: 90%;
     }
   .qrcode {
-      margin-left: 200px;
+      margin-left: auto;
+      margin-top: 150px;
     }
   }
 
@@ -615,5 +614,6 @@ h3 {
   }
   .qrcode{
     margin: auto;
+    margin-top: 150px;
   }
 } 
