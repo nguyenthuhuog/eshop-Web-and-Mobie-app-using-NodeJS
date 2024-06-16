@@ -72,7 +72,15 @@ html, body, #root {
   text-align: center;
 }
 @media screen and (max-width: 800px) {
-  /* .content{
-    width: 80%;
-  } */
+  .wrapper.active .content {
+    margin-left: none;
+  }
+  
+}
+
+@media screen and (max-width: 1200px) {
+  .wrapper.active .content {
+    margin-left: 80px;
+  }
+  
 }

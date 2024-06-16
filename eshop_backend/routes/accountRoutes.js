@@ -14,7 +14,7 @@ router.get('/', adminMiddleware, (req, res) => {
   });
 });
 
-router.get('/:id', (req, res) => {  
+router.get('/:id',adminMiddleware, (req, res) => {  
   const id = req.params.id;
   accountController.getById(id, (err, account) => {
     if (err) {
@@ -38,7 +38,7 @@ router.post('/', (req, res) => {
   });
 });
 
-router.put('/:id', (req, res) => {
+router.put('/:id',adminMiddleware, (req, res) => {
   const id = req.params.id;
   const accountData = req.body;
   accountController.update(id, accountData, (err, result) => {
@@ -51,7 +51,7 @@ router.put('/:id', (req, res) => {
   });
 });
 
-router.delete('/:id', (req, res) => {
+router.delete('/:id',adminMiddleware, (req, res) => {
   const id = req.params.id;
   accountController.delete(id, (err, result) => {
     if (err) {

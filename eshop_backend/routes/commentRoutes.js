@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const commentController = require('../controllers/commentController');
+const { authMiddleware, adminMiddleware } = require('../middlewares/authMiddleware');
 
 router.get('/', (req, res) => {
   commentController.getAll((err, comments) => {
@@ -36,7 +37,7 @@ router.get('/productID/:id', (req, res) => {
   });
 }); 
 
-router.post('/', (req, res) => {
+router.post('/',authMiddleware, (req, res) => {
   const commentData = req.body;
   commentController.create(commentData, (err, newComment) => {
     if (err) {
@@ -48,7 +49,7 @@ router.post('/', (req, res) => {
   });
 });
 
-router.put('/:id', (req, res) => {
+router.put('/:id',authMiddleware, (req, res) => {
   const id = req.params.id;
   const commentData = req.body;
   commentController.update(id, commentData, (err, result) => {
@@ -61,7 +62,7 @@ router.put('/:id', (req, res) => {
   });
 });
 
-router.delete('/:id', (req, res) => {
+router.delete('/:id',authMiddleware, (req, res) => {
   const id = req.params.id;
   commentController.delete(id, (err, result) => {
     if (err) {

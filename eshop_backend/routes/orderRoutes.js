@@ -1,8 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const orderController = require('../controllers/orderController');
+const { authMiddleware, adminMiddleware } = require('../middlewares/authMiddleware');
 
-router.get('/', (req, res) => {
+router.get('/',adminMiddleware, (req, res) => {
   orderController.getAll((err, orders) => {
     if (err) {
       console.error("Error:", err);
@@ -13,7 +14,7 @@ router.get('/', (req, res) => {
   });
 });
 
-router.get('/:id', (req, res) => {
+router.get('/:id',adminMiddleware, (req, res) => {
   const id = req.params.id;
   orderController.getById(id, (err, order) => {
     if (err) {
@@ -25,7 +26,7 @@ router.get('/:id', (req, res) => {
   });
 });
 
-router.post('/', (req, res) => {
+router.post('/',authMiddleware, (req, res) => {
   const orderData = req.body;
   orderController.create(orderData, (err, newOrder) => {
     if (err) {
@@ -37,7 +38,7 @@ router.post('/', (req, res) => {
   });
 });
 
-router.put('/:id', (req, res) => {
+router.put('/:id',adminMiddleware, (req, res) => {
   const id = req.params.id;
   const orderData = req.body;
   orderController.update(id, orderData, (err, result) => {
@@ -50,7 +51,7 @@ router.put('/:id', (req, res) => {
   });
 });
 
-router.delete('/:id', (req, res) => {
+router.delete('/:id',authMiddleware, (req, res) => {
   const id = req.params.id;
   orderController.delete(id, (err, result) => {
     if (err) {

@@ -77,7 +77,7 @@ function App() {
     const openRegisterModal = () => setIsRegisterModalOpen(true);
     const closeRegisterModal = () => setIsRegisterModalOpen(false);
 
-    const [isSidebarActive, setIsSidebarActive] = useState(false);
+    const [isSidebarActive, setIsSidebarActive] = useState(true);
 
     const toggleSidebar = () => {
         setIsSidebarActive(!isSidebarActive);
@@ -119,7 +119,9 @@ function App() {
                                 <Route path="/computer" element={<ComputerPage />} />
                                 <Route path="/keyboard" element={<KeyboardPage />} />
                                 <Route path="/admin/homepage" element={<AdminHomepage />} />
+                                {Cookies.get('isAdmin') && 
                                 <Route path="/admincomputer" element={<AdminComputerPage />} />
+                                }
                                 <Route path="/products" element={<ProductGrid />} />
                                 <Route path="/cart" element={<Cart setIsLoginModalOpen={setIsLoginModalOpen}/>} />
                                 <Route path="/checkout" element={<Checkout />} />
