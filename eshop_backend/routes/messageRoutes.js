@@ -1,9 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const messageController = require('../controllers/messageController');
+const { authMiddleware, adminMiddleware } = require('../middlewares/authMiddleware');
 
 // Lấy tất cả messages
-router.get('/', (req, res) => {
+router.get('/',adminMiddleware, (req, res) => {
     messageController.getAll((err, results) => {
         if (err) {
             console.error("Error:", err);
@@ -15,7 +16,7 @@ router.get('/', (req, res) => {
 });
 
 // Lấy message theo ID
-router.get('/:id', (req, res) => {
+router.get('/:id',adminMiddleware, (req, res) => {
     const id = req.params.id;
     messageController.getById(id, (err, result) => {
         if (err) {
@@ -41,7 +42,7 @@ router.post('/', (req, res) => {
 });
 
 // Cập nhật message theo ID
-router.put('/:id', (req, res) => {
+router.put('/:id',adminMiddleware, (req, res) => {
     const id = req.params.id;
     const messageData = req.body;
     messageController.update(id, messageData, (err, result) => {
@@ -55,7 +56,7 @@ router.put('/:id', (req, res) => {
 });
 
 // Xóa message theo ID
-router.delete('/:id', (req, res) => {
+router.delete('/:id',adminMiddleware, (req, res) => {
     const id = req.params.id;
     messageController.delete(id, (err, result) => {
         if (err) {
