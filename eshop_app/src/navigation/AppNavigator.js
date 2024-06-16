@@ -9,7 +9,6 @@ import Sidebar from '../components/Sidebar';
 
 import LoginScreen from '../log/LoginScreen';
 import RegisterScreen from '../log/RegisterScreen';
-// import ProfilePage from '../log/ProfilePage';
 
 import HomePage from '../screens/HomePage';
 import Contact from '../screens/Contact';
@@ -202,7 +201,18 @@ const AppNavigator = () => {
                             )}
                         </Stack.Screen>
                     </Stack.Navigator>
-                    {isSidebarActive && <Sidebar />}
+                    {/* {isSidebarActive && (<Sidebar>
+                                            {props => (
+                                                <Sidebar
+                                                    {...props}
+                                                    toggleSidebar={toggleSidebar}
+                                                />
+                                            )}
+                                        </Sidebar>
+                    )} */}
+                    
+                    {isSidebarActive && <Sidebar toggleSidebar={toggleSidebar} />}
+
                 </View>
                 <Footer visitCount={visitCount} />
             </View>
