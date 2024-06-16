@@ -69,7 +69,7 @@
 }
 
 @media screen and (max-width: 800px){
-    .ad-model-products {
+    .ad-modal-products {
         /* display: inline-block;  */
         size: 60%;
         display: flex; 

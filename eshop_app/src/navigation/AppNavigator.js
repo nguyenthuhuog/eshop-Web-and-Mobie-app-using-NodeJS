@@ -67,7 +67,7 @@ const AppNavigator = () => {
 
     const handleLogout = async () => {
         try {
-            await axios.post(`${BASE_URL}/api/accounts/logout`, {}, { withCredentials: true });
+            await axios.post(`${BASE_URL}/accounts/logout`, {}, { withCredentials: true });
             setIsLoggedIn(false);
             // Cookies.remove('userID');
         } catch (error) {

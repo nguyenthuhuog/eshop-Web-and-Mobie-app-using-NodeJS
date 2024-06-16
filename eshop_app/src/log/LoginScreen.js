@@ -1,14 +1,22 @@
-// src/log/LoginScreen.js
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, ImageBackground } from 'react-native';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
 import { BASE_URL } from './config';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function LoginScreen() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const navigation = useNavigation();
+
+    const storeUserID = async (userID) => {
+        try {
+            await AsyncStorage.setItem('userID', userID.toString()); // Ensure userID is a string
+        } catch (error) {
+            console.error('Error storing userID:', error);
+        }
+    };
 
     const handleSubmit = async () => {
         try {
@@ -17,6 +25,7 @@ export default function LoginScreen() {
 
             const response = await axios.post(`${BASE_URL}/accounts/login`, { username, password }, { withCredentials: true });
             console.log('User logged in:', response.data); 
+            storeUserID(response.data.userID); // Use response.data.userID
             navigation.navigate('HomePage');
         } catch (error) {
             console.error('Login error:', error);
