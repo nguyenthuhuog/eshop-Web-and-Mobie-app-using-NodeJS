@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const categoryController = require('../controllers/categoryController');
+const { authMiddleware, adminMiddleware } = require('../middlewares/authMiddleware');
 
 router.get('/', (req, res) => {
   categoryController.getAll((err, categories) => {
@@ -25,7 +26,7 @@ router.get('/:id', (req, res) => {
   });
 });
 
-router.post('/', (req, res) => {
+router.post('/',adminMiddleware, (req, res) => {
   const categoryData = req.body;
   categoryController.create(categoryData, (err, newCategory) => {
     if (err) {
@@ -37,7 +38,7 @@ router.post('/', (req, res) => {
   });
 });
 
-router.put('/:id', (req, res) => {
+router.put('/:id',adminMiddleware, (req, res) => {
   const id = req.params.id;
   const categoryData = req.body;
   categoryController.update(id, categoryData, (err, result) => {
@@ -50,7 +51,7 @@ router.put('/:id', (req, res) => {
   });
 });
 
-router.delete('/:id', (req, res) => {
+router.delete('/:id',adminMiddleware, (req, res) => {
   const id = req.params.id;
   categoryController.delete(id, (err, result) => {
     if (err) {

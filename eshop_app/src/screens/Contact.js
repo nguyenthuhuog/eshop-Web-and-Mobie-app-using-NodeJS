@@ -1,12 +1,11 @@
-// src/screens/Contact.js
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, Modal, StyleSheet} from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
 import axios from 'axios';
 import Navbar from '../components/Navbar';
-import { ScrollView } from 'react-native-gesture-handler';
+import { Modal, Portal, Provider } from 'react-native-paper';
 import { BASE_URL } from '../log/config';
 
-const Contact = ({toggleSidebar}) => {
+const Contact = ({ toggleSidebar }) => {
   const api = `${BASE_URL}/messages`;
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [post, setPost] = useState({
@@ -15,15 +14,22 @@ const Contact = ({toggleSidebar}) => {
     email: '',
     message: '',
   });
+  const [error, setError] = useState('');
 
   const handleInput = (name, value) => {
     setPost({ ...post, [name]: value });
   };
 
   const handleSubmit = async () => {
+    if (!post.firstName || !post.lastName || !post.email || !post.message) {
+      setError('All fields are required.');
+      return;
+    }
+
     try {
-      const response = await axios.post(api, post);
+      await axios.post(api, post);
       setIsModalOpen(true);
+      setError('');
     } catch (error) {
       console.error('Error sending message:', error);
     }
@@ -40,48 +46,53 @@ const Contact = ({toggleSidebar}) => {
   };
 
   return (
-    <ScrollView style={styles.mainContainer}>
-      <Navbar toggleSidebar={toggleSidebar} />
-      <View style={styles.container}>
-        <Text style={styles.heading}>Contact Us</Text>
-        <View style={styles.form}>
-          <TextInput
-            style={styles.input}
-            placeholder="First Name"
-            value={post.firstName}
-            onChangeText={(value) => handleInput('firstName', value)}
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="Last Name"
-            value={post.lastName}
-            onChangeText={(value) => handleInput('lastName', value)}
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="Email"
-            value={post.email}
-            onChangeText={(value) => handleInput('email', value)}
-          />
-          <TextInput
-            style={styles.textarea}
-            placeholder="Message"
-            value={post.message}
-            onChangeText={(value) => handleInput('message', value)}
-          />
-          <Button title="Submit" onPress={handleSubmit} />
-      </View>
-
-      <Modal visible={isModalOpen} transparent={true} animationType="slide">
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <Text>Thank you for contacting us! We will get back to you soon.</Text>
-            <Button title="OK" onPress={closeModal} />
+    <Provider>
+      <ScrollView style={styles.mainContainer}>
+        <Navbar toggleSidebar={toggleSidebar} />
+        <View style={styles.container}>
+          <Text style={styles.heading}>Contact Us</Text>
+          <View style={styles.form}>
+            <TextInput
+              style={styles.input}
+              placeholder="First Name"
+              value={post.firstName}
+              onChangeText={(value) => handleInput('firstName', value)}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Last Name"
+              value={post.lastName}
+              onChangeText={(value) => handleInput('lastName', value)}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Email"
+              value={post.email}
+              onChangeText={(value) => handleInput('email', value)}
+            />
+            <TextInput
+              style={styles.textarea}
+              placeholder="Message"
+              value={post.message}
+              onChangeText={(value) => handleInput('message', value)}
+            />
+            {error ? <Text style={styles.errorText}>{error}</Text> : null}
+            <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+              <Text style={styles.buttonText}>Submit</Text>
+            </TouchableOpacity>
           </View>
         </View>
-      </Modal>
-    </View>
-  </ScrollView>
+
+        <Portal>
+          <Modal visible={isModalOpen} onDismiss={closeModal} contentContainerStyle={styles.modalContent}>
+            <Text>Thank you for contacting us! We will get back to you soon.</Text>
+            <TouchableOpacity style={styles.modalButton} onPress={closeModal}>
+              <Text style={styles.buttonText}>OK</Text>
+            </TouchableOpacity>
+          </Modal>
+        </Portal>
+      </ScrollView>
+    </Provider>
   );
 };
 
@@ -114,17 +125,37 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     padding: 10,
   },
-  modalContainer: {
-    flex: 1,
-    justifyContent: 'center',
+  button: {
+    backgroundColor: '#4682A9',
+    paddingVertical: 15,
+    paddingHorizontal: 30,
+    borderRadius: 10,
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    marginTop: 10,
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 18,
+    fontWeight: 'bold',
   },
   modalContent: {
-    width: 300,
     padding: 20,
     backgroundColor: 'white',
+    marginHorizontal: 20,
     borderRadius: 10,
+    alignItems: 'center',
+  },
+  modalButton: {
+    backgroundColor: '#4682A9',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 10,
+    marginTop: 20,
+    alignItems: 'center',
+  },
+  errorText: {
+    color: 'red',
+    marginBottom: 10,
   },
 });
 

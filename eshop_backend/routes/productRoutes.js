@@ -1,9 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const productController = require('../controllers/productController');
+const { authMiddleware, adminMiddleware } = require('../middlewares/authMiddleware');
 
 // Checkout route - should be defined before any routes that take an ID parameter
-router.post('/checkout', (req, res) => {
+router.post('/checkout',authMiddleware, (req, res) => {
   const { userID, products } = req.body; 
   productController.checkout(userID, products, (err, result) => {
     if (err) {
@@ -54,7 +55,7 @@ router.get('/:id', (req, res) => {
 });
 
 // Create a new product
-router.post('/', (req, res) => {
+router.post('/', adminMiddleware, (req, res) => {
   const productData = req.body;
   productController.create(productData, (err, newProduct) => {
     if (err) {
@@ -67,7 +68,7 @@ router.post('/', (req, res) => {
 });
 
 // Update a product
-router.put('/:id', (req, res) => {
+router.put('/:id', adminMiddleware, (req, res) => {
   const id = req.params.id;
   const productData = req.body;
   productController.update(id, productData, (err, result) => {
@@ -81,7 +82,7 @@ router.put('/:id', (req, res) => {
 });
 
 // Delete a product
-router.delete('/:id', (req, res) => {
+router.delete('/:id', adminMiddleware, (req, res) => {
   const id = req.params.id;
   productController.delete(id, (err, result) => {
     if (err) {
