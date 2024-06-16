@@ -7,10 +7,6 @@
     text-align: center;
     font-size: 40px;
 }
-
-.product .description {
-    text-align: center;
-}
   
 .product:hover {
     transition: 0.3s ease-in;

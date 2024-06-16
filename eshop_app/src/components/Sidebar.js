@@ -2,9 +2,9 @@ import React, { useEffect, useRef } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Animated } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faLaptop, faKeyboard, faMouse } from '@fortawesome/free-solid-svg-icons';
+import { faLaptop, faKeyboard, faMouse, faTimes } from '@fortawesome/free-solid-svg-icons';
 
-const Sidebar = () => {
+const Sidebar = ({ toggleSidebar }) => {
   const navigation = useNavigation();
   const slideAnim = useRef(new Animated.Value(-250)).current;
 
@@ -16,8 +16,22 @@ const Sidebar = () => {
     }).start();
   }, [slideAnim]);
 
+  const closeSidebar = () => {
+    Animated.timing(slideAnim, {
+      toValue: -250,
+      duration: 300,
+      useNativeDriver: true,
+    }).start(() => {
+      toggleSidebar(); // Call the function passed as a prop to actually hide the sidebar
+    });
+  };
+
   return (
     <Animated.View style={[styles.sidebar, { transform: [{ translateX: slideAnim }] }]}>
+      <TouchableOpacity style={styles.closeButton} onPress={closeSidebar}>
+        <FontAwesomeIcon icon={faTimes} style={styles.closeIcon} />
+      </TouchableOpacity>
+
       <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('ComputerPage')}>
         <FontAwesomeIcon icon={faLaptop} style={styles.icon} />
         <Text style={styles.sidebarItem}>Computer & Laptop</Text>
@@ -41,11 +55,20 @@ const styles = StyleSheet.create({
     backgroundColor: '#629ad3',
     padding: 10,
     position: 'absolute',
-    top: 123,
+    top: 120,
     left: 0,
     bottom: 0,
-    width: 200,
+    width: 250,
+    height: 160,
     zIndex: 1000,
+  },
+  closeButton: {
+    alignSelf: 'flex-end',
+    marginBottom: 1,
+  },
+  closeIcon: {
+    color: '#fff',
+    fontSize: 24,
   },
   button: {
     flexDirection: 'row',

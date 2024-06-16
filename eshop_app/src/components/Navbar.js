@@ -5,7 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faHeadset, faShoppingCart, faSignOut } from '@fortawesome/free-solid-svg-icons'; 
 
-const Navbar = ({handleLogout, toggleSidebar, onLoginSuccess}) => {
+const Navbar = ({handleLogout, toggleSidebar}) => {
     const navigation = useNavigation();
     const handleLogoutAndNavigate = async () => {
         await handleLogout();

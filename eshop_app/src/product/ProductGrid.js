@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
-import { ShopContext } from '../context/ShopContext';
+import { ShopContext } from '../context/ShopContextProvider';
 import { BASE_URL } from '../log/config';
 
 const ProductGrid = ({ categoryName }) => {

@@ -16,26 +16,12 @@ html, body, #root {
   display: flex;
 }
 
-.main_container {
+/* .main_container {
   flex: 1;
   display: flex;
   flex-direction: column;
-}
+} */
 
-.sidebar {
-  position: fixed;
-  top: 140px;
-  left: 0;
-  width: 225px;
-  height: 100%;
-  background: #629ad3;
-  transition: all 0.3s ease;
-  z-index: 1;
-}
-
-.wrapper.active .sidebar {
-  width: 80px;
-}
 
 .content {
   flex: 1;
@@ -59,24 +45,6 @@ html, body, #root {
   z-index: 1;
 }
 
-.top_navbar .hamburger {
-  width: 80px;
-  background: #629ad3;
-  position: relative;
-  font-size: 28px;
-}
-
-.top_navbar .hamburger .hamburger__inner {
-  position: absolute;
-  top: 35%;
-  left: 55%;
-  transform: translate(-50%, -50%);
-  cursor: pointer;
-  width: 40px;
-  height: 20px;
-  color: #0f3249;
-}
-
 .top_navbar .menu {
   width: calc(100% - 80px);
   height: 100%;
@@ -92,14 +60,19 @@ html, body, #root {
   letter-spacing: 2px;
 }
 
-.main_container .container {
+/* .main_container .container {
   margin-top: 50px;
   padding: 30px;
-}
+} */
 
 #footer {
   background-color: #91C8E4;
   padding: 20px;
   color: white;
   text-align: center;
+}
+@media screen and (max-width: 800px) {
+  /* .content{
+    width: 80%;
+  } */
 }

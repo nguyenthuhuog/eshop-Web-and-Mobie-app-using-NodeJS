@@ -9,7 +9,6 @@ const HomePage = ({toggleSidebar, handleLogout}) => {
   return (
     <ScrollView style={styles.mainContainer}>
       <Navbar toggleSidebar={toggleSidebar} handleLogout={handleLogout} />
-
       <View style={styles.container}>
         <Banner />
         <ProductGrid />
