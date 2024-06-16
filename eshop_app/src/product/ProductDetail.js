@@ -120,25 +120,31 @@ const ProductDetail = ({ toggleSidebar, handleLogout }) => {
           <View style={styles.productInfo}>
             <Text style={styles.productName}>{product.productName}</Text>
             <Text style={styles.productPrice}>Price: ${parseFloat(product.price).toFixed(2)}</Text>
-            <Text style={styles.productStock}>Stock: {product.stock}</Text>
+            <Text style={styles.productStock}>Stock: {product.stock > 0 ? product.stock : 'Out of stock'}</Text>
             <View>
               <Text style={styles.productDetailsTitle}>{productDetailsTitle}</Text>
               {productDetails}
             </View>
             <View style={styles.cartSection}>
-              <View style={styles.quantitySelector}>
-                <TouchableOpacity onPress={() => handleQuantityChange(quantity - 1)} disabled={quantity <= 1}>
-                  <Text style={styles.quantityButton}>-</Text>
-                </TouchableOpacity>
-                <Text style={styles.quantity}>{quantity}</Text>
-                <TouchableOpacity onPress={() => handleQuantityChange(quantity + 1)} disabled={quantity >= product.stock}>
-                  <Text style={styles.quantityButton}>+</Text>
-                </TouchableOpacity>
-              </View>
-              <TouchableOpacity onPress={handleAddToCart} style={styles.cartButton}>
-                <FontAwesomeIcon icon={faShoppingCart} size={20} color="#fff" />
-                <Text style={styles.cartButtonText}> Add to Cart</Text>
-              </TouchableOpacity>
+              {product.stock > 0 ? (
+                <>
+                  <View style={styles.quantitySelector}>
+                    <TouchableOpacity onPress={() => handleQuantityChange(quantity - 1)} disabled={quantity <= 1}>
+                      <Text style={styles.quantityButton}>-</Text>
+                    </TouchableOpacity>
+                    <Text style={styles.quantity}>{quantity}</Text>
+                    <TouchableOpacity onPress={() => handleQuantityChange(quantity + 1)} disabled={quantity >= product.stock}>
+                      <Text style={styles.quantityButton}>+</Text>
+                    </TouchableOpacity>
+                  </View>
+                  <TouchableOpacity onPress={handleAddToCart} style={styles.cartButton}>
+                    <FontAwesomeIcon icon={faShoppingCart} size={20} color="#fff" />
+                    <Text style={styles.cartButtonText}> Add to Cart</Text>
+                  </TouchableOpacity>
+                </>
+              ) : (
+                <Text style={styles.outOfStockText}>This product is currently out of stock.</Text>
+              )}
             </View>
             {quantityError && <Text style={styles.quantityError}>Cannot exceed available stock.</Text>}
           </View>
@@ -181,7 +187,7 @@ const ProductDetail = ({ toggleSidebar, handleLogout }) => {
 };
 
 const styles = StyleSheet.create({
-    mainContainer: {
+  mainContainer: {
     flex: 1,
     backgroundColor: '#fff',
   },
@@ -262,6 +268,11 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 16,
     marginLeft: 10, // Space between icon and text
+  },
+  outOfStockText: {
+    fontSize: 16,
+    color: 'red',
+    textAlign: 'center',
   },
   quantityError: {
     color: 'red',

@@ -30,7 +30,8 @@ const ProductGrid = ({ categoryName }) => {
             <div className="product-grid">
                 {products.length > 0 ? (
                     products.map((product) => (
-                        <ProductGridComponent key={product.id} product={product} isAdmin={isAdmin} />
+                        product.stock > 0 &&
+                        (<ProductGridComponent key={product.id} product={product} isAdmin={isAdmin} />)
                     ))
                 ) : (
                     <p>Loading products...</p>
