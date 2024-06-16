@@ -77,26 +77,34 @@ const ProductDetail = ({ toggleSidebar }) => {
   };
 
   const handleCommentSubmit = async () => {
-    const newCommentData = {
-      content: newComment,
-      productID: product.productID,
-      rate: newRating,
-      userID: await AsyncStorage.getItem('userID'),
-    };
-
-    setNewComment('');
-    setNewRating(5);
-
     try {
+      const userID = await AsyncStorage.getItem('userID');
+      if (!userID) {
+        console.error('User ID not found');
+        return;
+      }
+  
+      const newCommentData = {
+        content: newComment,
+        productID: product.productID,
+        rate: newRating,
+        userID: parseInt(userID), // Ensure userID is an integer
+      };
+  
+      setNewComment('');
+      setNewRating(5);
+  
       const response = await axios.post(commentApiBase, newCommentData);
       if (response.status === 201) {
         console.log('Comment saved successfully:', response.data);
+        fetchComments(); // Fetch comments again after successful submission
       }
     } catch (error) {
       console.error('Error saving comment:', error);
     }
-    fetchComments();
   };
+  
+  
 
   if (!product) return <Text>Loading...</Text>;
 
@@ -142,7 +150,8 @@ const ProductDetail = ({ toggleSidebar }) => {
           <Text style={styles.commentsTitle}>Comments</Text>
           {comments.length > 0 ? comments.map((comment) => (
             <Text key={comment.id} style={styles.comment}>
-              User #{comment.userID}: {comment.content} (Rating: {parseFloat(comment.rate ? comment.rate : 5.0).toFixed(1)}/5.0)
+              <Text> User #{comment.userID}: {comment.content} (Rating: {parseFloat(comment.rate ? comment.rate : 5.0).toFixed(1)}/5.0)
+              </Text>
             </Text>
           )) : (
             <Text>No comments yet. Be the first to comment!</Text>
@@ -158,7 +167,7 @@ const ProductDetail = ({ toggleSidebar }) => {
             style={{ width: 200, height: 40 }}
             minimumValue={0}
             maximumValue={5}
-            step={1}
+            step={0.5}
             value={newRating}
             onValueChange={setNewRating}
             minimumTrackTintColor="#0000FF"
