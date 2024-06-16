@@ -501,8 +501,9 @@ body{
 }
 
 .qrcode {
+    margin: auto;
     margin-top: 150px;
-    margin-left: 600px;
+    
 }
 
 .qrcode img {
@@ -595,6 +596,9 @@ h3 {
       width: calc(50% - 30px);
       font-size: 90%;
     }
+  .qrcode {
+      margin-left: 200px;
+    }
   }
 
 @media screen and (max-width: 1200px) {
@@ -608,5 +612,8 @@ h3 {
   .wrapper.active .main_container .container{
     width: 100%;
     margin-left: 0px;
+  }
+  .qrcode{
+    margin: auto;
   }
 } 
