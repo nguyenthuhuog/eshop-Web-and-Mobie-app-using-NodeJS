@@ -33,9 +33,15 @@ const LoginModal = ({ show, onClose, responseText, setresponseText }) => {
       setPassword(''); 
       if (response.data.isAdmin === 1) {
         setresponseText('Welcom Admin, happy working');
+        setTimeout(() => {
+          onClose();
+        }, 1000);
         navigate('/admincomputer'); // Redirect to admin homepage if user is an admin
       } else {
         setresponseText('You have logged in, happy shopping');
+        setTimeout(() => {
+          onClose();
+        }, 1000);
       }
     } catch (error) {
       if (error.response.status === 401) {

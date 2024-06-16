@@ -30,7 +30,7 @@ const ProductGrid = ({ categoryName }) => {
   return (
     <View style={styles.productGrid}>
       {products.length > 0 ? (
-        products.map((product) => (
+        products.filter(product => product.stock > 0).map((product) => (
           <TouchableOpacity
             key={product.productID}
             style={styles.product}
