@@ -50,7 +50,7 @@ body{
 
 #header .shop-name {
     margin-right: 10px;
-    font-size: 30px;
+    font-size: 13px;
     font-weight: bold;
     color: #4682A9;
 }
@@ -559,7 +559,10 @@ h3 {
 
 @media screen and (max-width: 800px) {
   #header .search-bar{
-    width: 200px;
+    width: 150px;
+  }
+  #header .search-bar input[type="text"]::placeholder{
+    visibility: hidden;
   }
   #header .shop-name,
   #header .auth-buttons div button span{
@@ -583,17 +586,32 @@ h3 {
     margin-bottom: 10px;
     
   }
-  .top_navbar .hamburger .hamburger__inner{
+  .top_navbar .hamburger {
     display: none;
   }
   .product-grid {
+    margin-left: -10px;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 30px; /* Điều chỉnh khoảng cách giữa các sản phẩm */
-}
-
-.product {
-    width: calc(50% - 30px);
-    font-size: 90%;
+    gap: 30px; 
   }
-}
+
+  .product {
+      width: calc(50% - 30px);
+      font-size: 90%;
+    }
+  }
+
+@media screen and (max-width: 1200px) {
+  .main_container .container{
+    margin-top: 50px;
+    margin-left: 200px;
+    width: calc(100% - 200px);
+    padding: 30px;
+    transition: all 0.3s ease;
+  }
+  .wrapper.active .main_container .container{
+    width: 100%;
+    margin-left: 0px;
+  }
+} 
