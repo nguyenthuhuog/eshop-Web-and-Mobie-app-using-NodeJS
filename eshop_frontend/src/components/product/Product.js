@@ -1,3 +1,4 @@
+//no use
 import React, { useContext } from "react";
 import { ShopContext } from "./ShopContextProvider";
 import '../../css/homepage.css';

@@ -49,7 +49,7 @@ app.get('/', (req, res) => {
 
 const allowedOrigins = [
   'http://localhost:3000',
-  'http://10.136.13.234:8081'
+  'http:/10.9.0.156:8081'
 ];
 
 // CORS configuration

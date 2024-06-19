@@ -1,4 +1,4 @@
-// Product.js
+// no use
 import React from 'react';
 import '../css/product.css';
 

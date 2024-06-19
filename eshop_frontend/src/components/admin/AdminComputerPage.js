@@ -1,4 +1,4 @@
-// ComputerPage.js
+// AdminComputerPage.js
 import React, { useState } from 'react';
 import AddProductForm from './product/AddProductForm'; // Import the AddProductForm component
 import '../../css/homepage.css';
