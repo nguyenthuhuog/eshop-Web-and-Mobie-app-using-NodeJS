@@ -42,6 +42,12 @@ const Header = ({ openLoginModal, openRegisterModal, handleLogout }) => {
                             <span>Contact us</span>
                         </button>
                     </Link>
+                    <Link to="/aboutus">
+                        <button>
+                            <i className="fas fa-headset"></i>
+                            <span>About us</span>
+                        </button>
+                    </Link>
                     <button onClick={() => window.location.href = '#news'}>
                         <i className="fas fa-newspaper"></i>
                         <span>Tech news</span>

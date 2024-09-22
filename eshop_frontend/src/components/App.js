@@ -13,6 +13,7 @@ import LoginModal from './LoginModal';
 import RegisterModal from './RegisterModal';
 
 import Contact from './user/page/Contact';
+import AboutUs from './user/page/AboutUs';
 import MousePage from './user/page/MousePage';
 import KeyboardPage from './user/page/KeyboardPage';
 import ComputerPage from './user/page/ComputerPage';
@@ -115,6 +116,7 @@ function App() {
                         <div className="content">
                             <Routes>
                                 <Route path="/contact" element={<Contact />} />
+                                <Route path="/aboutus" element={<AboutUs />} />
                                 <Route path="/mouse" element={<MousePage />} />
                                 <Route path="/computer" element={<ComputerPage />} />
                                 <Route path="/keyboard" element={<KeyboardPage />} />
