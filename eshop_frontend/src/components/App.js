@@ -11,13 +11,13 @@ import Navbar from './Navbar';
 import Sidebar from './Sidebar';
 import LoginModal from './LoginModal';
 import RegisterModal from './RegisterModal';
+import AboutUs from './AboutUs.js'
 
 import Contact from './user/page/Contact';
 import MousePage from './user/page/MousePage';
 import KeyboardPage from './user/page/KeyboardPage';
 import ComputerPage from './user/page/ComputerPage';
 import HomePage from './user/homepage/HomePage';
-
 import AdminHomepage from './admin/homepage/AdminHomepage';
 import AdminComputerPage from './admin/AdminComputerPage';
 
@@ -115,6 +115,7 @@ function App() {
                         <div className="content">
                             <Routes>
                                 <Route path="/contact" element={<Contact />} />
+                                <Route path="/aboutus" element={<AboutUs />} />
                                 <Route path="/mouse" element={<MousePage />} />
                                 <Route path="/computer" element={<ComputerPage />} />
                                 <Route path="/keyboard" element={<KeyboardPage />} />

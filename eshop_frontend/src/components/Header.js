@@ -42,6 +42,14 @@ const Header = ({ openLoginModal, openRegisterModal, handleLogout }) => {
                             <span>Contact us</span>
                         </button>
                     </Link>
+                    
+                    <Link to="/aboutus">
+                        <button>
+                            <i className="fas fa-user-circle"></i>
+                            <span>About us</span>                            
+                        </button>
+                    </Link>
+
                     <button onClick={() => window.location.href = '#news'}>
                         <i className="fas fa-newspaper"></i>
                         <span>Tech news</span>
@@ -54,7 +62,8 @@ const Header = ({ openLoginModal, openRegisterModal, handleLogout }) => {
                                 <span className="cart-count">{totalCartCount}</span>
                             )}
                         </button>
-                        </Link>
+                    </Link>
+
                     )}
                     
                     {Cookies.get('userID') ? (
