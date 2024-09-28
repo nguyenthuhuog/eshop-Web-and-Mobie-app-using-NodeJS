@@ -4,37 +4,72 @@
     padding: 20px;
     color: #ffffff;
 }
-  
-.aboutus header,
-footer {
+
+.aboutus header, .aboutus footer, .aboutus .section {
     background-color: #155baf;
-    padding: 10px;
+    padding: 10px; /* Generous padding for separation */
+    margin: 20px 0; /* Space between sections */
+    border-radius: 8px; /* Rounded corners */
 }
-  
-.aboutus main {
-    padding: 20px;
+
+.aboutus .section {
+    background-color: rgba(21, 91, 175, 0.15); /* Light blue background */
 }
-  
 .aboutus table {
     width: 100%;
     border-collapse: collapse;
     margin: 20px 0;
-    background-color: #5085c5;
+    background-color: #e0efff;
 }
-  
+
 .aboutus table,
 th,
 td {
     border: 1px solid #ffffff;
 }
-  
+
 .aboutus th,
 td {
     padding: 15px;
     text-align: center;
 }
-  
+
 .aboutus th {
-    background-color: #040f70;
+    background-color: #0050b3;
+    color: white;
 }
-  
+.aboutus td{
+    color: #000;
+}
+
+.aboutus header > h1, .aboutus header > h1:hover {
+    color: white;
+    text-decoration: none;
+    cursor: auto;
+}
+.aboutus h1 {
+    cursor: pointer;
+    color: #0050b3; /* Change color for clarity */
+  }
+
+.aboutus h1:hover {
+    text-decoration: underline; /* Underline on hover for better UX */
+}
+
+.aboutus h2 {
+    color: #0050b3;
+}
+
+.aboutus .subsection{
+    color: black;
+    margin: 20px;
+    padding: 15px;
+    background-color: rgba(255, 255, 255, 0.51); /* Semi-transparent background */
+    border-radius: 8px; /* Rounded corners */
+}
+
+blockquote {
+    border-left: 2px solid #ffffff;
+    padding-left: 10px;
+    margin: 10px 0;
+}
