@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { ShopContext } from './product/ShopContextProvider';
+import SearchBar from './SearchBar';
 import logo from '../img/logo1.png';
 import Cookies from 'js-cookie';
 import '../css/homepage.css';
@@ -16,6 +17,7 @@ const Header = ({ openLoginModal, openRegisterModal, handleLogout }) => {
                 <Link to="/"><img src={logo} alt="Logo" /></Link>
             </div>
             <div className="shop-name">H2T Computer Shop</div>
+            <SearchBar />
             {/* <div className="search-bar">
                 <input type="text" placeholder="Search for products..." />
                 <i className="fas fa-search"></i>
