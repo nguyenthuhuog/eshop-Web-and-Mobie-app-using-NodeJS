@@ -9,6 +9,7 @@ import Footer from './Footer';
 import Header from './Header';
 import Navbar from './Navbar';
 import Sidebar from './Sidebar';
+import ChatBox from './ChatBox.js';
 import LoginModal from './LoginModal';
 import RegisterModal from './RegisterModal';
 import AboutUs from './AboutUs.js'
@@ -142,6 +143,7 @@ function App() {
                         <Footer visitCount={visitCount} />
                     </div>
                 </div>
+                <ChatBox />
                 <LoginModal show={isLoginModalOpen} onClose={closeLoginModal} responseText={responseText} setresponseText={setresponseText}/>
                 <RegisterModal show={isRegisterModalOpen} onClose={closeRegisterModal} />
             </div>
